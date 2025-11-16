@@ -1,19 +1,24 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import supabase from "../lib/supabaseClient";
+import supabase from "../app/lib/supabaseClient";
 
 export default function CreateItemModal({ open, onClose, reportId }) {
+  if (!open) return null;
+
   const [categoryList, setCategoryList] = useState([]);
   const [subcategoryList, setSubcategoryList] = useState([]);
 
   const [categoryId, setCategoryId] = useState("");
   const [subcategoryId, setSubcategoryId] = useState("");
-
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("ok");
   const [media, setMedia] = useState(null);
-  const [error, setError] = useState("");
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Load categories when modal opens
   useEffect(() => {
     if (open) loadCategories();
   }, [open]);
@@ -32,164 +37,243 @@ export default function CreateItemModal({ open, onClose, reportId }) {
     if (!error) setSubcategoryList(data);
   }
 
-  async function handleCreate(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
+    if (!categoryId || !subcategoryId) {
+      setError("Select category and subcategory");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      let media_url = null;
+      let mediaPath = null;
 
       if (media) {
-        const fileName = `${Date.now()}-${media.name}`;
-        const { error: uploadErr } = await supabase.storage
+        const path = `inspections/${Date.now()}-${media.name}`;
+        const { error: uploadError } = await supabase.storage
           .from("reports")
-          .upload(`inspections/${fileName}`, media);
+          .upload(path, media);
 
-        if (uploadErr) {
-          setError("Error uploading media");
+        if (uploadError) {
+          setError(uploadError.message);
+          setLoading(false);
           return;
         }
 
-        media_url = `inspections/${fileName}`;
+        mediaPath = path;
       }
 
-      const { error: insertErr } = await supabase.from("report_items").insert([
+      // Insert item into report_items
+      const { error: insertError } = await supabase.from("report_items").insert([
         {
           report_id: reportId,
           category_id: categoryId,
           subcategory_id: subcategoryId,
-          status,
           notes,
-          media_urls: media_url ? [media_url] : [],
+          status,
+          media_urls: mediaPath ? [mediaPath] : [],
         },
       ]);
 
-      if (insertErr) {
-        setError(insertErr.message);
+      if (insertError) {
+        setError(insertError.message);
+        setLoading(false);
         return;
       }
 
+      alert("Item added successfully!");
       onClose();
+
+      // Reset fields
+      setCategoryId("");
+      setSubcategoryId("");
+      setSubcategoryList([]);
+      setNotes("");
+      setStatus("ok");
+      setMedia(null);
+
     } catch (err) {
       setError(err.message);
     }
+
+    setLoading(false);
   }
 
-  if (!open) return null;
-
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.4)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-      }}
-    >
-      <form
-        onSubmit={handleCreate}
-        style={{
-          background: "white",
-          padding: "25px",
-          width: "90%",
-          maxWidth: "400px",
-          borderRadius: "10px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
-        <h2>Add Item</h2>
+    <div style={styles.overlay}>
+      <div style={styles.modal}>
+        <h2 style={styles.title}>Add Item to Report</h2>
 
-        {/* Category */}
-        <label>Category</label>
-        <select
-          required
-          value={categoryId}
-          onChange={(e) => {
-            setCategoryId(e.target.value);
-            loadSubcategories(e.target.value);
-          }}
-        >
-          <option value="">Select category</option>
-          {categoryList.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {/* Subcategory */}
-        <label>Subcategory</label>
-        <select
-          required
-          value={subcategoryId}
-          onChange={(e) => setSubcategoryId(e.target.value)}
-        >
-          <option value="">Select subcategory</option>
-          {subcategoryList.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+        <form onSubmit={handleSubmit}>
 
-        {/* Notes */}
-        <label>Notes</label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Describe the issue or condition..."
-        />
+          {/* Category */}
+          <label style={styles.label}>Category</label>
+          <select
+            style={styles.input}
+            value={categoryId}
+            onChange={(e) => {
+              setCategoryId(e.target.value);
+              loadSubcategories(e.target.value);
+            }}
+          >
+            <option value="">Select category</option>
+            {categoryList.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-        {/* Status */}
-        <label>Status</label>
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="ok">OK</option>
-          <option value="attention">Needs Attention</option>
-          <option value="urgent">Urgent</option>
-        </select>
+          {/* Subcategory */}
+          <label style={styles.label}>Subcategory</label>
+          <select
+            style={styles.input}
+            value={subcategoryId}
+            onChange={(e) => setSubcategoryId(e.target.value)}
+          >
+            <option value="">Select subcategory</option>
+            {subcategoryList.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
 
-        {/* Media */}
-        <label>Upload Photo (optional)</label>
-        <input type="file" onChange={(e) => setMedia(e.target.files[0])} />
+          {/* Status */}
+          <label style={styles.label}>Status</label>
+          <select
+            style={styles.input}
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="ok">OK</option>
+            <option value="attention">Attention</option>
+            <option value="urgent">Urgent</option>
+          </select>
 
-        {error && (
-          <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
-            {error}
-          </p>
-        )}
+          {/* Notes */}
+          <label style={styles.label}>Notes</label>
+          <textarea
+            style={styles.textarea}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Describe the condition..."
+          />
 
-        <button
-          type="submit"
-          style={{
-            background: "#000",
-            color: "#fff",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "none",
-          }}
-        >
-          Save Item
-        </button>
+          {/* Media */}
+          <label style={styles.label}>Upload Image</label>
+          <input
+            type="file"
+            onChange={(e) => setMedia(e.target.files[0])}
+            style={styles.input}
+          />
 
-        <button
-          type="button"
-          onClick={onClose}
-          style={{
-            marginTop: "5px",
-            background: "#ccc",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "none",
-          }}
-        >
-          Cancel
-        </button>
-      </form>
+          {/* Buttons */}
+          <div style={styles.actions}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={styles.cancelBtn}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={styles.submitBtn}
+            >
+              {loading ? "Saving..." : "Save Item"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
+
+// GLASS UI STYLES
+const styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backdropFilter: "blur(12px)",
+    background: "rgba(0,0,0,0.3)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+  },
+  modal: {
+    width: "90%",
+    maxWidth: "480px",
+    background: "rgba(255,255,255,0.12)",
+    borderRadius: "16px",
+    padding: "24px",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(255,255,255,0.25)",
+    color: "#fff",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+  },
+  title: {
+    marginBottom: "16px",
+    fontSize: "22px",
+    fontWeight: "600",
+  },
+  label: {
+    display: "block",
+    marginTop: "10px",
+    marginBottom: "6px",
+    fontSize: "14px",
+    opacity: 0.9,
+  },
+  input: {
+    width: "100%",
+    padding: "10px",
+    borderRadius: "10px",
+    border: "1px solid rgba(255,255,255,0.3)",
+    background: "rgba(255,255,255,0.1)",
+    color: "#fff",
+    marginBottom: "10px",
+  },
+  textarea: {
+    width: "100%",
+    height: "80px",
+    padding: "10px",
+    borderRadius: "10px",
+    border: "1px solid rgba(255,255,255,0.3)",
+    background: "rgba(255,255,255,0.1)",
+    color: "#fff",
+    marginBottom: "10px",
+  },
+  actions: {
+    marginTop: "18px",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  cancelBtn: {
+    padding: "10px 16px",
+    background: "rgba(255,255,255,0.15)",
+    borderRadius: "8px",
+    border: "1px solid rgba(255,255,255,0.25)",
+    color: "#fff",
+    cursor: "pointer",
+  },
+  submitBtn: {
+    padding: "10px 16px",
+    background: "#C8A36D",
+    borderRadius: "8px",
+    color: "#000",
+    fontWeight: "600",
+    cursor: "pointer",
+    border: "none",
+  },
+};
