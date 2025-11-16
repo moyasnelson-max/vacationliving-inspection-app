@@ -15,39 +15,32 @@ export default function NewReportPage() {
     e.preventDefault();
 
     try {
-      // 1. Upload image
       let image_url = null;
 
       if (image) {
         const path = `inspections/${Date.now()}-${image.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from("reports")
           .upload(path, image);
 
         if (uploadError) throw uploadError;
 
-        const { data: urlData } = supabase.storage
+        const { data: urlData } = await supabase.storage
           .from("reports")
           .getPublicUrl(path);
 
         image_url = urlData.publicUrl;
       }
 
-      // 2. Save report
-      const { error: insertError } = await supabase.from("reports").insert({
+      await supabase.from("reports").insert({
         title,
         details,
         image_url,
-        status: "open",
-        property_slug: "casa_carmela",
-        created_at: new Date(),
+        created_at: new Date().toISOString(),
       });
 
-      if (insertError) throw insertError;
-
       router.push("/reports");
-    } catch (err: any) {
-      console.log(err);
+    } catch (err) {
       setError(err.message);
     }
   }
@@ -55,39 +48,26 @@ export default function NewReportPage() {
   return (
     <div style={{ padding: 20 }}>
       <h1>Create New Report</h1>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <p>Title</p>
         <input
-          style={{ width: "100%", marginBottom: 12 }}
+          placeholder="Title"
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <p>Details</p>
         <textarea
-          style={{ width: "100%", height: 120, marginBottom: 12 }}
+          placeholder="Details"
           onChange={(e) => setDetails(e.target.value)}
-        ></textarea>
-
-        <p>Image (optional)</p>
-        <input
-          type="file"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
-          style={{ marginBottom: 12 }}
         />
 
-        <button
-          type="submit"
-          style={{
-            background: "black",
-            color: "white",
-            padding: "10px 20px",
-            borderRadius: 6,
-          }}
-        >
-          Submit Report
-        </button>
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+
+        <button type="submit">Submit Report</button>
       </form>
     </div>
   );
