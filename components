@@ -1,0 +1,195 @@
+"use client";
+import { useState, useEffect } from "react";
+import supabase from "../lib/supabaseClient";
+
+export default function CreateItemModal({ open, onClose, reportId }) {
+  const [categoryList, setCategoryList] = useState([]);
+  const [subcategoryList, setSubcategoryList] = useState([]);
+
+  const [categoryId, setCategoryId] = useState("");
+  const [subcategoryId, setSubcategoryId] = useState("");
+
+  const [notes, setNotes] = useState("");
+  const [status, setStatus] = useState("ok");
+  const [media, setMedia] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (open) loadCategories();
+  }, [open]);
+
+  async function loadCategories() {
+    const { data, error } = await supabase.from("categories").select("*");
+    if (!error) setCategoryList(data);
+  }
+
+  async function loadSubcategories(id) {
+    const { data, error } = await supabase
+      .from("subcategories")
+      .select("*")
+      .eq("category_id", id);
+
+    if (!error) setSubcategoryList(data);
+  }
+
+  async function handleCreate(e) {
+    e.preventDefault();
+    setError("");
+
+    try {
+      let media_url = null;
+
+      if (media) {
+        const fileName = `${Date.now()}-${media.name}`;
+        const { error: uploadErr } = await supabase.storage
+          .from("reports")
+          .upload(`inspections/${fileName}`, media);
+
+        if (uploadErr) {
+          setError("Error uploading media");
+          return;
+        }
+
+        media_url = `inspections/${fileName}`;
+      }
+
+      const { error: insertErr } = await supabase.from("report_items").insert([
+        {
+          report_id: reportId,
+          category_id: categoryId,
+          subcategory_id: subcategoryId,
+          status,
+          notes,
+          media_urls: media_url ? [media_url] : [],
+        },
+      ]);
+
+      if (insertErr) {
+        setError(insertErr.message);
+        return;
+      }
+
+      onClose();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  if (!open) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+      }}
+    >
+      <form
+        onSubmit={handleCreate}
+        style={{
+          background: "white",
+          padding: "25px",
+          width: "90%",
+          maxWidth: "400px",
+          borderRadius: "10px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+        }}
+      >
+        <h2>Add Item</h2>
+
+        {/* Category */}
+        <label>Category</label>
+        <select
+          required
+          value={categoryId}
+          onChange={(e) => {
+            setCategoryId(e.target.value);
+            loadSubcategories(e.target.value);
+          }}
+        >
+          <option value="">Select category</option>
+          {categoryList.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Subcategory */}
+        <label>Subcategory</label>
+        <select
+          required
+          value={subcategoryId}
+          onChange={(e) => setSubcategoryId(e.target.value)}
+        >
+          <option value="">Select subcategory</option>
+          {subcategoryList.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Notes */}
+        <label>Notes</label>
+        <textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Describe the issue or condition..."
+        />
+
+        {/* Status */}
+        <label>Status</label>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="ok">OK</option>
+          <option value="attention">Needs Attention</option>
+          <option value="urgent">Urgent</option>
+        </select>
+
+        {/* Media */}
+        <label>Upload Photo (optional)</label>
+        <input type="file" onChange={(e) => setMedia(e.target.files[0])} />
+
+        {error && (
+          <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          style={{
+            background: "#000",
+            color: "#fff",
+            padding: "10px",
+            borderRadius: "8px",
+            border: "none",
+          }}
+        >
+          Save Item
+        </button>
+
+        <button
+          type="button"
+          onClick={onClose}
+          style={{
+            marginTop: "5px",
+            background: "#ccc",
+            padding: "10px",
+            borderRadius: "8px",
+            border: "none",
+          }}
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
+  );
+}
