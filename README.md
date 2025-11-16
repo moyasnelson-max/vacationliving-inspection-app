@@ -16,3 +16,4 @@ Construido con Next.js 14, React 18 y Supabase.
 
 ## Deploy
 - Vercel
+ 
