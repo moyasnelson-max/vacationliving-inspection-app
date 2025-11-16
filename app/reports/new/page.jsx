@@ -11,7 +11,7 @@ export default function NewReportPage() {
   const [image, setImage] = useState(null);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     try {
