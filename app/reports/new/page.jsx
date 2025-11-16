@@ -1,212 +1,274 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import supabase from "../../lib/supabaseClient";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import supabase from "../../../lib/supabaseClient";
 import CreateItemModal from "../../../components/CreateItemModal";
 
-export default function ReportDetailsPage() {
-  const { id } = useParams();
-  const [items, setItems] = useState([]);
-  const [meta, setMeta] = useState(null);
-  const [loading, setLoading] = useState(true);
+// ---------- Luxury Styles ----------
+const styles = {
+  container: {
+    maxWidth: "540px",
+    margin: "0 auto",
+    padding: "32px",
+    fontFamily: "Inter, sans-serif",
+    color: "#1A1A1A",
+  },
+  card: {
+    background: "#FFFFFF",
+    padding: "24px",
+    borderRadius: "14px",
+    boxShadow: "0 6px 24px rgba(0,0,0,0.06)",
+    border: "1px solid #F2EFE8",
+  },
+  title: {
+    fontSize: "26px",
+    fontWeight: "600",
+    marginBottom: "20px",
+    letterSpacing: "-0.5px",
+    fontFamily: "Playfair Display, serif",
+  },
+  label: {
+    fontSize: "14px",
+    fontWeight: "500",
+    marginBottom: "6px",
+    marginTop: "18px",
+    color: "#444",
+  },
+  input: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #D8D5CC",
+    background: "#FAF9F7",
+    outline: "none",
+    fontSize: "15px",
+    transition: "0.2s",
+  },
+  textarea: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #D8D5CC",
+    background: "#FAF9F7",
+    outline: "none",
+    resize: "none",
+    fontSize: "15px",
+    transition: "0.2s",
+  },
+  buttonGold: {
+    width: "100%",
+    marginTop: "26px",
+    padding: "14px 0",
+    background: "linear-gradient(135deg, #C8A36D, #b48a54)",
+    border: "none",
+    borderRadius: "12px",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "16px",
+    cursor: "pointer",
+    boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+    transition: "0.2s",
+  },
+  addItemButton: {
+    width: "100%",
+    padding: "12px 0",
+    borderRadius: "12px",
+    marginTop: "14px",
+    background: "#FFFFFF",
+    border: "1px solid #C8A36D",
+    color: "#C8A36D",
+    fontWeight: "600",
+    fontSize: "15px",
+    cursor: "pointer",
+  },
+  error: {
+    color: "#B00020",
+    marginBottom: "12px",
+    fontWeight: "500",
+  },
+};
+
+export default function NewReportPage() {
+  const router = useRouter();
+
+  // MAIN REPORT STATES
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [notes, setNotes] = useState("");
+  const [image, setImage] = useState(null);
+  const [reportId, setReportId] = useState(null);
+
+  // MODAL STATE
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    loadReport();
-  }, []);
+  // ERROR + LOADING
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function loadReport() {
-    setLoading(true);
+  //-------------------------------
+  // CREATE MAIN REPORT
+  //-------------------------------
 
-    // Carga desde la vista que ya creamos
+  const createMainReportIfNeeded = async () => {
+    if (reportId) return reportId;
+
     const { data, error } = await supabase
-      .from("report_full_view")
-      .select("*")
-      .eq("report_id", id);
+      .from("reports")
+      .insert([{ status: "open" }])
+      .select()
+      .single();
 
-    if (!error) {
-      setItems(data);
-      if (data.length > 0) {
-        setMeta({
-          created_at: data[0].report_created_at,
-          property_id: data[0].property_id,
-          inspector_id: data[0].inspector_id,
-          status: data[0].report_status,
-        });
-      }
+    if (error) {
+      setError(error.message);
+      throw new Error(error.message);
+    }
+
+    setReportId(data.id);
+    return data.id;
+  };
+
+  //-------------------------------
+  // IMAGE UPLOAD
+  //-------------------------------
+
+  const uploadImage = async (file, id) => {
+    if (!file) return null;
+
+    const filename = `${id}_${Date.now()}.jpg`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("reports")
+      .upload(filename, file);
+
+    if (uploadError) {
+      setError(uploadError.message);
+      return null;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from("reports")
+      .getPublicUrl(filename);
+
+    return urlData.publicUrl;
+  };
+
+  //-------------------------------
+  // FINAL SUBMIT
+  //-------------------------------
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const id = await createMainReportIfNeeded();
+      const imageUrl = await uploadImage(image, id);
+
+      const { error: updateError } = await supabase
+        .from("reports")
+        .update({
+          category,
+          subcategory,
+          notes,
+          image_url: imageUrl,
+        })
+        .eq("id", id);
+
+      if (updateError) throw updateError;
+
+      router.push("/reports");
+    } catch (err) {
+      setError(err.message);
     }
 
     setLoading(false);
-  }
-
-  function statusColor(s) {
-    if (s === "ok") return "#16a34a";
-    if (s === "attention") return "#eab308";
-    return "#dc2626";
-  }
-
-  // Agrupar por categoría
-  const grouped = items.reduce((acc, item) => {
-    const cat = item.category_name || "Sin categoría";
-    acc[cat] = acc[cat] ? [...acc[cat], item] : [item];
-    return acc;
-  }, {});
+  };
 
   return (
     <div style={styles.container}>
+      <h1 style={styles.title}>Create New Report</h1>
 
-      <h1 style={styles.title}>Inspection Report</h1>
+      <div style={styles.card}>
+        {error && <p style={styles.error}>{error}</p>}
 
-      {loading && <p style={styles.loading}>Loading...</p>}
+        <form onSubmit={handleSubmit}>
+          {/* CATEGORY */}
+          <label style={styles.label}>Category</label>
+          <select
+            style={styles.input}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          >
+            <option value="">Select...</option>
+            <option value="Interior">Interior</option>
+            <option value="Exterior">Exterior</option>
+            <option value="Safety">Safety</option>
+            <option value="Cleaning">Cleaning</option>
+          </select>
 
-      {!loading && meta && (
-        <div style={styles.metaBox}>
-          <p><b>Report ID:</b> {id}</p>
-          <p><b>Created at:</b> {new Date(meta.created_at).toLocaleString()}</p>
-          <p><b>Inspector:</b> {meta.inspector_id}</p>
-        </div>
-      )}
+          {/* SUBCATEGORY */}
+          <label style={styles.label}>Subcategory</label>
+          <input
+            type="text"
+            placeholder="Describe subcategory"
+            style={styles.input}
+            value={subcategory}
+            onChange={(e) => setSubcategory(e.target.value)}
+            required
+          />
 
-      {/* Botón para items */}
-      <button style={styles.addBtn} onClick={() => setOpenModal(true)}>
-        + Add Item
-      </button>
+          {/* NOTES */}
+          <label style={styles.label}>Notes</label>
+          <textarea
+            placeholder="Add detailed notes..."
+            style={styles.textarea}
+            rows={4}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
 
-      {/* Render por categorías */}
-      {Object.keys(grouped).map((cat) => (
-        <div key={cat} style={styles.categorySection}>
-          <h2 style={styles.categoryTitle}>{cat}</h2>
+          {/* IMAGE */}
+          <label style={styles.label}>Image</label>
+          <input
+            style={styles.input}
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
 
-          {grouped[cat].map((item) => (
-            <div key={item.item_id} style={styles.itemCard}>
-              
-              <div style={styles.itemHeader}>
-                <span style={styles.subcat}>{item.subcategory_name}</span>
+          {/* ADD ITEM BUTTON */}
+          <button
+            type="button"
+            style={styles.addItemButton}
+            onClick={async () => {
+              const id = await createMainReportIfNeeded();
+              setReportId(id);
+              setOpenModal(true);
+            }}
+          >
+            + Add Item
+          </button>
 
-                <span
-                  style={{
-                    ...styles.statusBadge,
-                    background: statusColor(item.item_status),
-                  }}
-                >
-                  {item.item_status.toUpperCase()}
-                </span>
-              </div>
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            disabled={loading}
+            style={styles.buttonGold}
+          >
+            {loading ? "Saving..." : "Save Report"}
+          </button>
+        </form>
+      </div>
 
-              {/* Notes */}
-              {item.item_notes && (
-                <p style={styles.notes}>{item.item_notes}</p>
-              )}
-
-              {/* Image */}
-              {item.item_media && item.item_media.length > 0 && (
-                <img
-                  src={
-                    process.env.NEXT_PUBLIC_SUPABASE_URL +
-                    "/storage/v1/object/public/reports/" +
-                    item.item_media[0]
-                  }
-                  style={styles.image}
-                />
-              )}
-
-              <p style={styles.timestamp}>
-                {new Date(item.item_created_at).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      ))}
-
-      {/* Modal */}
+      {/* MODAL */}
       <CreateItemModal
         open={openModal}
-        onClose={() => {
-          setOpenModal(false);
-          loadReport(); // reload after add
-        }}
-        reportId={id}
+        onClose={() => setOpenModal(false)}
+        reportId={reportId}
       />
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "24px",
-    color: "white",
-    background: "#0d0d0d",
-    minHeight: "100vh",
-  },
-  title: {
-    fontSize: "28px",
-    marginBottom: "12px",
-  },
-  loading: {
-    opacity: 0.7,
-  },
-  metaBox: {
-    marginBottom: "20px",
-    padding: "16px",
-    borderRadius: "12px",
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,255,255,0.1)",
-  },
-  addBtn: {
-    padding: "10px 16px",
-    background: "#C8A36D",
-    borderRadius: "8px",
-    border: "none",
-    cursor: "pointer",
-    fontWeight: "600",
-    color: "#000",
-    marginBottom: "14px",
-  },
-  categorySection: {
-    marginBottom: "30px",
-  },
-  categoryTitle: {
-    fontSize: "22px",
-    marginBottom: "10px",
-    opacity: 0.8,
-  },
-  itemCard: {
-    padding: "16px",
-    marginBottom: "12px",
-    borderRadius: "14px",
-    background: "rgba(255,255,255,0.06)",
-    border: "1px solid rgba(255,255,255,0.15)",
-    backdropFilter: "blur(10px)",
-  },
-  itemHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "8px",
-    alignItems: "center",
-  },
-  subcat: {
-    fontWeight: "600",
-    fontSize: "16px",
-  },
-  statusBadge: {
-    padding: "4px 10px",
-    borderRadius: "6px",
-    fontSize: "13px",
-    color: "white",
-  },
-  notes: {
-    opacity: 0.9,
-    margin: "8px 0",
-  },
-  image: {
-    width: "100%",
-    borderRadius: "10px",
-    marginTop: "8px",
-  },
-  timestamp: {
-    marginTop: "8px",
-    fontSize: "12px",
-    opacity: 0.6,
-  },
-};
