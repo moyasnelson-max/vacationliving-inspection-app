@@ -1,6 +1,7 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import supabase from "../../lib/supabaseClient.js";
+import supabase from "../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function ReportsPage() {
@@ -10,12 +11,13 @@ export default function ReportsPage() {
   useEffect(() => {
     async function loadUser() {
       const { data: session } = await supabase.auth.getSession();
-      if (!session?.session) {
+      if (!session.session) {
         router.push("/login");
         return;
       }
       setUser(session.session.user);
     }
+
     loadUser();
   }, []);
 
@@ -26,16 +28,15 @@ export default function ReportsPage() {
 
       <button
         onClick={() => router.push("/reports/new")}
-        style={{
-          marginTop: 20,
-          padding: "12px 20px",
-          fontSize: 16,
-          borderRadius: 8,
-          backgroundColor: "black",
-          color: "white",
-        }}
       >
-        Create New Report
+        New Report
+      </button>
+
+      <button
+        onClick={() => router.push("/logout")}
+        style={{ marginLeft: 10 }}
+      >
+        Logout
       </button>
     </div>
   );
