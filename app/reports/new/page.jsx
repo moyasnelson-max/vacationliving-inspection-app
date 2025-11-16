@@ -8,7 +8,7 @@ export default function NewReportPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState(null);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: any) {
