@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import supabase as "../lib/supabaseClient";
+import as 'supabase';
 import { useRouter } from "next/navigation";
 
 export default function Logout() {
