@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../../lib/supabaseClient";
-import CreateItemModal from "../../../components/CreateItemModal";
+import CreateItemModal from "@/Components/CreateItemModal.jsx";
 
 // ---------- Luxury Styles ----------
 const styles = {
