@@ -1,135 +1,216 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import supabase from "../../../lib/supabaseClient";
 
-export default function ReportDetailPage() {
+// --------------------------------------------------------------
+//  ULTRA LUXURY GLASS STYLES (Four Seasons / Ritz-Carlton level)
+// --------------------------------------------------------------
+const styles = {
+  page: {
+    minHeight: "100vh",
+    padding: "40px 24px",
+    background:
+      "linear-gradient(135deg, rgba(245,240,230,0.7), rgba(255,255,255,0.4))",
+    backdropFilter: "blur(14px)",
+    fontFamily: "Inter, sans-serif",
+  },
+  card: {
+    width: "100%",
+    maxWidth: "780px",
+    margin: "0 auto",
+    padding: "32px",
+    borderRadius: "20px",
+    background: "rgba(255,255,255,0.55)",
+    boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(200,163,109,0.28)",
+  },
+  title: {
+    fontFamily: "Playfair Display, serif",
+    fontSize: "32px",
+    fontWeight: "600",
+    marginBottom: "20px",
+    color: "#1A1A1A",
+    letterSpacing: "-0.5px",
+  },
+  sectionTitle: {
+    marginTop: "30px",
+    fontSize: "20px",
+    fontWeight: "600",
+    color: "#7A6A50",
+    borderBottom: "1px solid #E8E2D8",
+    paddingBottom: "6px",
+  },
+  statusTag: {
+    display: "inline-block",
+    padding: "6px 14px",
+    borderRadius: "12px",
+    fontWeight: "600",
+    fontSize: "14px",
+    marginTop: "10px",
+  },
+  itemCard: {
+    background: "rgba(255,255,255,0.65)",
+    borderRadius: "14px",
+    padding: "18px",
+    border: "1px solid #EEE6D8",
+    marginTop: "14px",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+  },
+  label: { fontWeight: "600", color: "#7A6A50", marginBottom: "4px" },
+  value: { color: "#1A1A1A" },
+  image: {
+    width: "100%",
+    marginTop: "12px",
+    borderRadius: "14px",
+    objectFit: "cover",
+  },
+  backButton: {
+    width: "100%",
+    marginTop: "24px",
+    padding: "14px 0",
+    background: "linear-gradient(135deg, #C8A36D, #b48a54)",
+    border: "none",
+    borderRadius: "12px",
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+};
+
+export default function ReportDetailPage({ params }) {
   const router = useRouter();
-  const params = useParams();
-  const reportId = params.id;
 
   const [report, setReport] = useState(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ---------- LOAD DATA ----------
-  useEffect(() => {
-    async function load() {
-      if (!reportId) return;
+  const id = params.id;
 
+  // ------------------------------------------
+  //  LOAD REPORT + ITEMS FROM SUPABASE
+  // ------------------------------------------
+  useEffect(() => {
+    async function loadData() {
+      // Load main report
       const { data: reportData } = await supabase
         .from("reports")
         .select("*")
-        .eq("id", reportId)
+        .eq("id", id)
         .single();
 
-      const { data: itemData } = await supabase
+      // Load items from report_items table
+      const { data: itemsData } = await supabase
         .from("report_items")
-        .select("*")
-        .eq("report_id", reportId)
-        .order("created_at", { ascending: true });
+        .select(
+          `*, 
+           categories(name),
+           subcategories(name)`
+        )
+        .eq("report_id", id);
 
       setReport(reportData);
-      setItems(itemData || []);
+      setItems(itemsData || []);
       setLoading(false);
     }
 
-    load();
-  }, [reportId]);
+    loadData();
+  }, [id]);
 
-  if (loading) return <p style={{ padding: 20 }}>Loading...</p>;
+  if (loading)
+    return (
+      <div style={styles.page}>
+        <div style={styles.card}>
+          <h1 style={styles.title}>Loading report...</h1>
+        </div>
+      </div>
+    );
 
-  if (!report) return <p style={{ padding: 20 }}>Report not found</p>;
+  if (!report)
+    return (
+      <div style={styles.page}>
+        <div style={styles.card}>
+          <h1 style={styles.title}>Report not found</h1>
+        </div>
+      </div>
+    );
+
+  // ------------------------------------------
+  // STATUS COLOR
+  // ------------------------------------------
+  const statusColors = {
+    open: "#D4A017",
+    closed: "green",
+    pending: "#B75C00",
+  };
 
   return (
-    <div style={{ padding: 20, fontFamily: "Inter" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 10 }}>
-        Report #{report.id}
-      </h1>
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>Inspection Report</h1>
 
-      {/* MAIN REPORT INFO */}
-      <div
-        style={{
-          background: "white",
-          padding: 16,
-          borderRadius: 12,
-          boxShadow: "0 6px 24px rgba(0,0,0,0.06)",
-          marginBottom: 20,
-        }}
-      >
-        <p><strong>Category:</strong> {report.category}</p>
-        <p><strong>Subcategory:</strong> {report.subcategory}</p>
-        <p><strong>Notes:</strong> {report.notes || "—"}</p>
-        {report.image_url && (
-          <img
-            src={report.image_url}
-            style={{
-              width: "100%",
-              marginTop: 12,
-              borderRadius: 10,
-              border: "1px solid #eee",
-            }}
-          />
-        )}
-      </div>
-
-      {/* ITEMS LIST */}
-      <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12 }}>
-        Items
-      </h2>
-
-      {items.length === 0 && (
-        <p style={{ color: "#777" }}>No items yet.</p>
-      )}
-
-      {items.map((item) => (
+        {/* STATUS */}
         <div
-          key={item.id}
           style={{
-            background: "white",
-            padding: 14,
-            borderRadius: 12,
-            boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
-            marginBottom: 16,
+            ...styles.statusTag,
+            background: `${statusColors[report.status] || "#CCC"}22`,
+            color: statusColors[report.status] || "#444",
+            border: `1px solid ${statusColors[report.status] || "#CCC"}`,
           }}
         >
-          <p>
-            <strong>{item.item_name}</strong>
-          </p>
-          <p style={{ marginTop: 4 }}>{item.item_notes}</p>
-
-          {item.image_url && (
-            <img
-              src={item.image_url}
-              style={{
-                width: "100%",
-                marginTop: 10,
-                borderRadius: 10,
-                border: "1px solid #eee",
-              }}
-            />
-          )}
+          {report.status.toUpperCase()}
         </div>
-      ))}
 
-      <button
-        onClick={() => router.push(`/reports/${reportId}/add-item`)}
-        style={{
-          width: "100%",
-          padding: "12px 0",
-          marginTop: 20,
-          background: "#C8A36D",
-          color: "white",
-          border: "none",
-          borderRadius: 12,
-          fontSize: 16,
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        + Add Item
-      </button>
+        {/* MAIN REPORT INFO */}
+        <h2 style={styles.sectionTitle}>Main Information</h2>
+
+        <p><strong>ID:</strong> {report.id}</p>
+        <p><strong>Created:</strong> {new Date(report.created_at).toLocaleString()}</p>
+
+        {report.notes && (
+          <p style={{ marginTop: "10px" }}>
+            <span style={styles.label}>Notes:</span> <br />
+            <span style={styles.value}>{report.notes}</span>
+          </p>
+        )}
+
+        {report.image_url && (
+          <img src={report.image_url} alt="report" style={styles.image} />
+        )}
+
+        {/* ITEMS */}
+        <h2 style={styles.sectionTitle}>Items</h2>
+
+        {items.length === 0 && <p>No items added to this report.</p>}
+
+        {items.map((item) => (
+          <div key={item.id} style={styles.itemCard}>
+            <p>
+              <span style={styles.label}>Category:</span> {item.categories?.name}
+            </p>
+            <p>
+              <span style={styles.label}>Subcategory:</span> {item.subcategories?.name}
+            </p>
+
+            {item.notes && (
+              <p>
+                <span style={styles.label}>Notes:</span> {item.notes}
+              </p>
+            )}
+
+            {item.image_url && (
+              <img src={item.image_url} style={styles.image} alt="item" />
+            )}
+          </div>
+        ))}
+
+        <button style={styles.backButton} onClick={() => router.push("/reports")}>
+          Back to Reports
+        </button>
+      </div>
     </div>
   );
 }
