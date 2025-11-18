@@ -4,11 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../../lib/supabaseClient";
 
-// GLASS COMPONENTS
 import GlassPage from "../../components/GlassPage";
 import GlassHeader from "../../components/GlassHeader";
 import GlassCard from "../../components/GlassCard";
-import FloatingButton from "../../components/FloatingButton";
 
 export default function NewReportPage() {
   const router = useRouter();
@@ -17,57 +15,59 @@ export default function NewReportPage() {
   const [subcategory, setSubcategory] = useState("");
   const [notes, setNotes] = useState("");
   const [image, setImage] = useState(null);
-  const [reportId, setReportId] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [reportId, setReportId] = useState(null);
   const [error, setError] = useState("");
 
-  // Create Report
-  const createMainReportIfNeeded = async () => {
-    if (reportId) return reportId;
-
+  //------------------------------------------------------
+  // 1 — CREATE REPORT
+  //------------------------------------------------------
+  const createMainReport = async () => {
     const { data, error } = await supabase
       .from("reports")
       .insert([{ status: "open" }])
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) throw new Error(error.message);
 
     setReportId(data.id);
     return data.id;
   };
 
-  // Upload Photo
+  //------------------------------------------------------
+  // 2 — IMAGE UPLOAD
+  //------------------------------------------------------
   const uploadImage = async (file, id) => {
     if (!file) return null;
 
     const filename = `${id}_${Date.now()}.jpg`;
 
-    const { error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("reports")
       .upload(filename, file);
 
-    if (error) return null;
+    if (uploadError) throw new Error(uploadError.message);
 
-    const { data: urlData } = supabase.storage
+    const { data } = supabase.storage
       .from("reports")
       .getPublicUrl(filename);
 
-    return urlData.publicUrl;
+    return data.publicUrl;
   };
 
-  // Submit
+  //------------------------------------------------------
+  // 3 — FINAL SUBMIT
+  //------------------------------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
-      const id = await createMainReportIfNeeded();
+      const id = reportId || (await createMainReport());
       const imageUrl = await uploadImage(image, id);
 
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from("reports")
         .update({
           category,
@@ -77,15 +77,17 @@ export default function NewReportPage() {
         })
         .eq("id", id);
 
-      if (error) throw error;
+      if (updateError) throw new Error(updateError.message);
 
-      router.push("/reports");
+      router.push(`/reports/${id}`);
     } catch (err) {
       setError(err.message);
     }
-
-    setLoading(false);
   };
+
+  //------------------------------------------------------
+  // UI — GLASS PREMIUM
+  //------------------------------------------------------
 
   return (
     <GlassPage>
@@ -93,16 +95,15 @@ export default function NewReportPage() {
 
       <GlassCard>
         {error && (
-          <p style={{ color: "#b00020", fontWeight: 600, marginBottom: 10 }}>
-            {error}
-          </p>
+          <p style={{ color: "#B00020", marginBottom: 12 }}>{error}</p>
         )}
 
         <form onSubmit={handleSubmit}>
+
           {/* CATEGORY */}
-          <label className="vl-label">Category</label>
+          <label style={label}>Category</label>
           <select
-            className="vl-input"
+            style={input}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
@@ -115,53 +116,88 @@ export default function NewReportPage() {
           </select>
 
           {/* SUBCATEGORY */}
-          <label className="vl-label">Subcategory</label>
+          <label style={label}>Subcategory</label>
           <input
             type="text"
-            className="vl-input"
+            placeholder="Describe subcategory"
+            style={input}
             value={subcategory}
             onChange={(e) => setSubcategory(e.target.value)}
-            placeholder="Describe subcategory"
             required
           />
 
           {/* NOTES */}
-          <label className="vl-label">Notes</label>
+          <label style={label}>Notes</label>
           <textarea
-            className="vl-textarea"
-            value={notes}
-            rows={4}
             placeholder="Add detailed notes..."
+            style={textarea}
+            rows={4}
+            value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
 
           {/* IMAGE */}
-          <label className="vl-label">Image</label>
+          <label style={label}>Image</label>
           <input
             type="file"
             accept="image/*"
-            className="vl-input"
+            style={input}
             onChange={(e) => setImage(e.target.files[0])}
           />
 
           {/* SUBMIT */}
-          <button
-            type="submit"
-            className="vl-button"
-            disabled={loading}
-          >
-            {loading ? "Saving..." : "Save Report"}
+          <button type="submit" style={goldButton}>
+            Save Report
           </button>
         </form>
       </GlassCard>
-
-      <FloatingButton
-        onClick={async () => {
-          const id = await createMainReportIfNeeded();
-          setReportId(id);
-          router.push(`/reports/${id}`);
-        }}
-      />
     </GlassPage>
   );
 }
+
+// --------------------------------------------------
+// STYLES
+// --------------------------------------------------
+
+const label = {
+  fontSize: 15,
+  fontWeight: 600,
+  marginTop: 18,
+  marginBottom: 6,
+  color: "#3A3A3A",
+};
+
+const input = {
+  width: "100%",
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: "1px solid #D8D5CC",
+  background: "#FAF9F7",
+  fontSize: 15,
+  outline: "none",
+};
+
+const textarea = {
+  width: "100%",
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: "1px solid #D8D5CC",
+  background: "#FAF9F7",
+  fontSize: 15,
+  outline: "none",
+  resize: "none",
+};
+
+const goldButton = {
+  marginTop: 26,
+  width: "100%",
+  padding: "14px",
+  borderRadius: 12,
+  background: "linear-gradient(135deg,#C8A36D,#b48a54)",
+  color: "#fff",
+  border: "none",
+  fontSize: 16,
+  fontWeight: 600,
+  cursor: "pointer",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+};
