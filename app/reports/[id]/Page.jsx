@@ -1,24 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import supabase from "../../../lib/supabaseClient";
 
-// GLASS COMPONENTS
 import GlassPage from "../../components/GlassPage";
 import GlassHeader from "../../components/GlassHeader";
 import GlassCard from "../../components/GlassCard";
-import FloatingButton from "../../components/FloatingButton";
 
 export default function ReportView() {
-  const router = useRouter();
   const pathname = usePathname();
   const id = pathname.split("/").pop();
 
   const [report, setReport] = useState(null);
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
+  // --------------------------------------------------------------
+  // LOAD REPORT + ITEMS
+  // --------------------------------------------------------------
   const load = async () => {
+    setLoading(true);
+
     const { data: reportData } = await supabase
       .from("reports")
       .select("*")
@@ -37,43 +41,109 @@ export default function ReportView() {
 
     setReport(reportData);
     setItems(itemData || []);
+    setLoading(false);
   };
 
   useEffect(() => {
     load();
-  }, [id]);
+  }, []);
+
+  // --------------------------------------------------------------
+  // UI — GLASS PREMIUM VIEW
+  // --------------------------------------------------------------
 
   return (
     <GlassPage>
       <GlassHeader title="Inspection Report" back />
 
+      {/* LOADING */}
+      {loading && (
+        <p style={{ padding: 20, opacity: 0.7 }}>Loading...</p>
+      )}
+
       {/* MAIN REPORT INFO */}
-      {report && (
-        <GlassCard>
-          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>
-            Report #{report.id}
+      {!loading && (
+        <GlassCard style={{ marginBottom: 20 }}>
+          <h2
+            style={{
+              fontSize: 22,
+              margin: 0,
+              fontWeight: 700,
+              marginBottom: 10,
+            }}
+          >
+            Report #{id}
           </h2>
-          <p style={{ opacity: 0.7, marginTop: 6 }}>
-            Status: <strong>{report.status}</strong>
+
+          <p style={{ margin: 0, color: "#6A6A6A" }}>
+            Status:{" "}
+            <strong style={{ color: "#C8A36D" }}>
+              {report?.status || "open"}
+            </strong>
           </p>
+
+          {report?.notes && (
+            <p
+              style={{
+                marginTop: 14,
+                color: "#333",
+                lineHeight: "1.45",
+              }}
+            >
+              {report.notes}
+            </p>
+          )}
+
+          {report?.image_url && (
+            <img
+              src={report.image_url}
+              alt="report"
+              style={{
+                marginTop: 14,
+                width: "100%",
+                borderRadius: 12,
+                objectFit: "cover",
+              }}
+            />
+          )}
         </GlassCard>
       )}
 
       {/* ITEMS */}
       {items.map((item) => (
-        <GlassCard key={item.id}>
-          <h3 style={{ margin: 0 }}>
+        <GlassCard key={item.id} style={{ marginBottom: 14 }}>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 18,
+              fontWeight: "600",
+            }}
+          >
             {item.categories?.name} → {item.subcategories?.name}
           </h3>
 
-          {item.severity && (
-            <p style={{ marginTop: 4 }}>
-              <strong>Severity:</strong> {item.severity}
-            </p>
-          )}
+          <p style={{ marginTop: 4, marginBottom: 6 }}>
+            Severity:{" "}
+            <strong
+              style={{
+                color:
+                  item.severity === "critical"
+                    ? "#B00020"
+                    : "#C8A36D",
+              }}
+            >
+              {item.severity}
+            </strong>
+          </p>
 
           {item.notes && (
-            <p style={{ marginTop: 8, lineHeight: "1.45" }}>
+            <p
+              style={{
+                marginTop: 6,
+                color: "#444",
+                lineHeight: "1.45",
+              }}
+            >
               {item.notes}
             </p>
           )}
@@ -81,11 +151,11 @@ export default function ReportView() {
           {item.image_url && (
             <img
               src={item.image_url}
-              alt="inspection"
+              alt="item"
               style={{
+                marginTop: 10,
                 width: "100%",
-                borderRadius: 14,
-                marginTop: 12,
+                borderRadius: 12,
                 objectFit: "cover",
               }}
             />
@@ -94,9 +164,33 @@ export default function ReportView() {
       ))}
 
       {/* FLOATING BUTTON */}
-      <FloatingButton
-        onClick={() => router.push(`/reports/${id}/add-item`)}
-      />
+      <button
+        onClick={() => setOpenModal(true)}
+        style={floatingButton}
+      >
+        +
+      </button>
+
+      {/* MODAL */}
+      {/* ESTE MODAL LO TERMINAMOS EN EL PASO SIGUIENTE */}
     </GlassPage>
   );
 }
+
+// --------------------------------------------------------------
+// FLOATING BUTTON STYLE
+// --------------------------------------------------------------
+const floatingButton = {
+  position: "fixed",
+  bottom: 24,
+  right: 24,
+  width: 60,
+  height: 60,
+  borderRadius: "50%",
+  background: "linear-gradient(135deg,#C8A36D,#b48a54)",
+  color: "#fff",
+  fontSize: 34,
+  border: "none",
+  boxShadow: "0 8px 20px rgba(0,0,0,0.20)",
+  cursor: "pointer",
+};
