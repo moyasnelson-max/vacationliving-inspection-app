@@ -1,6 +1,8 @@
 "use client";
+
 import { useState } from "react";
 import supabase from "../lib/supabase-client";
+import "../styles/glass.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -28,37 +30,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="glass-page">
-      <div className="glass-card login-card">
-        <h1 className="glass-title">Vacation Living</h1>
-        <p className="glass-subtitle">Inspector Login</p>
+    <div className="glass-card">
+      <h2 className="glass-card-title">Login</h2>
 
-        <form onSubmit={handleLogin} className="glass-form">
-          <input
-            type="email"
-            placeholder="Email"
-            className="glass-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <form onSubmit={handleLogin}>
+        <input
+          className="glass-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="glass-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        <input
+          className="glass-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          {error && <p className="glass-error">{error}</p>}
+        {error && <p className="glass-error">{error}</p>}
 
-          <button type="submit" className="glass-button" disabled={loading}>
-            {loading ? "Loading..." : "Login"}
-          </button>
-        </form>
-      </div>
+        <button className="glass-button" type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Login"}
+        </button>
+      </form>
     </div>
   );
 }
