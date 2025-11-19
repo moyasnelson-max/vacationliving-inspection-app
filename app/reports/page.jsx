@@ -1,65 +1,51 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "../lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import supabase from "../../lib/supabaseClient";
+import Link from "next/link";
 
-export default function ReportsPage() {
-  const router = useRouter();
-  const [user, setUser] = useState(null);
+export default function ReportsListPage() {
   const [reports, setReports] = useState([]);
 
+  const loadReports = async () => {
+    const { data } = await supabase
+      .from("reports")
+      .select("*")
+      .order("id", { ascending: false });
+
+    setReports(data || []);
+  };
+
   useEffect(() => {
-    async function loadSession() {
-      const { data: session } = await supabase.auth.getSession();
-      if (!session.session) return router.push("/login");
-      setUser(session.session.user);
-    }
-
-    async function loadReports() {
-      const { data } = await supabase
-        .from("reports")
-        .select("*")
-        .order("id", { ascending: false });
-
-      if (data) setReports(data);
-    }
-
-    loadSession();
     loadReports();
   }, []);
 
   return (
-    <>
-      <div className="glass-nav">
-        Inspection Reports
-      </div>
+    <div className="glass-page">
+      <h1 className="glass-title">Inspection Reports</h1>
 
-      <div className="glass-page">
+      <Link href="/reports/new">
+        <button className="glass-button-primary">+ New Report</button>
+      </Link>
 
+      <div className="glass-list">
         {reports.map((r) => (
-          <div
-            key={r.id}
-            className="glass-card"
-            onClick={() => router.push(`/reports/${r.id}`)}
-            style={{ cursor: "pointer" }}
-          >
-            <h3>Report #{r.id}</h3>
-            <p>Status: <b>{r.status}</b></p>
-            <p style={{ opacity: 0.7 }}>
-              {r.notes ? r.notes.slice(0, 60) : "No notes"}...
+          <Link key={r.id} href={`/reports/${r.id}`} className="glass-card">
+            <div className="glass-card-header">
+              <h2>Report #{r.id}</h2>
+              <span className="chip">{r.status}</span>
+            </div>
+
+            <p className="glass-subtext">
+              {r.category ? `${r.category} → ${r.subcategory}` : "No category yet"}
             </p>
-          </div>
+
+            <p className="glass-notes-preview">
+              {r.notes?.slice(0, 80) || "No notes"}
+            </p>
+          </Link>
         ))}
-
       </div>
-
-      <div
-        className="glass-fab"
-        onClick={() => router.push("/reports/new")}
-      >
-        +
-      </div>
-    </>
+    </div>
   );
 }
