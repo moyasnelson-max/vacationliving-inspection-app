@@ -2,11 +2,40 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import supabase from "../../../lib/supabaseClient";
+import supabase from "../../lib/supabaseClient";
+import CreateItemModal from "../../components/CreateItemModal";
+import GlassFloatingButton from "../../components/GlassFloatingButton";
 
-import GlassPage from "../../components/GlassPage";
-import GlassHeader from "../../components/GlassHeader";
-import GlassCard from "../../components/GlassCard";
+const box = {
+  page: { padding: 24, fontFamily: "Inter, sans-serif" },
+  title: { fontSize: "26px", fontWeight: "600", marginBottom: 20 },
+  card: {
+    background: "rgba(255,255,255,0.55)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    padding: 20,
+    borderRadius: 14,
+    marginBottom: 14,
+    border: "1px solid #EEE",
+  },
+  img: {
+    width: "100%",
+    borderRadius: 12,
+    marginTop: 10,
+    objectFit: "cover",
+  },
+  button: {
+    padding: "12px 18px",
+    borderRadius: 12,
+    background: "linear-gradient(135deg,#C8A36D,#AD8A56)",
+    color: "#fff",
+    border: "none",
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+};
 
 export default function ReportView() {
   const pathname = usePathname();
@@ -14,15 +43,9 @@ export default function ReportView() {
 
   const [report, setReport] = useState(null);
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // --------------------------------------------------------------
-  // LOAD REPORT + ITEMS
-  // --------------------------------------------------------------
   const load = async () => {
-    setLoading(true);
-
     const { data: reportData } = await supabase
       .from("reports")
       .select("*")
@@ -36,161 +59,57 @@ export default function ReportView() {
         categories(name),
         subcategories(name)
       `)
-      .eq("report_id", id)
-      .order("id", { ascending: false });
+      .eq("report_id", id);
 
     setReport(reportData);
     setItems(itemData || []);
-    setLoading(false);
   };
 
   useEffect(() => {
     load();
   }, []);
 
-  // --------------------------------------------------------------
-  // UI — GLASS PREMIUM VIEW
-  // --------------------------------------------------------------
-
   return (
-    <GlassPage>
-      <GlassHeader title="Inspection Report" back />
+    <div style={box.page}>
+      <h1 style={box.title}>Inspection Report</h1>
 
-      {/* LOADING */}
-      {loading && (
-        <p style={{ padding: 20, opacity: 0.7 }}>Loading...</p>
-      )}
+      <button style={box.button} onClick={() => setOpen(true)}>
+        + Add Item
+      </button>
 
-      {/* MAIN REPORT INFO */}
-      {!loading && (
-        <GlassCard style={{ marginBottom: 20 }}>
-          <h2
-            style={{
-              fontSize: 22,
-              margin: 0,
-              fontWeight: 700,
-              marginBottom: 10,
-            }}
-          >
-            Report #{id}
-          </h2>
-
-          <p style={{ margin: 0, color: "#6A6A6A" }}>
-            Status:{" "}
-            <strong style={{ color: "#C8A36D" }}>
-              {report?.status || "open"}
-            </strong>
-          </p>
-
-          {report?.notes && (
-            <p
-              style={{
-                marginTop: 14,
-                color: "#333",
-                lineHeight: "1.45",
-              }}
-            >
-              {report.notes}
-            </p>
-          )}
-
-          {report?.image_url && (
-            <img
-              src={report.image_url}
-              alt="report"
-              style={{
-                marginTop: 14,
-                width: "100%",
-                borderRadius: 12,
-                objectFit: "cover",
-              }}
-            />
-          )}
-        </GlassCard>
-      )}
-
-      {/* ITEMS */}
       {items.map((item) => (
-        <GlassCard key={item.id} style={{ marginBottom: 14 }}>
-          <h3
-            style={{
-              margin: 0,
-              fontSize: 18,
-              fontWeight: "600",
-            }}
-          >
+        <div key={item.id} style={box.card}>
+          <h3>
             {item.categories?.name} → {item.subcategories?.name}
           </h3>
-
-          <p style={{ marginTop: 4, marginBottom: 6 }}>
-            Severity:{" "}
-            <strong
-              style={{
-                color:
-                  item.severity === "critical"
-                    ? "#B00020"
-                    : "#C8A36D",
-              }}
-            >
-              {item.severity}
-            </strong>
+          <p>
+            Status: <strong>{item.severity}</strong>
           </p>
-
-          {item.notes && (
-            <p
-              style={{
-                marginTop: 6,
-                color: "#444",
-                lineHeight: "1.45",
-              }}
-            >
-              {item.notes}
-            </p>
-          )}
+          <p>{item.notes}</p>
 
           {item.image_url && (
             <img
               src={item.image_url}
-              alt="item"
-              style={{
-                marginTop: 10,
-                width: "100%",
-                borderRadius: 12,
-                objectFit: "cover",
-              }}
+              style={box.img}
+              alt="inspection"
+              height="200"
             />
           )}
-        </GlassCard>
+        </div>
       ))}
 
-      {/* FLOATING BUTTON */}
-      <button
-        onClick={() => setOpenModal(true)}
-        style={floatingButton}
-      >
-        +
-      </button>
+      {/* --- FLOATING GLASS BUTTON --- */}
+      <GlassFloatingButton icon="🛠" onClick={() => setOpen(true)} />
 
-      {/* MODAL */}
-      {/* ESTE MODAL LO TERMINAMOS EN EL PASO SIGUIENTE */}
-    </GlassPage>
+      {/* --- MODAL --- */}
+      <CreateItemModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          load();
+        }}
+        reportId={id}
+      />
+    </div>
   );
 }
-
-// --------------------------------------------------------------
-// FLOATING BUTTON STYLE
-// --------------------------------------------------------------
-const floatingButton = {
-  position: "fixed",
-  bottom: 24,
-  right: 24,
-  width: 60,
-  height: 60,
-  borderRadius: "50%",
-  background: "linear-gradient(135deg,#C8A36D,#b48a54)",
-  color: "#fff",
-  fontSize: 34,
-  border: "none",
-  boxShadow: "0 8px 20px rgba(0,0,0,0.20)",
-  cursor: "pointer",
-};
