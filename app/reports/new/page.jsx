@@ -1,137 +1,170 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../../lib/supabaseClient";
-
 import GlassPage from "../../components/GlassPage";
 import GlassHeader from "../../components/GlassHeader";
 import GlassCard from "../../components/GlassCard";
 
+// --------------------------------------------------
+// MAIN COMPONENT
+// --------------------------------------------------
+
 export default function NewReportPage() {
   const router = useRouter();
 
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+
+  const [categoryId, setCategoryId] = useState("");
+  const [subcategoryId, setSubcategoryId] = useState("");
   const [notes, setNotes] = useState("");
   const [image, setImage] = useState(null);
 
-  const [reportId, setReportId] = useState(null);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  //------------------------------------------------------
-  // 1 — CREATE REPORT
-  //------------------------------------------------------
-  const createMainReport = async () => {
-    const { data, error } = await supabase
-      .from("reports")
-      .insert([{ status: "open" }])
-      .select()
-      .single();
+  // --------------------------------------------------
+  // LOAD CATEGORIES
+  // --------------------------------------------------
+  useEffect(() => {
+    async function load() {
+      const { data } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
 
-    if (error) throw new Error(error.message);
+      setCategories(data || []);
+    }
+    load();
+  }, []);
 
-    setReportId(data.id);
-    return data.id;
+  // LOAD SUBCATS WHEN CATEGORY SELECTED
+  const loadSub = async (id) => {
+    const { data } = await supabase
+      .from("subcategories")
+      .select("*")
+      .eq("category_id", id)
+      .order("name");
+
+    setSubcategories(data || []);
   };
 
-  //------------------------------------------------------
-  // 2 — IMAGE UPLOAD
-  //------------------------------------------------------
-  const uploadImage = async (file, id) => {
+  // --------------------------------------------------
+  // UPLOAD IMAGE
+  // --------------------------------------------------
+  const uploadImage = async (file, reportId) => {
     if (!file) return null;
 
-    const filename = `${id}_${Date.now()}.jpg`;
+    const filename = `report_${reportId}_${Date.now()}.jpg`;
 
-    const { error: uploadError } = await supabase.storage
+    const { error } = await supabase.storage
       .from("reports")
       .upload(filename, file);
 
-    if (uploadError) throw new Error(uploadError.message);
+    if (error) return null;
 
-    const { data } = supabase.storage
+    const { data: urlData } = supabase.storage
       .from("reports")
       .getPublicUrl(filename);
 
-    return data.publicUrl;
+    return urlData?.publicUrl || null;
   };
 
-  //------------------------------------------------------
-  // 3 — FINAL SUBMIT
-  //------------------------------------------------------
+  // --------------------------------------------------
+  // SUBMIT REPORT
+  // --------------------------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setLoading(true);
 
     try {
-      const id = reportId || (await createMainReport());
-      const imageUrl = await uploadImage(image, id);
+      // 1) CREATE MAIN REPORT
+      const { data: report, error: reportError } = await supabase
+        .from("reports")
+        .insert([{ status: "open" }])
+        .select()
+        .single();
 
+      if (reportError) throw reportError;
+
+      const reportId = report.id;
+
+      // 2) SAVE IMAGE IF EXISTS
+      const imageUrl = await uploadImage(image, reportId);
+
+      // 3) UPDATE MAIN REPORT WITH FIELDS
       const { error: updateError } = await supabase
         .from("reports")
         .update({
-          category,
-          subcategory,
+          category_id: categoryId,
+          subcategory_id: subcategoryId,
           notes,
           image_url: imageUrl,
         })
-        .eq("id", id);
+        .eq("id", reportId);
 
-      if (updateError) throw new Error(updateError.message);
+      if (updateError) throw updateError;
 
-      router.push(`/reports/${id}`);
+      router.push(`/reports/${reportId}`);
     } catch (err) {
-      setError(err.message);
+      console.error(err);
     }
+
+    setLoading(false);
   };
 
-  //------------------------------------------------------
-  // UI — GLASS PREMIUM
-  //------------------------------------------------------
+  // --------------------------------------------------
+  // UI
+  // --------------------------------------------------
 
   return (
     <GlassPage>
       <GlassHeader title="New Report" back />
 
       <GlassCard>
-        {error && (
-          <p style={{ color: "#B00020", marginBottom: 12 }}>{error}</p>
-        )}
-
         <form onSubmit={handleSubmit}>
-
           {/* CATEGORY */}
           <label style={label}>Category</label>
           <select
             style={input}
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={categoryId}
             required
+            onChange={(e) => {
+              setCategoryId(e.target.value);
+              loadSub(e.target.value);
+            }}
           >
             <option value="">Select...</option>
-            <option value="Interior">Interior</option>
-            <option value="Exterior">Exterior</option>
-            <option value="Safety">Safety</option>
-            <option value="Cleaning">Cleaning</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
 
           {/* SUBCATEGORY */}
           <label style={label}>Subcategory</label>
-          <input
-            type="text"
-            placeholder="Describe subcategory"
+          <select
             style={input}
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
+            value={subcategoryId}
             required
-          />
+            onChange={(e) => setSubcategoryId(e.target.value)}
+          >
+            <option value="">Select...</option>
+            {subcategories.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
 
           {/* NOTES */}
           <label style={label}>Notes</label>
           <textarea
-            placeholder="Add detailed notes..."
-            style={textarea}
             rows={4}
+            style={textarea}
+            placeholder="Describe the issue..."
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
@@ -146,8 +179,8 @@ export default function NewReportPage() {
           />
 
           {/* SUBMIT */}
-          <button type="submit" style={goldButton}>
-            Save Report
+          <button style={goldBtn} disabled={loading}>
+            {loading ? "Saving..." : "Save Report"}
           </button>
         </form>
       </GlassCard>
@@ -156,48 +189,47 @@ export default function NewReportPage() {
 }
 
 // --------------------------------------------------
-// STYLES
+// GLASS ELEMENT STYLES
 // --------------------------------------------------
 
 const label = {
-  fontSize: 15,
-  fontWeight: 600,
-  marginTop: 18,
+  fontSize: 14,
+  fontWeight: 500,
+  marginTop: 12,
   marginBottom: 6,
-  color: "#3A3A3A",
 };
 
 const input = {
   width: "100%",
   padding: "12px 14px",
   borderRadius: 12,
-  border: "1px solid #D8D5CC",
-  background: "#FAF9F7",
+  border: "1px solid rgba(0,0,0,0.15)",
+  background: "rgba(255,255,255,0.8)",
+  backdropFilter: "blur(6px)",
   fontSize: 15,
-  outline: "none",
 };
 
 const textarea = {
   width: "100%",
   padding: "12px 14px",
   borderRadius: 12,
-  border: "1px solid #D8D5CC",
-  background: "#FAF9F7",
-  fontSize: 15,
-  outline: "none",
+  border: "1px solid rgba(0,0,0,0.15)",
+  background: "rgba(255,255,255,0.8)",
+  backdropFilter: "blur(6px)",
   resize: "none",
+  fontSize: 15,
 };
 
-const goldButton = {
-  marginTop: 26,
+const goldBtn = {
   width: "100%",
-  padding: "14px",
-  borderRadius: 12,
-  background: "linear-gradient(135deg,#C8A36D,#b48a54)",
-  color: "#fff",
+  marginTop: 20,
+  padding: "14px 18px",
+  borderRadius: 14,
+  background: "linear-gradient(135deg,#C8A36D,#b8915e)",
+  boxShadow: "0 8px 22px rgba(0,0,0,0.12)",
   border: "none",
-  fontSize: 16,
+  color: "#fff",
+  fontSize: 17,
   fontWeight: 600,
   cursor: "pointer",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
 };
