@@ -1,18 +1,42 @@
-export default function GlassCard({ children }) {
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import GlassActionMenu from "./GlassActionMenu";
+
+export default function GlassCard({ report }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <div
-      style={{
-        background: "rgba(255,255,255,0.55)",
-        borderRadius: "18px",
-        padding: "18px",
-        border: "1px solid rgba(255,255,255,0.6)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-        marginBottom: "16px",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-      }}
-    >
-      {children}
+    <div className="glass-card">
+      {/* Header: Title + Menu */}
+      <div className="glass-card-header">
+        <h3 className="glass-card-title">{report.title}</h3>
+
+        {/* Marriott Menu Dots */}
+        <button 
+          className="glass-menu-button"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ⋯
+        </button>
+
+        {menuOpen && (
+          <GlassActionMenu 
+            id={report.id}
+            onClose={() => setMenuOpen(false)}
+          />
+        )}
+      </div>
+
+      {/* Body */}
+      <p className="glass-card-details">{report.details}</p>
+
+      {/* Footer */}
+      <div className="glass-card-footer">
+        <Link href={`/reports/${report.id}`} className="glass-button">
+          View
+        </Link>
+      </div>
     </div>
   );
 }
