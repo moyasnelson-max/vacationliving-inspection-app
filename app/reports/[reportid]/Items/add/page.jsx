@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import supabase from "../../../../lib/supabase-client";
-import "../../../../../styles/glass.css";
+import "../../../../styles/glass.css";
 
 export default function AddItem() {
   const router = useRouter();
@@ -21,9 +21,11 @@ export default function AddItem() {
     if (image) {
       const filename = `${reportId}_${Date.now()}.jpg`;
       await supabase.storage.from("reports").upload(filename, image);
+
       const { data } = supabase.storage
         .from("reports")
         .getPublicUrl(filename);
+
       imageUrl = data.publicUrl;
     }
 
@@ -35,44 +37,37 @@ export default function AddItem() {
       image_url: imageUrl,
     });
 
-    router.push(`/reports/${reportId}`);
+    router.back();
   };
 
   return (
-    <div className="glass-page">
-      <h2 className="glass-title">Add Item</h2>
+    <div className="glass-card">
+      <h2 className="glass-card-title">Add Item</h2>
 
       <input
-        type="text"
+        className="glass-input"
         placeholder="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="glass-input"
       />
 
       <input
-        type="text"
+        className="glass-input"
         placeholder="Subcategory"
         value={subcategory}
         onChange={(e) => setSubcategory(e.target.value)}
-        className="glass-input"
       />
 
       <textarea
+        className="glass-input"
         placeholder="Notes"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="glass-input"
       />
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setImage(e.target.files[0])}
-        className="glass-input"
-      />
+      <input type="file" onChange={(e) => setImage(e.target.files[0])} />
 
-      <button onClick={saveItem} className="glass-button">
+      <button className="glass-button" onClick={saveItem}>
         Save Item
       </button>
     </div>
