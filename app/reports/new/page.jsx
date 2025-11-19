@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../lib/supabase-client";
-import "../../../styles/glass.css";
+import "../../styles/glass.css";
 
 export default function NewReport() {
   const router = useRouter();
@@ -21,16 +21,16 @@ export default function NewReport() {
 
     if (error) {
       setError(error.message);
-      setLoading(false);
-      return;
+    } else {
+      router.push(`/reports/${data.id}`);
     }
 
-    router.push(`/reports/${data.id}`);
+    setLoading(false);
   };
 
   return (
-    <div className="glass-page">
-      <h1 className="glass-title">Create New Report</h1>
+    <div className="glass-card">
+      <h2 className="glass-card-title">Create New Report</h2>
 
       {error && <p className="glass-error">{error}</p>}
 
