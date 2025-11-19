@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../lib/supabaseClient";
-import "../../glass.css";
+import "../../../styles/glass.css";
 
 export default function NewReport() {
   const router = useRouter();
