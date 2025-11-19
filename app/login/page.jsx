@@ -1,47 +1,64 @@
 "use client";
-
 import { useState } from "react";
-import supabase from "../lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase-client";
+import "@/app/styles/glass.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
-  async function handleLogin() {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      setError(error.message);
-      return;
+      setError("Invalid login credentials");
+      setLoading(false);
+    } else {
+      window.location.href = "/reports";
     }
-
-    router.push("/reports");
-  }
+  };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Vacation Living - Inspector Login</h1>
+    <div className="glass-page">
+      <div className="glass-card login-card">
+        <h1 className="glass-title">Vacation Living</h1>
+        <p className="glass-subtitle">Inspector Login</p>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <form onSubmit={handleLogin} className="glass-form">
+          <input
+            type="email"
+            placeholder="Email"
+            className="glass-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-      <input
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+          <input
+            type="password"
+            placeholder="Password"
+            className="glass-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          {error && <p className="glass-error">{error}</p>}
 
-      <button onClick={handleLogin}>Login</button>
+          <button type="submit" disabled={loading} className="glass-button">
+            {loading ? "Loading..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
