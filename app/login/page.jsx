@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase-client";
-import "../styles/glass.css";   // <— RUTA CORRECTA
+import supabase from "../lib/supabase-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
