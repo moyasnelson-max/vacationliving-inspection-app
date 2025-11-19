@@ -1,5 +1,4 @@
 import "./globals.css";
-import "./styles/glass.css";
 
 export const metadata = {
   title: "Vacation Living Inspection App",
@@ -10,16 +9,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>{children}</body>
-
-      <script>
-        {`
-          if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-              navigator.serviceWorker.register("/sw.js");
-            });
-          }
-        `}
-      </script>
     </html>
   );
 }
