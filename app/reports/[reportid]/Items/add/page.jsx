@@ -2,8 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import supabase from "../../../../lib/supabaseClient";
-import "../../../../glass.css";
+import { supabase } from "@/lib/supabase-client";
 
 export default function AddItem() {
   const router = useRouter();
@@ -27,49 +26,53 @@ export default function AddItem() {
       imageUrl = data.publicUrl;
     }
 
-    await supabase.from("report_items").insert([
-      {
-        report_id: reportId,
-        category,
-        subcategory,
-        notes,
-        image_url: imageUrl,
-      },
-    ]);
+    await supabase.from("items").insert({
+      report_id: reportId,
+      category,
+      subcategory,
+      notes,
+      image_url: imageUrl,
+    });
 
     router.push(`/reports/${reportId}`);
   };
 
   return (
     <div className="glass-page">
-      <h1 className="glass-title">Add Item</h1>
+      <h2 className="glass-title">Add Item</h2>
 
       <input
-        className="glass-input"
+        type="text"
         placeholder="Category"
+        value={category}
         onChange={(e) => setCategory(e.target.value)}
+        className="glass-input"
       />
 
       <input
-        className="glass-input"
+        type="text"
         placeholder="Subcategory"
+        value={subcategory}
         onChange={(e) => setSubcategory(e.target.value)}
+        className="glass-input"
       />
 
       <textarea
-        className="glass-textarea"
         placeholder="Notes"
+        value={notes}
         onChange={(e) => setNotes(e.target.value)}
+        className="glass-input"
       />
 
       <input
         type="file"
-        className="glass-input"
+        accept="image/*"
         onChange={(e) => setImage(e.target.files[0])}
+        className="glass-input"
       />
 
-      <button className="glass-button" onClick={saveItem}>
-        Save
+      <button onClick={saveItem} className="glass-button">
+        Save Item
       </button>
     </div>
   );
