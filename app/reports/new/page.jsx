@@ -1,160 +1,57 @@
 "use client";
-
 import { useState } from "react";
-import supabase from "../../../lib/supabaseClient";
+import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
-export default function NewReport() {
-  const router = useRouter();
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [notes, setNotes] = useState("");
-  const [image, setImage] = useState(null);
-  const [error, setError] = useState("");
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-  const createReport = async () => {
+export default function NewReportPage() {
+  const router = useRouter();
+
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+  });
+
+  async function createReport() {
     const { data, error } = await supabase
       .from("reports")
-      .insert([{ status: "open", category, subcategory, notes }])
+      .insert({
+        title: form.title,
+        description: form.description,
+        created_at: new Date(),
+      })
       .select()
       .single();
 
-    if (error) throw error;
-    return data.id;
-  };
-
-  const uploadImage = async (file, id) => {
-    if (!file) return null;
-
-    const filename = `${id}_${Date.now()}.jpg`;
-    const { error } = await supabase
-      .storage
-      .from("reports")
-      .upload(filename, file);
-
-    if (error) throw error;
-
-    const { data } = supabase
-      .storage
-      .from("reports")
-      .getPublicUrl(filename);
-
-    return data.publicUrl;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    try {
-      const id = await createReport();
-      const imageUrl = await uploadImage(image, id);
-
-      await supabase
-        .from("reports")
-        .update({ image_url: imageUrl })
-        .eq("id", id);
-
-      router.push(`/reports/${id}`);
-    } catch (err) {
-      setError(err.message);
+    if (error) {
+      alert("❌ Error creando reporte");
+      return;
     }
-  };
+
+    router.push(`/reports/${data.id}`);
+  }
 
   return (
-    <>
-      <div className="glass-nav">
-        <button onClick={() => router.back()}>←</button>
-        New Report
-      </div>
+    <div style={{ padding: 20 }}>
+      <h1>Crear Reporte</h1>
 
-      <div className="glass-page">
+      <input
+        placeholder="Título"
+        value={form.title}
+        onChange={(e) => setForm({ ...form, title: e.target.value })}
+      />
 
-        {error && (
-          <div className="glass-card" style={{ color: "red" }}>
-            {error}
-          </div>
-        )}
+      <textarea
+        placeholder="Descripción"
+        value={form.description}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
 
-        <div className="glass-card">
-
-          <form onSubmit={handleSubmit}>
-
-            <label>Category</label>
-            <select
-              className="glass-input"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "14px",
-                border: "1px solid #ddd"
-              }}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-            >
-              <option value="">Select</option>
-              <option value="Interior">Interior</option>
-              <option value="Exterior">Exterior</option>
-              <option value="Safety">Safety</option>
-              <option value="Cleaning">Cleaning</option>
-            </select>
-
-            <label style={{ marginTop: 12 }}>Subcategory</label>
-            <input
-              type="text"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "14px",
-                border: "1px solid #ddd"
-              }}
-              value={subcategory}
-              onChange={(e) => setSubcategory(e.target.value)}
-              required
-            />
-
-            <label style={{ marginTop: 12 }}>Notes</label>
-            <textarea
-              rows={4}
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "14px",
-                border: "1px solid #ddd"
-              }}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-
-            <label style={{ marginTop: 12 }}>Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-
-            <button
-              type="submit"
-              style={{
-                width: "100%",
-                padding: "14px",
-                borderRadius: "14px",
-                marginTop: "20px",
-                background: "linear-gradient(135deg,#c8a36d,#b48a54)",
-                border: "none",
-                color: "#fff",
-                fontSize: "17px",
-                fontWeight: "600"
-              }}
-            >
-              Save Report
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-    </>
+      <button onClick={createReport}>Guardar</button>
+    </div>
   );
 }
