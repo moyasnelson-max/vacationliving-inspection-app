@@ -1,128 +1,73 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "../../../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 export default function EditReportPage({ params }) {
   const router = useRouter();
   const { id } = params;
 
-  const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const [notes, setNotes] = useState("");
-  const [status, setStatus] = useState("open");
-
-  async function loadReport() {
-    const { data } = await supabase
-      .from("reports")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    setReport(data);
-    setNotes(data.notes || "");
-    setStatus(data.status);
-    setLoading(false);
-  }
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+  });
 
   useEffect(() => {
-    loadReport();
-  }, []);
+    async function load() {
+      const { data } = await supabase
+        .from("reports")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-  async function save() {
-    setSaving(true);
+      if (data) {
+        setForm({
+          title: data.title,
+          description: data.description,
+        });
+      }
+    }
+    load();
+  }, [id]);
 
+  async function saveReport() {
     const { error } = await supabase
       .from("reports")
-      .update({ notes, status })
+      .update({
+        title: form.title,
+        description: form.description,
+      })
       .eq("id", id);
 
-    setSaving(false);
+    if (error) {
+      alert("❌ Error actualizando");
+      return;
+    }
 
-    if (!error) router.push(`/reports/${id}`);
+    router.push(`/reports/${id}`);
   }
 
-  if (loading) return <p style={{ padding: 20 }}>Loading...</p>;
-
   return (
-    <div
-      style={{
-        padding: 24,
-        fontFamily: "Inter",
-      }}
-    >
-      <h1
-        style={{
-          fontSize: 28,
-          fontWeight: 600,
-          marginBottom: 14,
-        }}
-      >
-        Edit Report
-      </h1>
+    <div style={{ padding: 20 }}>
+      <h1>Editar Reporte</h1>
 
-      <div
-        style={{
-          background: "rgba(255,255,255,0.50)",
-          backdropFilter: "blur(18px)",
-          padding: 22,
-          borderRadius: 16,
-          border: "1px solid #E8E2D6",
-        }}
-      >
-        <label>Status</label>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          style={{
-            width: "100%",
-            padding: 12,
-            borderRadius: 12,
-            border: "1px solid #D8D5CC",
-            background: "#FAF9F7",
-            marginBottom: 14,
-          }}
-        >
-          <option value="open">Open</option>
-          <option value="in_progress">In Progress</option>
-          <option value="closed">Closed</option>
-        </select>
+      <input
+        value={form.title}
+        onChange={(e) => setForm({ ...form, title: e.target.value })}
+      />
 
-        <label>Notes</label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={5}
-          style={{
-            width: "100%",
-            padding: 12,
-            borderRadius: 12,
-            border: "1px solid #D8D5CC",
-            background: "#FAF9F7",
-          }}
-        />
+      <textarea
+        value={form.description}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
 
-        <button
-          onClick={save}
-          disabled={saving}
-          style={{
-            width: "100%",
-            padding: 14,
-            marginTop: 22,
-            borderRadius: 12,
-            background: "linear-gradient(135deg,#C8A36D,#B48A54)",
-            color: "#fff",
-            border: "none",
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-      </div>
+      <button onClick={saveReport}>Guardar Cambios</button>
     </div>
   );
 }
