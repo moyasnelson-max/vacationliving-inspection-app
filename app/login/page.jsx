@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase-client";
-import "../styles/glass.css";
+import "../styles/glass.css";   // <— RUTA CORRECTA
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,10 +21,11 @@ export default function LoginPage() {
 
     if (error) {
       setError("Invalid login credentials");
-      setLoading(false);
     } else {
       window.location.href = "/reports";
     }
+
+    setLoading(false);
   };
 
   return (
@@ -54,7 +55,7 @@ export default function LoginPage() {
 
           {error && <p className="glass-error">{error}</p>}
 
-          <button type="submit" disabled={loading} className="glass-button">
+          <button type="submit" className="glass-button" disabled={loading}>
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
