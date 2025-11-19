@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase-client";
+import supabase from "../../../../lib/supabase-client";
 import "../../../../../styles/glass.css";
 
 export default function AddItem() {
