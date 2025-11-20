@@ -1,4 +1,4 @@
-import supabase from "@/app/lib/supabase-client";
+import supabase from "../../lib/supabase-client";
 
 export async function POST(req) {
   try {
