@@ -1,6 +1,6 @@
 import supabase from "@/app/lib/supabase-client";
 
-export async function GET() {
+export async function GET(req) { ... }
   try {
     const { data, error } = await supabase
       .from("reports")
