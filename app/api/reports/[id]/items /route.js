@@ -1,4 +1,4 @@
-import supabase from "../../../../lib/supabase-client";
+import supabase from "../../../../lib/supabase-client.js";
 
 export async function GET(_, { params }) {
   const { id } = params;
