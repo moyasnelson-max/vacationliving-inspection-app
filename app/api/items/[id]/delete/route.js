@@ -1,4 +1,4 @@
-import supabase from "../../../lib/supabase-client.js";
+import supabase from "@/app/lib/supabase-client.js";
 
 export async function DELETE(_, { params }) {
   const { id } = params;
