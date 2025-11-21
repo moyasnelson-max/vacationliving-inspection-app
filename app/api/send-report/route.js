@@ -4,26 +4,45 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    // 🔥 Llamada directa a la Edge Function send-report
-    const res = await fetch(
+    const inspector_email = body.inspector_email;
+    const property_id = body.property_id;
+    const data = body.data;
+
+    if (!inspector_email || !property_id || !data) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Llama a la Edge Function
+    const resp = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-report`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          inspector_email,
+          property_id,
+          data,
+        }),
       }
     );
 
-    const data = await res.json();
-    return NextResponse.json(data);
+    const result = await resp.json();
+
+    if (!resp.ok) {
+      return NextResponse.json(
+        { error: result.error || "Failed in send-report function" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("API /api/send-report Error:", err);
-    return NextResponse.json(
-      { error: "Failed to send report" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
