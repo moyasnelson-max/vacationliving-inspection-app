@@ -1,26 +1,12 @@
+import uploadToSupabase from "@/app/pdf/uploadToSupabase";
+
 export async function POST(req) {
   try {
-    const data = await req.formData();
-    const file = data.get("file");
+    const formData = await req.formData();
+    const response = await uploadToSupabase(formData);
 
-    if (!file) {
-      return new Response(
-        JSON.stringify({ error: "No file provided" }),
-        { status: 400 }
-      );
-    }
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-    return new Response(buffer, {
-      headers: {
-        "Content-Type": file.type,
-      },
-    });
+    return Response.json(response, { status: 200 });
   } catch (err) {
-    console.error(err);
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return Response.json({ error: err.message }, { status: 500 });
   }
 }
