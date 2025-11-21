@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import generatePDF from "../pdf/generatePDF";
-import { uploadPDF } from "../pdf/uploadToSupabase";
-import { sendEmail } from "../pdf/sendEmail";
-import { createIssue } from "../issues/createIssue";
+import generatePDF from "../pdf/generatePdf.jsx";
+import uploadToSupabase from "../pdf/uploadToSupabase.js";
+import sendEmail from "../pdf/sendEmail.js";
+import createIssue from "../issues/createIssue.js";
 
 export default function InspectionPage() {
   const [propertyId, setPropertyId] = useState("");
