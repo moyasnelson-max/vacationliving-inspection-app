@@ -47,12 +47,15 @@ export default function InspectionPage() {
       });
 
       // 3️⃣ Send Email to Owner
-      await sendEmail({
-        to: inspectorEmail, // You can change to property owner
-        subject: `Inspection Report — ${propertyId}`,
-        message: "Your inspection has been completed.",
-        pdfUrl,
-      });
+      await fetch("/api/send-report", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    inspector_email: session.user.email,
+    property_id: selectedPropertyId,
+    data: form,
+  }),
+});
 
       // 4️⃣ Create Issue Ticket if needed
       if (notes.length > 5) {
