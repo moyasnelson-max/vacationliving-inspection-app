@@ -1,157 +1,185 @@
 "use client";
 
 import { useState } from "react";
-import ReportHTML from "./components/ReportHTML.jsx";
-import GeneratePDF from "./components/GeneratePDF.jsx";
-import { uploadPDF } from "./components/UploadPDF.js";
-import { submitFinalReport } from "./components/SubmitReport.js";
+import generatePDF from "../pdf/generatePDF";
+import { uploadPDF } from "../pdf/uploadToSupabase";
+import { sendEmail } from "../pdf/sendEmail";
+import { createIssue } from "../issues/createIssue";
 
 export default function InspectionPage() {
-  const [step, setStep] = useState("form"); // form → preview → sending → done
-  const [report, setReport] = useState(null);
-
-  // Form fields
-  const [propertyName, setPropertyName] = useState("");
   const [propertyId, setPropertyId] = useState("");
   const [inspectorEmail, setInspectorEmail] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [issues, setIssues] = useState([]);
+  const [notes, setNotes] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
 
-  // Handle submit
-  async function handleSubmit() {
-    if (!propertyId || !inspectorEmail) {
-      alert("Missing required fields.");
-      return;
-    }
+  // Handle camera / file picker
+  const handlePhotos = (e) => {
+    const files = Array.from(e.target.files);
+    setPhotos((prev) => [...prev, ...files]);
+  };
 
-    const now = new Date().toLocaleString();
-
-    const reportObject = {
-      propertyName,
-      propertyId,
-      inspectorEmail,
-      reportDate: now,
-      categories,
-      issues,
-      photos,
-    };
-
-    setReport(reportObject);
-    setStep("preview");
-  }
-
-  // Generate PDF + Upload + Send Report
-  async function finishReport() {
+  // MAIN FLOW
+  const submitInspection = async () => {
     try {
-      setStep("sending");
+      setIsLoading(true);
+      setResult(null);
 
-      // 1) Generate PDF
-      const pdfBlob = await GeneratePDF();
+      if (!propertyId || !inspectorEmail || photos.length === 0) {
+        setResult({ error: "Please fill all fields and add photos." });
+        setIsLoading(false);
+        return;
+      }
 
-      // 2) Upload PDF
-      const pdfUrl = await uploadPDF(pdfBlob, report.propertyId);
-
-      // 3) Submit to backend (send-report)
-      const res = await submitFinalReport({
-        ...report,
-        pdf_url: pdfUrl,
+      // 1️⃣ Generate PDF
+      const pdfBase64 = await generatePDF({
+        propertyId,
+        inspectorEmail,
+        notes,
+        photos,
       });
 
-      console.log("Send-report response:", res);
+      // 2️⃣ Upload PDF to Supabase
+      const { pdfUrl } = await uploadPDF({
+        propertyId,
+        pdfBase64,
+      });
 
-      setStep("done");
-    } catch (e) {
-      console.error(e);
-      alert("There was an error sending the report.");
-      setStep("preview");
+      // 3️⃣ Send Email to Owner
+      await sendEmail({
+        to: inspectorEmail, // You can change to property owner
+        subject: `Inspection Report — ${propertyId}`,
+        message: "Your inspection has been completed.",
+        pdfUrl,
+      });
+
+      // 4️⃣ Create Issue Ticket if needed
+      if (notes.length > 5) {
+        await createIssue({
+          propertyId,
+          inspectorEmail,
+          description: notes,
+          photoCount: photos.length,
+          pdfUrl,
+        });
+      }
+
+      setResult({ ok: true, pdfUrl });
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setResult({ error: err.message });
+      setIsLoading(false);
     }
-  }
+  };
 
-  // UI Screens
-  if (step === "form") {
-    return (
-      <div style={{ padding: 20, fontFamily: "Inter, sans-serif" }}>
-        <h1 style={{ color: "#C8A36D" }}>Inspection Form</h1>
+  return (
+    <div style={styles.container}>
+      <h1 style={styles.title}>Inspection Form</h1>
 
-        <label>Property Name:</label>
+      <div style={styles.group}>
+        <label>Property ID</label>
         <input
-          style={{ display: "block", padding: 8, marginBottom: 12 }}
-          value={propertyName}
-          onChange={(e) => setPropertyName(e.target.value)}
-        />
-
-        <label>Property ID:</label>
-        <input
-          style={{ display: "block", padding: 8, marginBottom: 12 }}
+          type="text"
           value={propertyId}
           onChange={(e) => setPropertyId(e.target.value)}
+          style={styles.input}
         />
+      </div>
 
-        <label>Inspector Email:</label>
+      <div style={styles.group}>
+        <label>Inspector Email</label>
         <input
-          style={{ display: "block", padding: 8, marginBottom: 12 }}
+          type="email"
           value={inspectorEmail}
           onChange={(e) => setInspectorEmail(e.target.value)}
+          style={styles.input}
         />
-
-        <button
-          onClick={handleSubmit}
-          style={{
-            padding: "12px 20px",
-            background: "#C8A36D",
-            color: "white",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          Continue
-        </button>
       </div>
-    );
-  }
 
-  if (step === "preview") {
-    return (
-      <div style={{ padding: 20 }}>
-        <h2 style={{ color: "#C8A36D" }}>Preview Report</h2>
-
-        <ReportHTML report={report} />
-
-        <button
-          onClick={finishReport}
-          style={{
-            marginTop: 20,
-            padding: "12px 20px",
-            background: "#9C7C4D",
-            color: "white",
-            borderRadius: 6,
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Send Final Report
-        </button>
+      <div style={styles.group}>
+        <label>Notes</label>
+        <textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          style={styles.textarea}
+        />
       </div>
-    );
-  }
 
-  if (step === "sending") {
-    return (
-      <div style={{ padding: 20 }}>
-        <h2 style={{ color: "#C8A36D" }}>Sending report...</h2>
-        <p>Do not close this page.</p>
+      <div style={styles.group}>
+        <label>Photos</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+          onChange={handlePhotos}
+        />
       </div>
-    );
-  }
 
-  if (step === "done") {
-    return (
-      <div style={{ padding: 20, textAlign: "center" }}>
-        <h2 style={{ color: "#4CAF50" }}>Report Sent Successfully!</h2>
-        <p>A PDF has been delivered and issues were created.</p>
-      </div>
-    );
-  }
+      <button onClick={submitInspection} style={styles.button} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Submit Inspection"}
+      </button>
+
+      {result && (
+        <div style={styles.resultBox}>
+          {result.error && <p style={{ color: "red" }}>❌ {result.error}</p>}
+          {result.ok && (
+            <>
+              <p style={{ color: "green" }}>✔ Inspection Completed!</p>
+              <p>PDF: <a href={result.pdfUrl} target="_blank">{result.pdfUrl}</a></p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
+
+const styles = {
+  container: {
+    maxWidth: 600,
+    margin: "40px auto",
+    padding: 20,
+    fontFamily: "Inter, sans-serif",
+    background: "#fff",
+    borderRadius: 12,
+    boxShadow: "0 6px 20px rgba(0,0,0,0.08)"
+  },
+  title: {
+    fontSize: 28,
+    marginBottom: 20,
+    color: "#0A2540",
+  },
+  group: { marginBottom: 20 },
+  input: {
+    width: "100%",
+    padding: 10,
+    borderRadius: 8,
+    border: "1px solid #ccc"
+  },
+  textarea: {
+    width: "100%",
+    padding: 10,
+    height: 120,
+    borderRadius: 8,
+    border: "1px solid #ccc"
+  },
+  button: {
+    width: "100%",
+    padding: 14,
+    background: "#0A2540",
+    color: "#fff",
+    fontSize: 18,
+    borderRadius: 10,
+    cursor: "pointer"
+  },
+  resultBox: {
+    marginTop: 20,
+    padding: 15,
+    background: "#f9f9f9",
+    borderRadius: 8,
+    border: "1px solid #ddd"
+  }
+};
