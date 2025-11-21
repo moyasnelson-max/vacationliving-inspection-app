@@ -50,39 +50,53 @@ export default function InspectionPage() {
   // MAIN FLOW
   const submitInspection = async () => {
     try {
-      setIsLoading(true);
-      setResult(null);
+        setIsLoading(true);
+        setResult(null);
 
-      if (!propertyId || !inspectorEmail || photos.length === 0) {
-        setResult({ error: "Please fill all fields and add photos." });
+        if (!propertyId || !inspectorEmail || photos.length === 0) {
+            setResult({ error: "Please fill all fields and add photos." });
+            setIsLoading(false);
+            return;
+        }
+
+        // 1️⃣ Generate PDF
+        const pdfBase64 = await generatePDF({
+            propertyId,
+            inspectorEmail,
+            notes,
+            photos,
+        });
+
+        // 2️⃣ Upload PDF to Supabase
+        const pdfUrl = await uploadToSupabase({
+            propertyId,
+            pdfBase64,
+        });
+
+        // 3️⃣ Create Issue in Supabase
+        await createIssue({
+            propertyId,
+            inspectorEmail,
+            notes,
+            photos,
+            pdfUrl,
+        });
+
+        // 4️⃣ Send Email with PDF attachment
+        await sendEmail({
+            propertyId,
+            inspectorEmail,
+            pdfUrl,
+        });
+
+        setResult({ success: true });
+
+    } catch (err) {
+        setResult({ error: err.message });
+    } finally {
         setIsLoading(false);
-        return;
-      }
-
-      // 1️⃣ Generate PDF
-      const pdfBase64 = await generatePDF({
-        propertyId,
-        inspectorEmail,
-        notes,
-        photos,
-      });
-
-      // 2️⃣ Upload PDF to Supabase
-      const { pdfUrl } = await uploadPDF({
-        propertyId,
-        pdfBase64,
-      });
-
-      // 3️⃣ Send Email to Owner
-      await fetch("/api/send-report", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    inspector_email: session.user.email,
-    property_id: selectedPropertyId,
-    data: form,
-  }),
-});
+    }
+};
 
       // 4️⃣ Create Issue Ticket if needed
       if (notes.length > 5) {
