@@ -1,10 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import generatePDF from "../pdf/generatePdf.jsx";
-import uploadToSupabase from "../pdf/uploadToSupabase.js";
-import sendEmail from "../pdf/sendEmail.js";
-import createIssue from "../issues/createIssue.js";
+async function generatePDF_API(data) {
+  const res = await fetch("/api/generate-pdf", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+  return await res.arrayBuffer();
+}
+
+async function upload_API(formData) {
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    body: formData
+  });
+  return await res.json();
+}
+
+async function sendEmail_API(data) {
+  const res = await fetch("/api/send-email", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+  return await res.json();
+}
+
+async function createIssue_API(data) {
+  const res = await fetch("/api/create-issue", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+  return await res.json();
+}
 
 export default function InspectionPage() {
   const [propertyId, setPropertyId] = useState("");
