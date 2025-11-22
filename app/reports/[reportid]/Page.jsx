@@ -1,123 +1,120 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import supabase from "@/lib/supabaseClient";
-import CreateItemModal from "@/Components/CreateItemModal";
-import "/app/styles/glass.css";
+import { useParams } from "next/navigation";
+import supabase from "../../../lib/supabase-client";
 
-export default function ReportView() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const id = pathname.split("/").pop();
+export default function ReportDetailsPage() {
+  const params = useParams();
+  const reportId = params.reportid;
 
   const [report, setReport] = useState(null);
   const [items, setItems] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // LOAD DATA
-  const load = async () => {
-    const { data: reportData } = await supabase
+  // Fetch report + items
+  const fetchData = async () => {
+    const { data: rep, error: repError } = await supabase
       .from("reports")
       .select("*")
-      .eq("id", id)
+      .eq("id", reportId)
       .single();
 
-    const { data: itemData } = await supabase
+    const { data: itemList, error: itemError } = await supabase
       .from("report_items")
-      .select(`
-        *,
-        categories(name),
-        subcategories(name)
-      `)
-      .eq("report_id", id)
+      .select("*")
+      .eq("report_id", reportId)
       .order("created_at", { ascending: false });
 
-    setReport(reportData);
-    setItems(itemData || []);
+    if (!repError) setReport(rep);
+    if (!itemError) setItems(itemList || []);
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    load();
+    fetchData();
   }, []);
 
-  // DELETE REPORT
-  const deleteReport = async () => {
-    const ok = confirm("Are you sure you want to DELETE this report?");
-    if (!ok) return;
-
-    // delete items first
-    await supabase.from("report_items").delete().eq("report_id", id);
-    // delete report
-    await supabase.from("reports").delete().eq("id", id);
-
-    router.push("/reports");
-  };
-
-  if (!report) {
-    return <div style={{ padding: 20 }}>Loading...</div>;
-  }
+  const goBack = () => (window.location.href = "/reports");
+  const addItem = () => (window.location.href = `/reports/${reportId}/items/add`);
+  const openItem = (id) =>
+    (window.location.href = `/reports/${reportId}/items/${id}/edit`);
 
   return (
-    <div style={{ padding: 24, fontFamily: "Inter, sans-serif" }}>
-      
-      <h1 className="glass-title">Inspection Report</h1>
+    <div className="page-container">
+      <h1 className="vl-title">Report Details</h1>
+      <p className="vl-subtitle">Full inspection overview</p>
 
-      {/* DELETE BUTTON */}
-      <button
-        className="btn-delete"
-        onClick={deleteReport}
-      >
-        Delete Report
+      <button onClick={goBack} style={{ marginBottom: "22px" }}>
+        ← Back to Reports
       </button>
 
-      {/* ADD ITEM BUTTON */}
-      <button
-        className="btn-gold"
-        onClick={() => setOpen(true)}
-        style={{ marginTop: 18 }}
-      >
-        + Add Item
-      </button>
+      {loading ? (
+        <p>Loading report...</p>
+      ) : !report ? (
+        <p>Report not found.</p>
+      ) : (
+        <>
+          {/* Report card */}
+          <div className="card">
+            <h2 style={{ marginBottom: "8px" }}>{report.property_name}</h2>
+            <p style={{ marginBottom: "4px" }}>
+              <strong>Inspector:</strong> {report.inspector || "Unknown"}
+            </p>
+            <p style={{ marginBottom: "12px" }}>
+              <strong>Date:</strong>{" "}
+              {report.created_at
+                ? new Date(report.created_at).toLocaleString()
+                : "No date"}
+            </p>
 
-      {/* ALL ITEMS */}
-      {items.map((item) => (
-        <div key={item.id} className="glass-card">
-          <h3 style={{ marginBottom: 6 }}>
-            {item.categories?.name} → {item.subcategories?.name}
-          </h3>
+            {report.notes && (
+              <p style={{ color: "#555", marginTop: "10px" }}>
+                <strong>Notes:</strong> {report.notes}
+              </p>
+            )}
+          </div>
 
-          <p style={{ marginBottom: 6 }}>
-            <strong>Status:</strong> {item.severity}
-          </p>
-
-          <p>{item.notes}</p>
-
-          {item.image_url && (
-            <img src={item.image_url} className="glass-img" alt="photo" />
-          )}
-
-          {/* EDIT BUTTON */}
-          <button
-            className="btn-outline-gold"
-            onClick={() =>
-              router.push(`/reports/${id}/items/${item.id}/edit`)
-            }
-          >
-            Edit Item
+          {/* Add Item Button */}
+          <button onClick={addItem} style={{ marginBottom: "25px" }}>
+            + Add Item
           </button>
-        </div>
-      ))}
 
-      {/* MODAL */}
-      <CreateItemModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          load();
-        }}
-        reportId={id}
-      />
+          <h3 style={{ marginBottom: "12px" }}>Items</h3>
+
+          {/* Items list */}
+          {items.length === 0 ? (
+            <p>No items added yet.</p>
+          ) : (
+            items.map((item) => (
+              <div
+                key={item.id}
+                className="card"
+                style={{ cursor: "pointer" }}
+                onClick={() => openItem(item.id)}
+              >
+                <h4 style={{ marginBottom: "4px" }}>{item.title}</h4>
+                <p style={{ color: "#666" }}>
+                  Status:{" "}
+                  <strong
+                    style={{
+                      color:
+                        item.status === "ok"
+                          ? "#3a7f2b"
+                          : item.status === "issue"
+                          ? "#b02c2c"
+                          : "#555",
+                    }}
+                  >
+                    {item.status.toUpperCase()}
+                  </strong>
+                </p>
+              </div>
+            ))
+          )}
+        </>
+      )}
     </div>
   );
 }
