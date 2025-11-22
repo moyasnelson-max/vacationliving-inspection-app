@@ -1,18 +1,36 @@
-export default function Home() {
+"use client";
+
+import { useEffect } from "react";
+import supabase from "../lib/supabase-client";
+
+export default function HomePage() {
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session) {
+        window.location.href = "/reports";
+      } else {
+        window.location.href = "/login";
+      }
+    };
+
+    checkSession();
+  }, []);
+
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Vacation Living - Inspection System</h1>
-      <p>Bienvenido. Seleccione una opción:</p>
-
-      <div style={{ marginTop: 30 }}>
-        <a href="/login" style={{ display: "block", marginBottom: 10 }}>
-          🔐 Login Inspectores
-        </a>
-
-        <a href="/reports/new" style={{ display: "block", marginBottom: 10 }}>
-          📝 Reporte Huéspedes (sin login)
-        </a>
-      </div>
+    <div style={{
+      width: "100%",
+      height: "100vh",
+      background: "#f6f0e8",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      fontFamily: "Inter, sans-serif",
+      fontSize: "18px",
+      color: "#444",
+    }}>
+      Loading...
     </div>
   );
 }
