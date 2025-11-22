@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import supabase from "../../lib/supabase-client";
-import "../styles/marriott-login.css";
+import "../styles/glass.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,43 +30,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="lux-container">
-      <div className="lux-overlay"></div>
+    <div className="login-container">
 
-      <div className="lux-card">
-        <img
-          src="/logo.png"
-          alt="Vacation Living"
-          className="lux-logo"
-        />
+      <div className="login-overlay" />
 
-        <h2 className="lux-title">Welcome Back</h2>
-        <p className="lux-subtitle">Sign in to continue</p>
+      <div className="login-card">
 
-        <form onSubmit={handleLogin} className="lux-form">
+        <img src="/logo.png" alt="Vacation Living" className="login-logo" />
+
+        <h2 className="login-title">Welcome Back</h2>
+        <p className="login-subtitle">Sign in to continue</p>
+
+        <form onSubmit={handleLogin} className="login-form">
+
           <input
-            className="lux-input"
             type="email"
-            placeholder="Email address"
+            placeholder="Email"
+            className="login-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
           />
 
           <input
-            className="lux-input"
             type="password"
             placeholder="Password"
+            className="login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
           />
 
-          {error && <p className="lux-error">{error}</p>}
+          {error && <p className="login-error">{error}</p>}
 
-          <button className="lux-button" disabled={loading}>
-            {loading ? "Processing..." : "Login"}
+          <button className="login-btn" disabled={loading}>
+            {loading ? "Loading..." : "Login"}
           </button>
+
         </form>
       </div>
     </div>
