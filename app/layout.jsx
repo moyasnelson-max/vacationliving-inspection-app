@@ -1,9 +1,8 @@
 import "./globals.css";
-import "./styles/marriott-login.css";
 
 export const metadata = {
   title: "Vacation Living Inspection App",
-  description: "Premium Glass System",
+  description: "Premium Inspection System",
 };
 
 export default function RootLayout({ children }) {
