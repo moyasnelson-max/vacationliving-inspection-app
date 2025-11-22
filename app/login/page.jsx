@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import supabase from "../../lib/supabase-client";
-import "../../styles/marriott-login.css";
+import "../styles/marriott-login.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
