@@ -1,20 +1,33 @@
 "use client";
 
 import { useEffect } from "react";
-import supabase from "../lib/supabase-client";
-import { useRouter } from "next/navigation";
+import supabase from "../../lib/supabase-client";
 
-export default function Logout() {
-  const router = useRouter();
-
+export default function LogoutPage() {
   useEffect(() => {
-    supabase.auth.signOut();
-    router.push("/login");
+    const logout = async () => {
+      await supabase.auth.signOut();
+      window.location.href = "/login";
+    };
+
+    logout();
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Signing out...</h2>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        background: "#f6f0e8",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontFamily: "Inter, sans-serif",
+        fontSize: "18px",
+        color: "#444",
+      }}
+    >
+      Signing out...
     </div>
   );
 }
