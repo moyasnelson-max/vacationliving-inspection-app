@@ -1,229 +1,47 @@
 "use client";
 
-import { useState } from "react";
-async function generatePDF_API(data) {
-  const res = await fetch("/api/generate-pdf", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
-  return await res.arrayBuffer();
-}
+import { useEffect, useState } from "react";
+import supabase from "../../lib/supabase-client";
 
-async function upload_API(formData) {
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    body: formData
-  });
-  return await res.json();
-}
+export default function InspectionMain() {
+  const [session, setSession] = useState(null);
 
-async function sendEmail_API(data) {
-  const res = await fetch("/api/send-email", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
-  return await res.json();
-}
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session || null);
+    };
 
-async function createIssue_API(data) {
-  const res = await fetch("/api/create-issue", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
-  return await res.json();
-}
+    load();
+  }, []);
 
-export default function InspectionPage() {
-  const [propertyId, setPropertyId] = useState("");
-  const [inspectorEmail, setInspectorEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [photos, setPhotos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState(null);
-
-  // Handle camera / file picker
-  const handlePhotos = (e) => {
-    const files = Array.from(e.target.files);
-    setPhotos((prev) => [...prev, ...files]);
-  };
-
-  // MAIN FLOW
-  const submitInspection = async () => {
-    try {
-        setIsLoading(true);
-        setResult(null);
-
-        if (!propertyId || !inspectorEmail || photos.length === 0) {
-            setResult({ error: "Please fill all fields and add photos." });
-            setIsLoading(false);
-            return;
-        }
-
-        // 1️⃣ Generate PDF
-        const pdfBase64 = await generatePDF({
-            propertyId,
-            inspectorEmail,
-            notes,
-            photos,
-        });
-
-        // 2️⃣ Upload PDF to Supabase
-        const pdfUrl = await uploadToSupabase({
-            propertyId,
-            pdfBase64,
-        });
-
-        // 3️⃣ Create Issue in Supabase
-        await createIssue({
-            propertyId,
-            inspectorEmail,
-            notes,
-            photos,
-            pdfUrl,
-        });
-
-        // 4️⃣ Send Email with PDF attachment
-        await sendEmail({
-            propertyId,
-            inspectorEmail,
-            pdfUrl,
-        });
-
-        setResult({ success: true });
-
-    } catch (err) {
-        setResult({ error: err.message });
-    } finally {
-        setIsLoading(false);
-    }
-};
-
-      // 4️⃣ Create Issue Ticket if needed
-      if (notes.length > 5) {
-        await createIssue({
-          propertyId,
-          inspectorEmail,
-          description: notes,
-          photoCount: photos.length,
-          pdfUrl,
-        });
-      }
-
-      setResult({ ok: true, pdfUrl });
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      setResult({ error: err.message });
-      setIsLoading(false);
-    }
+  const goReports = () => {
+    window.location.href = "/reports";
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Inspection Form</h1>
+    <div className="page-container">
+      <h1 className="vl-title">Inspection Center</h1>
+      <p className="vl-subtitle">
+        Manage inspections, review reports, and enter new findings.
+      </p>
 
-      <div style={styles.group}>
-        <label>Property ID</label>
-        <input
-          type="text"
-          value={propertyId}
-          onChange={(e) => setPropertyId(e.target.value)}
-          style={styles.input}
-        />
+      <div className="card">
+        <h2 style={{ marginBottom: "10px" }}>Your Session</h2>
+
+        {session ? (
+          <>
+            <p><strong>Email:</strong> {session.user.email}</p>
+            <p style={{ marginTop: "4px" }}>
+              <strong>Status:</strong> Logged in ✔
+            </p>
+          </>
+        ) : (
+          <p>No active session</p>
+        )}
       </div>
 
-      <div style={styles.group}>
-        <label>Inspector Email</label>
-        <input
-          type="email"
-          value={inspectorEmail}
-          onChange={(e) => setInspectorEmail(e.target.value)}
-          style={styles.input}
-        />
-      </div>
-
-      <div style={styles.group}>
-        <label>Notes</label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          style={styles.textarea}
-        />
-      </div>
-
-      <div style={styles.group}>
-        <label>Photos</label>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          capture="environment"
-          onChange={handlePhotos}
-        />
-      </div>
-
-      <button onClick={submitInspection} style={styles.button} disabled={isLoading}>
-        {isLoading ? "Processing..." : "Submit Inspection"}
-      </button>
-
-      {result && (
-        <div style={styles.resultBox}>
-          {result.error && <p style={{ color: "red" }}>❌ {result.error}</p>}
-          {result.ok && (
-            <>
-              <p style={{ color: "green" }}>✔ Inspection Completed!</p>
-              <p>PDF: <a href={result.pdfUrl} target="_blank">{result.pdfUrl}</a></p>
-            </>
-          )}
-        </div>
-      )}
+      <button onClick={goReports}>Go to Reports</button>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: 600,
-    margin: "40px auto",
-    padding: 20,
-    fontFamily: "Inter, sans-serif",
-    background: "#fff",
-    borderRadius: 12,
-    boxShadow: "0 6px 20px rgba(0,0,0,0.08)"
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 20,
-    color: "#0A2540",
-  },
-  group: { marginBottom: 20 },
-  input: {
-    width: "100%",
-    padding: 10,
-    borderRadius: 8,
-    border: "1px solid #ccc"
-  },
-  textarea: {
-    width: "100%",
-    padding: 10,
-    height: 120,
-    borderRadius: 8,
-    border: "1px solid #ccc"
-  },
-  button: {
-    width: "100%",
-    padding: 14,
-    background: "#0A2540",
-    color: "#fff",
-    fontSize: 18,
-    borderRadius: 10,
-    cursor: "pointer"
-  },
-  resultBox: {
-    marginTop: 20,
-    padding: 15,
-    background: "#f9f9f9",
-    borderRadius: 8,
-    border: "1px solid #ddd"
-  }
-};
