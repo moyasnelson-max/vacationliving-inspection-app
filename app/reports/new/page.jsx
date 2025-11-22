@@ -1,42 +1,76 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import supabase from "../../lib/supabase-client";
-import "../../styles/glass.css";
+import supabase from "../../../lib/supabase-client";
 
-export default function NewReport() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+export default function NewReportPage() {
+  const [propertyName, setPropertyName] = useState("");
+  const [inspector, setInspector] = useState("");
+  const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const createReport = async () => {
+  const createReport = async (e) => {
+    e.preventDefault();
     setLoading(true);
+    setError("");
 
-    const { data, error } = await supabase
-      .from("reports")
-      .insert([{ status: "open" }])
-      .select()
-      .single();
-
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push(`/reports/${data.id}`);
+    if (!propertyName) {
+      setError("Property name is required");
+      setLoading(false);
+      return;
     }
 
-    setLoading(false);
+    const { error } = await supabase.from("reports").insert([
+      {
+        property_name: propertyName,
+        inspector: inspector || "Unknown",
+        notes,
+      },
+    ]);
+
+    if (error) {
+      setError("Error creating report");
+      setLoading(false);
+      return;
+    }
+
+    window.location.href = "/reports";
   };
 
   return (
-    <div className="glass-card">
-      <h2 className="glass-card-title">Create New Report</h2>
+    <div className="page-container">
+      <h1 className="vl-title">New Inspection Report</h1>
+      <p className="vl-subtitle">Create a new report for a property</p>
 
-      {error && <p className="glass-error">{error}</p>}
+      <form onSubmit={createReport} style={{ marginTop: "20px" }}>
+        <input
+          type="text"
+          placeholder="Property Name"
+          value={propertyName}
+          onChange={(e) => setPropertyName(e.target.value)}
+        />
 
-      <button className="glass-button" onClick={createReport} disabled={loading}>
-        {loading ? "Creating..." : "Create Report"}
-      </button>
+        <input
+          type="text"
+          placeholder="Inspector Name"
+          value={inspector}
+          onChange={(e) => setInspector(e.target.value)}
+        />
+
+        <textarea
+          placeholder="Notes (optional)"
+          rows={4}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        ></textarea>
+
+        {error && <p className="error-text">{error}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : "Create Report"}
+        </button>
+      </form>
     </div>
   );
 }
