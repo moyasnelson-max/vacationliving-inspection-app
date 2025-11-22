@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import supabase from "../../lib/supabase-client";
-import "../styles/glass.css";
+import "../styles/marriott-login.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,22 +30,31 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="glass-login-container">
-      <div className="glass-card login-card">
-        <h2 className="glass-card-title">Login</h2>
+    <div className="lux-container">
+      <div className="lux-overlay"></div>
 
-        <form onSubmit={handleLogin} className="login-form">
+      <div className="lux-card">
+        <img
+          src="/logo.png"
+          alt="Vacation Living"
+          className="lux-logo"
+        />
+
+        <h2 className="lux-title">Welcome Back</h2>
+        <p className="lux-subtitle">Sign in to continue</p>
+
+        <form onSubmit={handleLogin} className="lux-form">
           <input
-            className="glass-input"
+            className="lux-input"
             type="email"
-            placeholder="Email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
           />
 
           <input
-            className="glass-input"
+            className="lux-input"
             type="password"
             placeholder="Password"
             value={password}
@@ -53,10 +62,10 @@ export default function LoginPage() {
             autoComplete="current-password"
           />
 
-          {error && <p className="glass-error">{error}</p>}
+          {error && <p className="lux-error">{error}</p>}
 
-          <button className="glass-button" type="submit" disabled={loading}>
-            {loading ? "Loading..." : "Login"}
+          <button className="lux-button" disabled={loading}>
+            {loading ? "Processing..." : "Login"}
           </button>
         </form>
       </div>
