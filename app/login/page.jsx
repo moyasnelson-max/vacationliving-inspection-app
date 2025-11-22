@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import supabase from "../lib/supabase-client";
+import supabase from "../../lib/supabase-client";
 import "../styles/glass.css";
 
 export default function LoginPage() {
@@ -30,32 +30,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="glass-card">
-      <h2 className="glass-card-title">Login</h2>
+    <div className="glass-login-container">
+      <div className="glass-card login-card">
+        <h2 className="glass-card-title">Login</h2>
 
-      <form onSubmit={handleLogin}>
-        <input
-          className="glass-input"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            className="glass-input"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
 
-        <input
-          className="glass-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            className="glass-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+          />
 
-        {error && <p className="glass-error">{error}</p>}
+          {error && <p className="glass-error">{error}</p>}
 
-        <button className="glass-button" type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Login"}
-        </button>
-      </form>
+          <button className="glass-button" type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
