@@ -1,17 +1,22 @@
-/* CARD BASE ------------------------------------------------- */
+/* ============================================================
+   CARD BASE
+============================================================ */
 .glass-card {
   background: rgba(255, 255, 255, 0.16);
   padding: 20px;
   border-radius: 18px;
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   margin-bottom: 22px;
   position: relative;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.25s ease;
+  z-index: 1 !important; /* ← FIX */
 }
 
-/* HEADER ----------------------------------------------------- */
+/* ============================================================
+   CARD HEADER
+============================================================ */
 .glass-card-header {
   display: flex;
   justify-content: space-between;
@@ -24,7 +29,9 @@
   margin: 0;
 }
 
-/* MENU BUTTON (⋯) ------------------------------------------ */
+/* ============================================================
+   MENU BUTTON
+============================================================ */
 .glass-menu-button {
   font-size: 24px;
   padding: 4px 10px;
@@ -34,14 +41,16 @@
   backdrop-filter: blur(10px);
   cursor: pointer;
   color: black;
-  transition: 0.2s;
+  transition: 0.25s;
 }
 
 .glass-menu-button:hover {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* ACTION MENU ------------------------------------------------ */
+/* ============================================================
+   ACTION MENU
+============================================================ */
 .glass-action-menu {
   position: absolute;
   right: 10px;
@@ -50,9 +59,9 @@
   background: rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(15px);
   padding: 10px;
-  border-radius: 15px;
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 10px 20px rgba(0,0,0,.2);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.18s ease-out;
   z-index: 20;
 }
@@ -67,14 +76,16 @@
   font-size: 16px;
   cursor: pointer;
   border-radius: 10px;
-  transition: 0.2s;
+  transition: 0.25s;
 }
 
 .glass-menu-item:hover {
-  background: rgba(255,255,255,0.35);
+  background: rgba(255, 255, 255, 0.35);
 }
 
-/* DELETE ----------------------------------------------------- */
+/* ============================================================
+   DELETE
+============================================================ */
 .glass-delete {
   color: #c0392b;
   font-weight: 600;
@@ -93,7 +104,9 @@
   font-weight: 600;
 }
 
-/* FOOTER ----------------------------------------------------- */
+/* ============================================================
+   FOOTER
+============================================================ */
 .glass-card-footer {
   margin-top: 14px;
 }
@@ -103,13 +116,50 @@
   background: rgba(255,255,255,0.25);
   border-radius: 12px;
   backdrop-filter: blur(10px);
-  font-size: 15px;
-  text-decoration: none;
+  border: none;
+  cursor: pointer;
   color: black;
   font-weight: 500;
+  transition: 0.2s;
 }
 
-/* ANIMATION -------------------------------------------------- */
+.glass-button:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+/* ============================================================
+   INPUTS (FIX DEFINITIVO)
+============================================================ */
+.glass-input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  font-size: 16px;
+  outline: none;
+  color: black;
+
+  /* FIX: evita ser tapado por overlays */
+  position: relative !important;
+  z-index: 999 !important;
+  pointer-events: auto !important;
+}
+
+/* ============================================================
+   ERROR
+============================================================ */
+.glass-error {
+  color: #e74c3c;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
