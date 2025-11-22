@@ -1,3 +1,15 @@
+/* Prevent overlay from blocking input events */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+  overflow-x: hidden !important;
+}
+
 .vl-input {
   width: 100%;
   padding: 12px 14px;
