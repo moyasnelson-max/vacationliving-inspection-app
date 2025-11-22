@@ -1,55 +1,6 @@
-/* Prevent overlay from blocking input events */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
+body {
   margin: 0;
   padding: 0;
+  font-family: system-ui, -apple-system, "Inter", sans-serif;
   background: #f5f5f5;
-  overflow-x: hidden !important;
-}
-
-.vl-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.4);
-  backdrop-filter: blur(12px);
-  font-size: 15px;
-  margin-bottom: 16px;
-}
-
-.vl-label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  display: block;
-  opacity: 0.8;
-  font-weight: 500;
-}
-
-.vl-textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.4);
-  backdrop-filter: blur(12px);
-  font-size: 15px;
-  margin-bottom: 16px;
-}
-
-.vl-button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #C8A36D, #AF8A56);
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
