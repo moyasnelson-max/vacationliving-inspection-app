@@ -1,140 +1,108 @@
-/* MARRIOTT LUXURY LOGIN -------------------------- */
+"use client";
 
-.lux-container {
-  position: fixed;
-  inset: 0;
-  background: url("/background.webp") center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+import { useState } from "react";
+import supabase from "../../lib/supabase-client";
+import "../../styles/marriott-login.css";
 
-.lux-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-}
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-.lux-card {
-  position: relative;
-  z-index: 10;
-  width: 94%;
-  max-width: 420px;
-  padding: 48px 40px;
-  border-radius: 22px;
-  background: rgba(255,255,255,0.10);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 18px 60px rgba(0,0,0,0.25);
-  animation: fadeInUp 0.8s ease;
-}
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-/* LOGO */
-.lux-logo {
-  width: 130px;
-  display: block;
-  margin: 0 auto 28px;
-  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.25));
-}
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-/* TITLES */
-.lux-title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 6px;
-}
+    if (error) {
+      setError("Invalid login credentials");
+      setLoading(false);
+      return;
+    }
 
-.lux-subtitle {
-  text-align: center;
-  font-size: 14px;
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 32px;
-}
+    window.location.href = "/reports"; // REDIRECCIÓN
+  };
 
-/* FORM */
-.lux-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+  const handleReset = async () => {
+    if (!email) {
+      setError("Enter your email to reset password");
+      return;
+    }
 
-/* INPUTS */
-.lux-input-wrapper {
-  position: relative;
-}
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
 
-.lux-input {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.20);
-  backdrop-filter: blur(6px);
-  color: white;
-  font-size: 16px;
-}
+    if (error) {
+      setError("Error sending reset email");
+    } else {
+      setError("Password reset email sent ✔");
+    }
+  };
 
-.lux-input::placeholder {
-  color: rgba(255,255,255,0.7);
-}
+  return (
+    <div className="lux-container">
+      <div className="lux-overlay"></div>
 
-.lux-showpass {
-  position: absolute;
-  right: 16px;
-  top: 13px;
-  font-size: 18px;
-  cursor: pointer;
-}
+      <div className="lux-card">
+        {/* LOGO */}
+        <img
+          src="/logo.png"
+          alt="Vacation Living Logo"
+          className="lux-logo"
+        />
 
-/* BUTTON */
-.lux-button {
-  margin-top: 10px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #C9A875, #9C7C50);
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.25s;
-}
+        <h2 className="lux-title">Vacation Living</h2>
+        <p className="lux-subtitle">Inspector Access</p>
 
-.lux-button:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #d4b38a, #a88a60);
-}
+        <form onSubmit={handleLogin} className="lux-form">
+          {/* EMAIL */}
+          <input
+            className="lux-input"
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-/* FORGOT */
-.lux-forgot {
-  margin-top: 10px;
-  color: #f1d8aa;
-  text-align: center;
-  display: block;
-  font-size: 14px;
-}
+          {/* PASSWORD + TOGGLE */}
+          <div className="lux-pass-wrapper">
+            <input
+              className="lux-input"
+              type={showPass ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-/* ERROR */
-.lux-error {
-  color: white;
-  background: rgba(220,80,80,0.35);
-  padding: 10px 14px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 14px;
-}
+            <button
+              type="button"
+              className="lux-toggle-pass"
+              onClick={() => setShowPass(!showPass)}
+            >
+              {showPass ? "Hide" : "Show"}
+            </button>
+          </div>
 
-/* ANIMATION */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+          {/* ERROR */}
+          {error && <p className="lux-error">{error}</p>}
+
+          {/* LOGIN BUTTON */}
+          <button className="lux-button" type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Login"}
+          </button>
+        </form>
+
+        {/* Forgot Password */}
+        <button className="lux-forgot" onClick={handleReset}>
+          Forgot Password?
+        </button>
+      </div>
+    </div>
+  );
 }
