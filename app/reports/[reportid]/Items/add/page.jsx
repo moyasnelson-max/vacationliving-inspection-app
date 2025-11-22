@@ -1,75 +1,86 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import supabase from "../../../../lib/supabase-client";
-import "../../../../styles/glass.css";
 
-export default function AddItem() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const reportId = pathname.split("/")[2];
+export default function AddItemPage() {
+  const params = useParams();
+  const reportId = params.reportid;
 
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("ok");
   const [notes, setNotes] = useState("");
-  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const saveItem = async () => {
-    let imageUrl = null;
+  const addItem = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    if (image) {
-      const filename = `${reportId}_${Date.now()}.jpg`;
-      await supabase.storage.from("reports").upload(filename, image);
-
-      const { data } = supabase.storage
-        .from("reports")
-        .getPublicUrl(filename);
-
-      imageUrl = data.publicUrl;
+    if (!title) {
+      setError("Title is required");
+      setLoading(false);
+      return;
     }
 
-    await supabase.from("items").insert({
-      report_id: reportId,
-      category,
-      subcategory,
-      notes,
-      image_url: imageUrl,
-    });
+    const { error } = await supabase.from("report_items").insert([
+      {
+        report_id: reportId,
+        title,
+        status,
+        notes,
+      },
+    ]);
 
-    router.back();
+    if (error) {
+      setError("Error adding item");
+      setLoading(false);
+      return;
+    }
+
+    window.location.href = `/reports/${reportId}`;
   };
 
   return (
-    <div className="glass-card">
-      <h2 className="glass-card-title">Add Item</h2>
+    <div className="page-container">
+      <h1 className="vl-title">Add Item</h1>
+      <p className="vl-subtitle">Attach a new inspection item to this report</p>
 
-      <input
-        className="glass-input"
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
+      <form onSubmit={addItem} style={{ marginTop: "20px" }}>
+        {/* Title */}
+        <input
+          type="text"
+          placeholder="Item Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <input
-        className="glass-input"
-        placeholder="Subcategory"
-        value={subcategory}
-        onChange={(e) => setSubcategory(e.target.value)}
-      />
+        {/* Status */}
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          style={{ marginBottom: "16px" }}
+        >
+          <option value="ok">OK</option>
+          <option value="issue">Issue</option>
+        </select>
 
-      <textarea
-        className="glass-input"
-        placeholder="Notes"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-      />
+        {/* Notes */}
+        <textarea
+          rows={4}
+          placeholder="Notes (optional)"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        ></textarea>
 
-      <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        {error && <p className="error-text">{error}</p>}
 
-      <button className="glass-button" onClick={saveItem}>
-        Save Item
-      </button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : "Add Item"}
+        </button>
+      </form>
     </div>
   );
 }
