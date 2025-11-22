@@ -1,45 +1,76 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import supabase from "../../lib/supabase-client";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadReports() {
-      try {
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const fetchReports = async () => {
+    const { data, error } = await supabase
+      .from("reports")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-        if (!siteUrl) {
-          throw new Error("❌ NEXT_PUBLIC_SITE_URL is NOT defined");
-        }
-
-        const url = `${siteUrl}api/reports`;
-
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error("Error fetching reports");
-
-        const data = await res.json();
-        setReports(data);
-      } catch (e) {
-        setError(e.message);
-      }
+    if (!error) {
+      setReports(data || []);
     }
 
-    loadReports();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchReports();
   }, []);
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h1>Reports</h1>
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
+  const goToNewReport = () => {
+    window.location.href = "/reports/new";
+  };
 
-      <ul>
-        {reports.map((r) => (
-          <li key={r.id}>{r.id} — {r.status}</li>
-        ))}
-      </ul>
+  const openReport = (id) => {
+    window.location.href = `/reports/${id}`;
+  };
+
+  return (
+    <div className="page-container">
+      <h1 className="vl-title">Inspection Reports</h1>
+      <p className="vl-subtitle">Review, update, or create new inspections</p>
+
+      {/* NEW REPORT BUTTON */}
+      <button onClick={goToNewReport} style={{ marginBottom: "22px" }}>
+        + New Report
+      </button>
+
+      {loading ? (
+        <p>Loading reports...</p>
+      ) : reports.length === 0 ? (
+        <p>No reports found.</p>
+      ) : (
+        <div>
+          {reports.map((rep) => (
+            <div
+              key={rep.id}
+              className="card"
+              onClick={() => openReport(rep.id)}
+              style={{
+                cursor: "pointer",
+                transition: "0.25s",
+              }}
+            >
+              <h3 style={{ marginBottom: "6px" }}>{rep.property_name}</h3>
+              <p style={{ marginBottom: "6px", color: "#555" }}>
+                {rep.created_at
+                  ? new Date(rep.created_at).toLocaleString()
+                  : "No date"}
+              </p>
+              <p style={{ fontSize: "14px", color: "#777" }}>
+                Tap to view report →
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
