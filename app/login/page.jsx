@@ -1,144 +1,140 @@
-"use client";
+/* MARRIOTT LUXURY LOGIN -------------------------- */
 
-import { useState } from "react";
-import supabase from "../../lib/supabase-client";
-import "../styles/marriott-login.css";
+.lux-container {
+  position: fixed;
+  inset: 0;
+  background: url("/background.webp") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [forgotModal, setForgotModal] = useState(false);
-  const [resetEmailSent, setResetEmailSent] = useState(false);
+.lux-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+.lux-card {
+  position: relative;
+  z-index: 10;
+  width: 94%;
+  max-width: 420px;
+  padding: 48px 40px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.25);
+  animation: fadeInUp 0.8s ease;
+}
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+/* LOGO */
+.lux-logo {
+  width: 130px;
+  display: block;
+  margin: 0 auto 28px;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.25));
+}
 
-    if (error) {
-      setError("Invalid email or password");
-    } else {
-      window.location.href = "/reports";
-    }
+/* TITLES */
+.lux-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+}
 
-    setLoading(false);
-  };
+.lux-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 32px;
+}
 
-  const handleForgotPassword = async () => {
-    if (!email) {
-      setError("Enter your email first");
-      return;
-    }
+/* FORM */
+.lux-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://vacationlivingvirtualtour.com/reset",
-    });
+/* INPUTS */
+.lux-input-wrapper {
+  position: relative;
+}
 
-    if (error) {
-      setError("Error sending reset email");
-    } else {
-      setResetEmailSent(true);
-    }
-  };
+.lux-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.20);
+  backdrop-filter: blur(6px);
+  color: white;
+  font-size: 16px;
+}
 
-  return (
-    <div className="lux-container">
-      <div className="lux-overlay"></div>
+.lux-input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
 
-      <div className="lux-card">
+.lux-showpass {
+  position: absolute;
+  right: 16px;
+  top: 13px;
+  font-size: 18px;
+  cursor: pointer;
+}
 
-        {/* LOGO */}
-        <img src="/logo.png" alt="Vacation Living" className="lux-logo" />
+/* BUTTON */
+.lux-button {
+  margin-top: 10px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #C9A875, #9C7C50);
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
 
-        <h1 className="lux-title">Welcome Back</h1>
-        <p className="lux-subtitle">Vacation Living Inspection System</p>
+.lux-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #d4b38a, #a88a60);
+}
 
-        {/* FORM */}
-        <form className="lux-form" onSubmit={handleLogin}>
-          <input
-            type="email"
-            className="lux-input"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+/* FORGOT */
+.lux-forgot {
+  margin-top: 10px;
+  color: #f1d8aa;
+  text-align: center;
+  display: block;
+  font-size: 14px;
+}
 
-          <div style={{ position: "relative" }}>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="lux-input"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+/* ERROR */
+.lux-error {
+  color: white;
+  background: rgba(220,80,80,0.35);
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+}
 
-            <span
-              className="show-pass"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "🙈" : "👁️"}
-            </span>
-          </div>
-
-          {error && <p className="lux-error">{error}</p>}
-
-          <button className="lux-button" type="submit" disabled={loading}>
-            {loading ? "Loading..." : "Login"}
-          </button>
-        </form>
-
-        {/* FORGOT PASSWORD */}
-        <p
-          className="lux-forgot"
-          onClick={() => setForgotModal(true)}
-        >
-          Forgot password?
-        </p>
-      </div>
-
-      {/* MODAL FORGOT PASSWORD */}
-      {forgotModal && (
-        <div className="lux-modal">
-          <div className="lux-modal-card">
-            <h2 className="lux-title">Reset Password</h2>
-
-            <input
-              type="email"
-              className="lux-input"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            {resetEmailSent && (
-              <p className="lux-success">
-                Reset email sent! Check your inbox.
-              </p>
-            )}
-
-            {error && <p className="lux-error">{error}</p>}
-
-            <button className="lux-button" onClick={handleForgotPassword}>
-              Send Reset Email
-            </button>
-
-            <button
-              className="lux-close"
-              onClick={() => setForgotModal(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+/* ANIMATION */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
