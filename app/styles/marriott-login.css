@@ -1,160 +1,122 @@
-/* ===========================================================
-   MARRIOTT LUXURY LOGIN STYLE
-   Only affects /login page
-   =========================================================== */
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Background image */
+/* ---------- Premium Marriott Login Styles ---------- */
 .lux-container {
-  position: fixed;
-  inset: 0;
-  background: url("/background.webp") center/cover no-repeat;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url('/bg-login.jpg') center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
-/* Blur overlay */
 .lux-overlay {
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(16px);
-  background: linear-gradient(
-    to bottom right,
-    rgba(255,255,255,0.45),
-    rgba(240,230,220,0.45)
-  );
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
 }
 
-/* Card */
 .lux-card {
   position: relative;
-  width: 92%;
-  max-width: 420px;
-  padding: 40px 32px;
-  border-radius: 22px;
-  background: rgba(255,255,255,0.60);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  backdrop-filter: blur(20px);
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Logo */
-.lux-logo {
-  width: 110px;
-  margin: 0 auto 18px;
-  display: block;
-}
-
-/* Titles */
-.lux-title {
-  font-size: 28px;
-  font-weight: 600;
+  width: 90%;
+  max-width: 380px;
+  padding: 40px 30px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  z-index: 10;
   text-align: center;
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
+}
+
+.lux-logo {
+  width: 85px;
+  margin: 0 auto 10px auto;
+}
+
+.lux-title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.7px;
 }
 
 .lux-subtitle {
-  text-align: center;
-  font-size: 15px;
-  color: #4a4a4a;
-  margin-bottom: 30px;
+  color: #d8d8d8;
+  font-size: 14px;
+  margin-bottom: 25px;
 }
 
-/* Inputs */
+.lux-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .lux-input {
   width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(160, 140, 120, 0.45);
-  background: rgba(255,255,255,0.75);
-  font-size: 16px;
-  outline: none;
-  transition: 0.25s;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 15px;
 }
 
-.lux-input:focus {
-  border-color: #b59772;
-  box-shadow: 0 0 0 3px rgba(181,151,114,0.25);
+.lux-input::placeholder {
+  color: #f1f1f1;
 }
 
-/* Password wrapper */
 .lux-pass-wrapper {
   position: relative;
 }
 
 .lux-toggle-pass {
   position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+  right: 10px;
+  top: 9px;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.35);
   border: none;
-  color: #7a6043;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
+  color: #000;
   font-weight: 500;
 }
 
-/* Button */
 .lux-button {
-  width: 100%;
-  margin-top: 6px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  background: #b59772;
+  padding: 12px 0;
+  border-radius: 10px;
+  background: #c8a36d;
+  color: white;
   border: none;
-  color: #fff;
-  font-size: 17px;
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: 0.25s;
 }
 
 .lux-button:hover {
-  background: #a68661;
-  transform: translateY(-1px);
+  background: #b8955f;
 }
 
-/* Forgot password link */
+.lux-error {
+  color: #ffb3b3;
+  font-size: 14px;
+}
+
 .lux-forgot {
-  margin-top: 14px;
-  width: 100%;
+  margin-top: 15px;
   background: none;
   border: none;
-  text-align: center;
-  font-size: 15px;
-  color: #806748;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 6px;
-}
-
-/* Error text */
-.lux-error {
-  color: #c62828;
+  color: #fff;
   font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  text-align: center;
+  cursor: pointer;
+  opacity: 0.8;
 }
 
-/* Fade animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.lux-forgot:hover {
+  opacity: 1;
 }
