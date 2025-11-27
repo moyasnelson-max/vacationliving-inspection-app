@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import supabase from "@/lib/supabase-client";
-import "../styles/marriott-login.css";
+import supabase from "@lib/supabase-client";
+import "@styles/marriott-login.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -50,8 +50,7 @@ export default function LoginPage() {
       <div className="lux-overlay"></div>
 
       <div className="lux-card">
-        <img src="/logo.png" className="lux-logo" />
-
+        <img src="/logo.png" alt="Vacation Living Logo" className="lux-logo" />
         <h2 className="lux-title">Vacation Living</h2>
         <p className="lux-subtitle">Inspector Access</p>
 
