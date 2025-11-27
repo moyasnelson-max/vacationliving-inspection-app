@@ -1,36 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import supabase from "../lib/supabase-client";
+import supabase from "@lib/supabase-client";
 
-export default function HomePage() {
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (session) {
-        window.location.href = "/reports";
-      } else {
-        window.location.href = "/login";
-      }
-    };
-
-    checkSession();
-  }, []);
-
+export default function Home() {
   return (
-    <div style={{
-      width: "100%",
-      height: "100vh",
-      background: "#f6f0e8",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      fontFamily: "Inter, sans-serif",
-      fontSize: "18px",
-      color: "#444",
-    }}>
-      Loading...
-    </div>
+    <main style={{ padding: 30 }}>
+      <h1>Vacation Living - Inspection System</h1>
+      <a href="/login">Login Inspectors</a>
+    </main>
   );
 }
