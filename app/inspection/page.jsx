@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@lib/supabase-client";
+import supabase from "@/app/lib/supabase-client";
 
 export default function InspectionMain() {
   const [session, setSession] = useState(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import supabase from "@lib/supabase-client";
+import supabase from "@/app/lib/supabase-client";
 import "@styles/marriott-login.css";
 
 export default function LoginPage() {

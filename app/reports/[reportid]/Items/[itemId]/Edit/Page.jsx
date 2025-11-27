@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "../../../../../lib/supabase-client";
+import supabase from "@/app/lib/supabase-client";
 
 export default function EditItemPage() {
   const params = useParams();
