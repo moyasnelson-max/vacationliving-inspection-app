@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./styles/marriott-login.css";
 
 export const metadata = {
   title: "Vacation Living Inspection App",
