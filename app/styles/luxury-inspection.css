@@ -1,0 +1,158 @@
+/* ============================================================
+   FOUR SEASONS · GOLD MINIMAL · LUXURY INSPECTION UI
+   Applies only to the Inspector Dashboard
+   ------------------------------------------------------------
+   Colors: Soft-Beige · Pure-White · Soft-Gold (#C9A86A)
+   Shadows: Luxury Hotel Diffuse
+   Typography: Inter (clean hotel style)
+   ============================================================ */
+
+:root {
+  --lux-bg: #f7f2ea; /* premium beige hotel */
+  --lux-card: #ffffff;
+  --lux-border: rgba(201,168,106,0.55); /* gold soft */
+  --lux-gold: #c9a86a;
+  --lux-gold-dark: #b48e4f;
+  --lux-text: #1e1e1e;
+  --lux-muted: #6f6f6f;
+  --lux-radius: 22px;
+  --lux-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  --lux-hover-shadow: 0 28px 60px rgba(0,0,0,0.09);
+}
+
+/* Full Page Layout --------------------------------------- */
+.lux-container {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--lux-bg);
+  padding: 35px 28px;
+  max-width: 980px;
+  margin: auto;
+}
+
+/* Page Header -------------------------------------------- */
+.lux-header {
+  margin-bottom: 35px;
+}
+
+.lux-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--lux-text);
+  margin: 0;
+}
+
+.lux-subtitle {
+  font-size: 17px;
+  color: var(--lux-muted);
+  margin-top: 6px;
+}
+
+/* Card ---------------------------------------------------- */
+.lux-card {
+  background: var(--lux-card);
+  padding: 25px 28px;
+  border-radius: var(--lux-radius);
+  border: 1px solid var(--lux-border);
+  box-shadow: var(--lux-shadow);
+  margin-bottom: 26px;
+}
+
+.lux-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--lux-text);
+  margin-bottom: 20px;
+}
+
+/* Buttons -------------------------------------------------- */
+.lux-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--lux-gold);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.lux-btn:hover {
+  background: var(--lux-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--lux-hover-shadow);
+}
+
+.lux-btn-outline {
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  border: 2px solid var(--lux-gold);
+  color: var(--lux-gold);
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.lux-btn-outline:hover {
+  background: #fff8ef;
+  transform: translateY(-2px);
+  box-shadow: var(--lux-hover-shadow);
+}
+
+/* List Items ---------------------------------------------- */
+.lux-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lux-list-item {
+  background: var(--lux-card);
+  border-radius: var(--lux-radius);
+  padding: 18px 22px;
+  border: 1px solid var(--lux-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--lux-shadow);
+  transition: 0.2s;
+}
+
+.lux-list-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lux-hover-shadow);
+}
+
+.lux-item-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--lux-text);
+}
+
+.lux-arrow {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--lux-gold);
+}
+
+/* Loading -------------------------------------------------- */
+.lux-loading {
+  margin-top: 20px;
+  color: var(--lux-muted);
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* Responsive ---------------------------------------------- */
+@media (max-width: 550px) {
+  .lux-title { font-size: 26px; }
+  .lux-card { padding: 20px; }
+  .lux-list-item { padding: 16px 20px; }
+}

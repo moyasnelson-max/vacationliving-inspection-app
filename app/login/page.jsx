@@ -1,97 +1,66 @@
 "use client";
-
 import { useState } from "react";
-import supabase from "@/app/lib/supabase-client";
-import "@styles/marriott-login.css";
+import { supabase } from "@/app/lib/supabase-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
+  const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
 
-  const handleLogin = async (e) => {
+  async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password: pass
     });
 
-    if (error) {
-      setError("Invalid login credentials");
-      setLoading(false);
-      return;
-    }
-
-    window.location.href = "/reports";
-  };
-
-  const handleReset = async () => {
-    if (!email) {
-      setError("Enter your email to reset password");
-      return;
-    }
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-
-    if (error) {
-      setError("Error sending reset email");
-    } else {
-      setError("Password reset email sent ✔");
-    }
-  };
+    if (error) alert(error.message);
+    setLoading(false);
+  }
 
   return (
-    <div className="lux-container">
-      <div className="lux-overlay"></div>
+    <>
+      <div className="login-bg"></div>
+      <div className="login-overlay"></div>
 
-      <div className="lux-card">
-        <img src="/logo.png" alt="Vacation Living Logo" className="lux-logo" />
-        <h2 className="lux-title">Vacation Living</h2>
-        <p className="lux-subtitle">Inspector Access</p>
+      <div className="center-wrapper">
+        <form onSubmit={handleLogin} className="login-card">
+          
+          <img src="/logo.png" className="login-logo" />
+          <h1 className="login-title">Vacation Living</h1>
+          <p className="login-subtitle">Inspector Access</p>
 
-        <form onSubmit={handleLogin} className="lux-form">
-          <input
-            className="lux-input"
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <div className="lux-pass-wrapper">
+          <div className="input-group">
             <input
-              className="lux-input"
-              type={showPass ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
-
-            <button
-              type="button"
-              className="lux-toggle-pass"
-              onClick={() => setShowPass(!showPass)}
-            >
-              {showPass ? "Hide" : "Show"}
-            </button>
           </div>
 
-          {error && <p className="lux-error">{error}</p>}
+          <div className="input-group">
+            <input
+              type={show ? "text" : "password"}
+              placeholder="Password"
+              onChange={(e) => setPass(e.target.value)}
+              required
+            />
+            <span onClick={() => setShow(!show)} className="toggle-pass">
+              {show ? "Hide" : "Show"}
+            </span>
+          </div>
 
-          <button className="lux-button" type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Login"}
+          <button className="login-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </button>
-        </form>
 
-        <button className="lux-forgot" onClick={handleReset}>
-          Forgot Password?
-        </button>
+          <a href="#" className="forgot-link">Forgot Password?</a>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

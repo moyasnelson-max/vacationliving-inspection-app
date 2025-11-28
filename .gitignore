@@ -4,3 +4,5 @@ node_modules/
 node_modules/
 .vercel/
 npm-debug.log
+.vercel
+.env*.local

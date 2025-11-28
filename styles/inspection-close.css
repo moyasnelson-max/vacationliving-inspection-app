@@ -1,0 +1,127 @@
+/* ---------- GLOBAL CONTAINER ---------- */
+.lux-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: "Inter", sans-serif;
+  color: #1a1a1a;
+}
+
+/* ---------- TITLES ---------- */
+.lux-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: #8c6d35; /* gold */
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #d8c29a;
+  padding-bottom: 10px;
+}
+
+/* ---------- CARDS ---------- */
+.lux-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  border: 1px solid #e9e2d0;
+  margin-bottom: 25px;
+}
+
+.lux-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6e5a33; /* darker gold */
+  margin-bottom: 4px;
+}
+
+.lux-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 14px;
+}
+
+.lux-note {
+  background: #faf7f2;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  border-left: 3px solid #c8a56a;
+}
+
+/* ---------- SECTIONS ---------- */
+.lux-section {
+  margin-bottom: 30px;
+}
+
+/* ---------- TEXTAREA ---------- */
+.lux-textarea {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 10px;
+  border: 1px solid #d9d2c0;
+  padding: 12px;
+  font-size: 15px;
+  resize: none;
+  background: #fff;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.lux-textarea:focus {
+  border: 1px solid #c5a267;
+}
+
+/* ---------- PHOTO PREVIEW ---------- */
+.lux-photo-preview {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lux-photo {
+  width: 95px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d6c5a4;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+/* ---------- BUTTON CLOSE ---------- */
+.lux-button-close {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(145deg, #c8a567, #b89248);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.lux-button-close:hover {
+  background: linear-gradient(145deg, #d6b575, #c9a456);
+  transform: translateY(-1px);
+}
+
+.lux-button-close:disabled {
+  background: #e2d4b6;
+  color: #8b7a5b;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- LOADING ---------- */
+.lux-loading {
+  text-align: center;
+  font-size: 18px;
+  color: #8c6d35;
+  padding-top: 50px;
+}

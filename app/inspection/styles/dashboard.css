@@ -1,0 +1,124 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import supabase from "@/app/lib/supabase-client";
+
+export default function InspectionDashboard() {
+  const [session, setSession] = useState(null);
+  const [houses, setHouses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // -----------------------------
+  // LOAD SESSION
+  // -----------------------------
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session || null);
+    };
+    load();
+  }, []);
+
+  // -----------------------------
+  // LOAD HOUSES FROM SUPABASE
+  // -----------------------------
+  useEffect(() => {
+    const fetchHouses = async () => {
+      const { data, error } = await supabase
+        .from("houses")
+        .select("*")
+        .order("name", { ascending: true });
+
+      if (!error) setHouses(data || []);
+      setLoading(false);
+    };
+    fetchHouses();
+  }, []);
+
+  // -----------------------------
+  // GO TO SPECIFIC HOUSE
+  // -----------------------------
+  const goToHouse = (houseId) => {
+    window.location.href = `/inspection/${houseId}`;
+  };
+
+  // -----------------------------
+  // LOGOUT
+  // -----------------------------
+  const logout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  };
+
+  return (
+    <div className="lux-dashboard">
+
+      {/* ------------------------------
+          HEADER
+      --------------------------------*/}
+      <div className="lux-header">
+        <div>
+          <h1 className="lux-header-title">Inspection Center</h1>
+          <p className="lux-header-sub">Manage inspections and house reports</p>
+        </div>
+
+        <img src="/logo.png" alt="VL Logo" className="lux-header-logo" />
+      </div>
+
+      {/* ------------------------------
+          BREADCRUMBS
+      --------------------------------*/}
+      <div className="lux-breadcrumbs">
+        <a>Dashboard</a> <span>/</span> <span>Properties</span>
+      </div>
+
+      {/* ------------------------------
+          SESSION CARD
+      --------------------------------*/}
+      <div className="lux-card">
+        <h2 className="lux-card-title">Your Session</h2>
+        {session ? (
+          <p className="lux-card-text">
+            <strong>Email:</strong> {session.user.email}
+            <br />
+            <strong>Status:</strong> Logged in ✔
+          </p>
+        ) : (
+          <p className="lux-card-text">Not logged in.</p>
+        )}
+
+        <button className="lux-btn-outline" onClick={logout}>
+          Logout
+        </button>
+      </div>
+
+      {/* ------------------------------
+          HOUSE LIST
+      --------------------------------*/}
+      <div className="lux-card">
+        <h2 className="lux-card-title">Your Properties</h2>
+        <p className="lux-card-text">
+          Choose a property to start a new inspection or review reports.
+        </p>
+
+        {loading ? (
+          <p className="lux-dash-loading">Loading properties...</p>
+        ) : (
+          <div className="lux-grid">
+            {houses.map((house) => (
+              <div
+                key={house.id}
+                className="lux-house-box"
+                onClick={() => goToHouse(house.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <p className="lux-house-title">{house.name}</p>
+                <p className="lux-house-id">ID: {house.id}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

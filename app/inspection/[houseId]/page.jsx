@@ -1,81 +1,56 @@
 "use client";
 
+import "@/app/styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import supabase from "@/app/lib/supabase-client";
 
-export default function HouseInspectionPage() {
+export default function HouseDashboard() {
   const params = useParams();
   const houseId = params.houseId;
 
   const [house, setHouse] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchHouse = async () => {
-    const { data, error } = await supabase
+  const loadHouse = async () => {
+    const { data } = await supabase
       .from("houses")
       .select("*")
       .eq("id", houseId)
       .single();
 
-    if (!error) setHouse(data);
-
+    setHouse(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchHouse();
+    loadHouse();
   }, []);
 
-  const goBack = () => (window.location.href = "/inspection");
-
-  const goReports = () =>
-    (window.location.href = `/reports?house=${houseId}`);
-
-  const newInspection = () =>
-    (window.location.href = `/reports/new?house=${houseId}`);
-
   return (
-    <div className="page-container">
-      <h1 className="vl-title">Property Inspection</h1>
-      <p className="vl-subtitle">Details for this vacation home</p>
+    <div className="lux-container">
+      <div className="lux-header">
+        <h1 className="lux-title">{loading ? "Loading..." : house?.name}</h1>
+        <p className="lux-subtitle">Inspection Dashboard</p>
+      </div>
 
-      <button onClick={goBack} style={{ marginBottom: "22px" }}>
-        ← Back to Inspection Dashboard
-      </button>
+      <div className="lux-card">
+        <h2 className="lux-section-title">Actions</h2>
 
-      {loading ? (
-        <p>Loading property...</p>
-      ) : !house ? (
-        <p>Property not found.</p>
-      ) : (
-        <>
-          <div className="card">
-            <h2 style={{ marginBottom: "10px" }}>{house.name}</h2>
+        <button
+          className="lux-btn"
+          onClick={() => (window.location.href = `/inspection/${houseId}/components`)}
+        >
+          Start Inspection
+        </button>
 
-            <p style={{ color: "#555", marginBottom: "6px" }}>
-              <strong>Address:</strong> {house.address || "N/A"}
-            </p>
-
-            <p style={{ color: "#555", marginBottom: "6px" }}>
-              <strong>Owner:</strong> {house.owner || "N/A"}
-            </p>
-
-            <p style={{ color: "#777" }}>
-              <strong>Description:</strong>{" "}
-              {house.description || "No additional details."}
-            </p>
-          </div>
-
-          <button onClick={goReports} style={{ marginBottom: "14px" }}>
-            View Reports for this Property
-          </button>
-
-          <button onClick={newInspection}>
-            + Start New Inspection
-          </button>
-        </>
-      )}
+        <button
+          className="lux-btn-outline"
+          onClick={() => (window.location.href = `/reports?house=${houseId}`)}
+        >
+          View Reports
+        </button>
+      </div>
     </div>
   );
 }

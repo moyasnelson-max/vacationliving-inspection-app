@@ -1,11 +1,36 @@
-import createIssue from "@/app/issues/createIssue.js";
+import supabase from "@/app/lib/supabase-client";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const result = await createIssue(body);
-    return Response.json(result, { status: 200 });
+
+    const { data, error } = await supabase
+      .from("issues")
+      .insert({
+        title: body.title,
+        description: body.body_description,
+        house_id: body.house_id,
+        created_at: new Date().toISOString(),
+      })
+      .select("*")
+      .single();
+
+    if (error) {
+      return new Response(
+        JSON.stringify({ error: error.message }),
+        { status: 500 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ issue: data }),
+      { status: 200 }
+    );
+
   } catch (err) {
-    return Response.json({ error: err.message }, { status: 500 });
+    return new Response(
+      JSON.stringify({ error: err.message }),
+      { status: 500 }
+    );
   }
 }
