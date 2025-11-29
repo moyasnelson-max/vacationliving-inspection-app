@@ -1,5 +1,5 @@
 import "../styles/inspection-layout.css";
-import LuxHeader from "@/app/components/LuxHeader";
+import LuxHeader from "@/components/LuxHeader";
 
 export const metadata = {
   title: "Inspection · Vacation Living",

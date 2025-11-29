@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase-client";
-import "@/styles/inspection-subcategories.css";
+import "../../../styles/inspection-subcategories.css";
 
 export default function SubcategoriesPage({ params }) {
   const router = useRouter();

@@ -1,0 +1,27 @@
+AUTO FIX PAGES REPORT
+------------------------
+
+→ Buscando pages.jsx sin export default…
+
+⚠ No tiene export default: app/inspection/[houseId]/close/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/issue/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/finish/summary/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/items/[itemId]/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/issues/[id]/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/media/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/media/[mediaId]/page.jsx
+   ✓ FIX aplicado
+⚠ No tiene export default: app/inspection/[houseId]/subcategories/page.jsx
+   ✓ FIX aplicado
+
+==========================================
+ AUTO FIX COMPLETADO
+ Total archivos corregidos: 8
+ Reporte: pages-fix-report.txt
+==========================================

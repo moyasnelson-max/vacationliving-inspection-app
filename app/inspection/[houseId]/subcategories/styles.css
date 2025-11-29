@@ -1,0 +1,15 @@
+.subcategoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.subcategoryCard {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+}
+.subcategoryCard:hover {
+  background: #f2f2f2;
+}

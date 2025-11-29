@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import supabase from "@/lib/supabase-client";
 import { useRouter } from "next/navigation";
-import "@/styles/inspection-close.css";
+import "../../../styles/inspection-close.css";
 
 export default function CloseIssuePage({ params }) {
   const { houseId, issueId } = params;

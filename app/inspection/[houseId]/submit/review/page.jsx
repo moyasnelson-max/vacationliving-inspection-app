@@ -79,7 +79,9 @@ export default function ReviewPage({ params }) {
 
     // 2. Update issue
     await supabase
-      .from("issues")
-      .update({
-        status: "closed",
-        repair_note:
+  .from("issues")
+  .update({
+    status: "closed",
+    repair_note: repairNote, repairNote, repairNote,
+  })
+  .eq("id", selectedIssue.id);}
