@@ -4,24 +4,34 @@
   flex-direction: column;
   gap: 24px;
 }
-.sectionTitle {
-  font-size: 22px;
+
+.reviewItem {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 18px;
+  border: 1px solid #e5e5e5;
+}
+
+.reviewLabel {
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 6px;
 }
-.issueCard {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #eee;
+
+.reviewValue {
+  font-size: 15px;
+  color: #444;
 }
-.buttonPrimary {
-  background: #c8a36d;
-  padding: 14px;
+
+.reviewPhotos {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reviewPhotos img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
   border-radius: 8px;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-.buttonPrimary:hover {
-  background: #b48f57;
 }

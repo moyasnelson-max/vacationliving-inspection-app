@@ -82,6 +82,6 @@ export default function ReviewPage({ params }) {
   .from("issues")
   .update({
     status: "closed",
-    repair_note: repairNote, repairNote, repairNote,
+    repair_note: repairNote,
   })
   .eq("id", selectedIssue.id);}

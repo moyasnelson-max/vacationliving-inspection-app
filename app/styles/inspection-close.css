@@ -1,0 +1,23 @@
+.closeContainer {
+  padding: 24px;
+}
+
+.closeTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.closeButton {
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.closeButton:active {
+  opacity: 0.8;
+}

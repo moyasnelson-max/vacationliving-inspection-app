@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client";
+import supabase from "../@lib/supabase-client";
 import { useRouter } from "next/navigation";
-import "../../../styles/inspection-review.css";
+import "@styles/inspection-review.css";
 
 export default function ReviewPage({ params }) {
   const { houseId } = params;

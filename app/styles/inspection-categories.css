@@ -1,0 +1,19 @@
+.categoriesContainer {
+  padding: 24px;
+}
+
+.categoryBox {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  padding: 18px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.categoryName {
+  font-size: 18px;
+  font-weight: 600;
+}
