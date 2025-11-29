@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import supabase from "../@lib/supabase-client";
-import "@styles/inspection-categories.css";
+import supabase from "@/lib/supabase-client"
+import "../../../../styles/inspection-categories.css";
 
 export default function CategoriesPage({ params }) {
   const router = useRouter();
