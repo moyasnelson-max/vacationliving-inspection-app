@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/app/lib/supabase-client";
+import supabase from "@/lib/supabase-client";
 import Image from "next/image";
 
 export default function InspectionDashboard() {
