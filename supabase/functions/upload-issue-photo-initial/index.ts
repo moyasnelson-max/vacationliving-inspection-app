@@ -62,8 +62,7 @@ serve({
       }
 
       // Ruta dentro de Supabase Storage
-      const storagePath =
-        `issue-media/${house_id}/${category_id}/${issue_id}/initial/${filename}`;
+      const storagePath = `issue-media/${house_id}/${category_id}/${issue_id}/initial/${filename}`;
 
       // Subir archivo
       const fileBuffer = await file.arrayBuffer();

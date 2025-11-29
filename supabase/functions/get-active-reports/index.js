@@ -15,10 +15,9 @@ export default async (req) => {
     const { houseId } = await req.json();
 
     if (!houseId) {
-      return new Response(
-        JSON.stringify({ error: "houseId is required" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "houseId is required" }), {
+        status: 400,
+      });
     }
 
     // Supabase env
@@ -27,10 +26,10 @@ export default async (req) => {
 
     if (!supabaseUrl || !serviceKey) {
       return new Response(
-        JSON.stringify({ 
-          error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" 
+        JSON.stringify({
+          error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -45,18 +44,18 @@ export default async (req) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     const reports = await r.json();
 
     if (!r.ok) {
       return new Response(
-        JSON.stringify({ 
-          error: "Error loading reports", 
-          details: reports 
-        }), 
-        { status: 500 }
+        JSON.stringify({
+          error: "Error loading reports",
+          details: reports,
+        }),
+        { status: 500 },
       );
     }
 
@@ -77,7 +76,7 @@ export default async (req) => {
             apikey: serviceKey,
             Authorization: `Bearer ${serviceKey}`,
           },
-        }
+        },
       );
 
       let files = [];
@@ -99,7 +98,7 @@ export default async (req) => {
     // 3. SORT newest → oldest
     // ---------------------------------------------------------
     enhancedReports.sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      (a, b) => new Date(b.created_at) - new Date(a.created_at),
     );
 
     // ---------------------------------------------------------
@@ -108,11 +107,9 @@ export default async (req) => {
     return new Response(JSON.stringify(enhancedReports), {
       status: 200,
     });
-
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 };

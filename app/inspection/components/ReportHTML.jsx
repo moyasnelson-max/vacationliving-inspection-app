@@ -32,7 +32,9 @@ export default function ReportHTML({ report }) {
         <strong>Inspector:</strong> {inspectorEmail}
       </p>
 
-      <hr style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }} />
+      <hr
+        style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }}
+      />
 
       <h2 style={{ color: "#C8A36D" }}>Inspection Details</h2>
       {categories?.map((cat, i) => (
@@ -42,7 +44,9 @@ export default function ReportHTML({ report }) {
         </div>
       ))}
 
-      <hr style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }} />
+      <hr
+        style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }}
+      />
 
       <h2 style={{ fontSize: "22px", color: "#C8A36D" }}>Issues Found</h2>
       {issues?.length === 0 ? (
@@ -55,7 +59,9 @@ export default function ReportHTML({ report }) {
         ))
       )}
 
-      <hr style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }} />
+      <hr
+        style={{ margin: "20px 0", border: 0, borderTop: "1px solid #ccc" }}
+      />
 
       <h2 style={{ fontSize: "22px", color: "#C8A36D" }}>Photos</h2>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>

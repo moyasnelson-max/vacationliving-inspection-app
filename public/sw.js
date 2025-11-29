@@ -16,6 +16,6 @@ self.addEventListener("fetch", (event) => {
       } catch (err) {
         return cache.match(event.request) || Response.error();
       }
-    })
+    }),
   );
 });

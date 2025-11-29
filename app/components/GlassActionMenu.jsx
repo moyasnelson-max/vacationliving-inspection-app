@@ -41,18 +41,16 @@ export default function GlassActionMenu({ id, onClose }) {
         </>
       ) : (
         <>
-          <div className="glass-confirm-text">
-            Confirm delete?
-          </div>
+          <div className="glass-confirm-text">Confirm delete?</div>
 
-          <button 
+          <button
             className="glass-menu-item glass-delete-strong"
             onClick={deleteReport}
           >
             Yes, delete
           </button>
 
-          <button 
+          <button
             className="glass-menu-item"
             onClick={() => setConfirmDelete(false)}
           >

@@ -10,14 +10,8 @@ export const config = {
 
 export default async (req) => {
   try {
-    const {
-      houseId,
-      queryText,
-      inspectorId,
-      status,
-      dateFrom,
-      dateTo,
-    } = await req.json();
+    const { houseId, queryText, inspectorId, status, dateFrom, dateTo } =
+      await req.json();
 
     // --------------------------- VALIDATION ---------------------------
     if (!houseId) {
@@ -34,7 +28,7 @@ export default async (req) => {
         JSON.stringify({
           error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -86,14 +80,14 @@ export default async (req) => {
           error: "Error searching reports",
           details: json,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     // order newest first
     json.sort(
       (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
 
     // --------------------------- RESPONSE ---------------------------
@@ -103,7 +97,7 @@ export default async (req) => {
         count: json.length,
         results: json,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

@@ -180,11 +180,7 @@ export default function CreateItemModal({ open, onClose, reportId }) {
         />
 
         {/* SAVE */}
-        <button
-          style={goldBtn}
-          onClick={handleCreate}
-          disabled={loading}
-        >
+        <button style={goldBtn} onClick={handleCreate} disabled={loading}>
           {loading ? "Saving..." : "Save Item"}
         </button>
       </div>

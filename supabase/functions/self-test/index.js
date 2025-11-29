@@ -63,7 +63,7 @@ export default async (req) => {
             Authorization: `Bearer ${SERVICE_KEY}`,
           },
           body: "self-test OK",
-        }
+        },
       );
 
       diagnostics.storage.issue_media = testResp.ok;

@@ -11,13 +11,13 @@ export default function SubmitIssue() {
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );
 
   const [categories, setCategories] = useState([]);
   const [subcats, setSubcats] = useState([]);
 
-  const [step, setStep] = useState("category"); 
+  const [step, setStep] = useState("category");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcat, setSelectedSubcat] = useState(null);
 
@@ -178,7 +178,6 @@ export default function SubmitIssue() {
 
   return (
     <div className="submit-container fade-in">
-
       {/* STEP 1: CATEGORY */}
       {step === "category" && (
         <>
@@ -192,9 +191,7 @@ export default function SubmitIssue() {
               className="category-box"
               onClick={() => chooseCategory(cat)}
             >
-              <div className="category-left">
-                {cat.name_es || cat.name_en}
-              </div>
+              <div className="category-left">{cat.name_es || cat.name_en}</div>
               <div>➜</div>
             </div>
           ))}
@@ -249,7 +246,12 @@ export default function SubmitIssue() {
           {/* Upload */}
           <div className="upload-box">
             <div className="upload-text">Subir fotos (máx 3)</div>
-            <input type="file" accept="image/*" multiple onChange={handleImageSelect} />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageSelect}
+            />
           </div>
 
           {/* Preview */}
@@ -273,7 +275,6 @@ export default function SubmitIssue() {
           </button>
         </>
       )}
-
     </div>
   );
 }

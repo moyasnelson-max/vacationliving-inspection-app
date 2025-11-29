@@ -17,7 +17,7 @@ serve(async (req) => {
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SERVICE_ROLE_KEY")!
+      Deno.env.get("SERVICE_ROLE_KEY")!,
     );
 
     const { data, error } = await supabase
@@ -33,7 +33,7 @@ serve(async (req) => {
           created_at,
           closed_at,
           media_urls
-        `
+        `,
       )
       .eq("house_id", houseId)
       .eq("status", "closed")

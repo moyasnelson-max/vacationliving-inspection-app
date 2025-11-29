@@ -3,7 +3,7 @@
 import "../../../../styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 
 export default function CategoryItems() {
   const params = useParams();

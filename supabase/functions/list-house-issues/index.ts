@@ -29,10 +29,9 @@ serve({
         .order("created_at", { ascending: false });
 
       if (error) {
-        return new Response(
-          JSON.stringify({ error: error.message }),
-          { status: 500 },
-        );
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+        });
       }
 
       // 2. Fetch a thumbnail per issue (if exists)
@@ -62,10 +61,9 @@ serve({
       );
     } catch (err) {
       console.error(err);
-      return new Response(
-        JSON.stringify({ error: "Internal server error" }),
-        { status: 500 },
-      );
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+      });
     }
   },
 });

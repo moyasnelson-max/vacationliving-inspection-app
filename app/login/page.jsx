@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase-client"
+import { supabase } from "@/lib/supabase-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ export default function LoginPage() {
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password: pass
+      password: pass,
     });
 
     if (error) alert(error.message);
@@ -28,7 +28,6 @@ export default function LoginPage() {
 
       <div className="center-wrapper">
         <form onSubmit={handleLogin} className="login-card">
-          
           <img src="/logo.png" className="login-logo" />
           <h1 className="login-title">Vacation Living</h1>
           <p className="login-subtitle">Inspector Access</p>
@@ -58,7 +57,9 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign In"}
           </button>
 
-          <a href="#" className="forgot-link">Forgot Password?</a>
+          <a href="#" className="forgot-link">
+            Forgot Password?
+          </a>
         </form>
       </div>
     </>

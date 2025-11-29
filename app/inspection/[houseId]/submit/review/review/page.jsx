@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 );
 
 export default function ReviewPage({ params }) {
@@ -66,7 +66,9 @@ export default function ReviewPage({ params }) {
     }
 
     if (repairPhotos.length < 1) {
-      alert("Please attach at least one repair photo before closing this issue.");
+      alert(
+        "Please attach at least one repair photo before closing this issue.",
+      );
       return;
     }
 
@@ -139,10 +141,7 @@ export default function ReviewPage({ params }) {
       {/* SELECTED ISSUE DETAIL */}
       {selectedIssue && (
         <div style={styles.detailBox}>
-          <button
-            style={styles.backBtn}
-            onClick={() => setSelectedIssue(null)}
-          >
+          <button style={styles.backBtn} onClick={() => setSelectedIssue(null)}>
             ← Back to Issues
           </button>
 

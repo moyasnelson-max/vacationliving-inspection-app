@@ -18,38 +18,38 @@ export default async (req) => {
     const { property_slug } = await req.json();
 
     if (!property_slug) {
-      return new Response(
-        JSON.stringify({ error: "Missing property_slug" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "Missing property_slug" }), {
+        status: 400,
+      });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseServiceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!supabaseUrl || !supabaseServiceRole) {
-      return new Response(
-        JSON.stringify({ error: "Missing Supabase keys" }),
-        { status: 500 }
-      );
+      return new Response(JSON.stringify({ error: "Missing Supabase keys" }), {
+        status: 500,
+      });
     }
 
     // Fetch property config
-    const resp = await fetch(`${supabaseUrl}/rest/v1/properties?slug=eq.${property_slug}`, {
-      method: "GET",
-      headers: {
-        apikey: supabaseServiceRole,
-        Authorization: `Bearer ${supabaseServiceRole}`,
+    const resp = await fetch(
+      `${supabaseUrl}/rest/v1/properties?slug=eq.${property_slug}`,
+      {
+        method: "GET",
+        headers: {
+          apikey: supabaseServiceRole,
+          Authorization: `Bearer ${supabaseServiceRole}`,
+        },
       },
-    });
+    );
 
     const data = await resp.json();
 
     if (!Array.isArray(data) || data.length === 0) {
-      return new Response(
-        JSON.stringify({ error: "Property not found" }),
-        { status: 404 }
-      );
+      return new Response(JSON.stringify({ error: "Property not found" }), {
+        status: 404,
+      });
     }
 
     const p = data[0];
@@ -70,7 +70,6 @@ export default async (req) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,

@@ -14,10 +14,9 @@ export default async (req) => {
     const { houseId } = await req.json();
 
     if (!houseId) {
-      return new Response(
-        JSON.stringify({ error: "houseId is required" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "houseId is required" }), {
+        status: 400,
+      });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -26,7 +25,7 @@ export default async (req) => {
     if (!supabaseUrl || !serviceKey) {
       return new Response(
         JSON.stringify({ error: "Missing Supabase environment variables" }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -39,7 +38,7 @@ export default async (req) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     const rows = await resp.json();
@@ -47,7 +46,7 @@ export default async (req) => {
     if (!resp.ok) {
       return new Response(
         JSON.stringify({ error: "Query failed", details: rows }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -68,13 +67,11 @@ export default async (req) => {
         grouped,
         issues: rows,
       }),
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 };

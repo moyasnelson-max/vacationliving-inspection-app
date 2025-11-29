@@ -1,1 +1,3 @@
-export default function LuxHeader(){ return null }
+export default function LuxHeader() {
+  return null;
+}

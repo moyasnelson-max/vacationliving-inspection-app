@@ -17,7 +17,7 @@ serve({
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // ---------------------------
@@ -107,7 +107,7 @@ serve({
           inspections,
           pdfs,
         }),
-        { status: 200 }
+        { status: 200 },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

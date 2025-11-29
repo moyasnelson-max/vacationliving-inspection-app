@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 export async function uploadPDF(pdfBlob, propertyId) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );
 
   const fileName = `report_${propertyId}_${Date.now()}.pdf`;

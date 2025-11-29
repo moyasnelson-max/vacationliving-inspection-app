@@ -28,10 +28,9 @@ export default async (req) => {
     } = data;
 
     if (!inspection || !property) {
-      return new Response(
-        JSON.stringify({ error: "Missing required data" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "Missing required data" }), {
+        status: 400,
+      });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -47,7 +46,7 @@ export default async (req) => {
     // -------------------------------------------------------------
     const pdf = await PDFDocument.create();
     const font = await pdf.embedFont(StandardFonts.Helvetica);
-    const gold = rgb(0.78, 0.65, 0.40);
+    const gold = rgb(0.78, 0.65, 0.4);
     const black = rgb(0.12, 0.12, 0.12);
 
     const page = pdf.addPage([595, 842]); // A4 vertical
@@ -179,7 +178,9 @@ export default async (req) => {
       cursor -= 20;
 
       for (const img of grouped[reportId]) {
-        const resImg = await fetch(`${supabaseUrl}/storage/v1/object/public/${img.path}`);
+        const resImg = await fetch(
+          `${supabaseUrl}/storage/v1/object/public/${img.path}`,
+        );
         const bytes = await resImg.arrayBuffer();
         const emb = await pdf.embedJpg(bytes);
 
@@ -221,7 +222,7 @@ export default async (req) => {
         url: publicUrl,
         path,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

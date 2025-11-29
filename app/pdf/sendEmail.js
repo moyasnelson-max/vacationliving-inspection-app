@@ -59,7 +59,6 @@ export async function sendEmail({ to, subject, message, pdfUrl }) {
     }
 
     return { ok: true };
-
   } catch (err) {
     return { ok: false, error: err.message };
   }

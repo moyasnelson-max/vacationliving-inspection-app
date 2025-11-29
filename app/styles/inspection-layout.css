@@ -2,7 +2,7 @@
 .lux-inspection-wrapper {
   min-height: 100vh;
   width: 100%;
-  background: #F5F1EB; /* Four Seasons beige */
+  background: #f5f1eb; /* Four Seasons beige */
   display: flex;
   flex-direction: column;
   overflow-x: hidden;

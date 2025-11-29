@@ -14,10 +14,9 @@ export default async (req) => {
     const { houseId } = await req.json();
 
     if (!houseId) {
-      return new Response(
-        JSON.stringify({ error: "houseId is required" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "houseId is required" }), {
+        status: 400,
+      });
     }
 
     // -----------------------------------------------------
@@ -32,7 +31,7 @@ export default async (req) => {
           error:
             "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment vars",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -47,7 +46,7 @@ export default async (req) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     const entries = await res.json();
@@ -58,7 +57,7 @@ export default async (req) => {
           error: "Error reading reports",
           details: entries,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -87,9 +86,10 @@ export default async (req) => {
     // -----------------------------------------------------
     // LAST INSPECTION DATE
     // -----------------------------------------------------
-    const lastInspection = entries
-      .map((x) => x.created_at)
-      .sort((a, b) => new Date(b) - new Date(a))[0] || null;
+    const lastInspection =
+      entries
+        .map((x) => x.created_at)
+        .sort((a, b) => new Date(b) - new Date(a))[0] || null;
 
     // -----------------------------------------------------
     // SEND RESPONSE
@@ -104,7 +104,7 @@ export default async (req) => {
         status_level: level, // green | yellow | red
         last_inspection: lastInspection,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

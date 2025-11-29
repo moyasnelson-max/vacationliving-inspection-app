@@ -1,5 +1,5 @@
 // /app/pdf/uploadToSupabase.js
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 /**
  * Uploads a PDF Blob to Supabase Storage in the "reports" bucket.
@@ -14,37 +14,36 @@ export async function uploadToSupabase({ pdfBlob, propertyId }) {
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     );
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filePath = `${propertyId}/inspection-${timestamp}.pdf`;
 
     const { data, error } = await supabase.storage
-      .from('reports')
+      .from("reports")
       .upload(filePath, pdfBlob, {
-        cacheControl: '3600',
+        cacheControl: "3600",
         upsert: false,
-        contentType: 'application/pdf',
+        contentType: "application/pdf",
       });
 
     if (error) throw error;
 
     // Generate public URL
     const { data: publicData } = supabase.storage
-      .from('reports')
+      .from("reports")
       .getPublicUrl(filePath);
 
     return {
       ok: true,
       path: filePath,
-      url: publicData.publicUrl
+      url: publicData.publicUrl,
     };
-
   } catch (err) {
     return {
       ok: false,
-      error: err.message
+      error: err.message,
     };
   }
 }

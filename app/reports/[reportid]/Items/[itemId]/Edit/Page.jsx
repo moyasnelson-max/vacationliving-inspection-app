@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 
 export default function EditItemPage() {
   const params = useParams();
@@ -84,10 +84,7 @@ export default function EditItemPage() {
           />
 
           {/* Status */}
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="ok">OK</option>
             <option value="issue">Issue</option>
           </select>

@@ -7,24 +7,20 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 serve({
   "/": async (req) => {
     try {
-      const {
-        house_id,
-        inspector_email,
-        final_note,
-      } = await req.json();
+      const { house_id, inspector_email, final_note } = await req.json();
 
       if (!house_id || !inspector_email) {
         return new Response(
           JSON.stringify({
             error: "Missing fields: house_id, inspector_email are required",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // 1 — verificar issues abiertos
@@ -47,7 +43,7 @@ serve({
             error: "There are still open issues",
             open_issues: openIssues,
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -79,7 +75,7 @@ serve({
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${Deno.env.get(
-              "SUPABASE_SERVICE_ROLE_KEY"
+              "SUPABASE_SERVICE_ROLE_KEY",
             )}`,
           },
           body: JSON.stringify({
@@ -87,7 +83,7 @@ serve({
             inspector_email,
             inspection_id: inspectionId,
           }),
-        }
+        },
       );
 
       const sendResult = await response.json();
@@ -99,7 +95,7 @@ serve({
           inspection_id: inspectionId,
           report_status: sendResult,
         }),
-        { status: 200 }
+        { status: 200 },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

@@ -20,7 +20,7 @@ export default async (req) => {
     if (!inspectionId) {
       return new Response(
         JSON.stringify({ error: "inspectionId is required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -38,15 +38,14 @@ export default async (req) => {
     // -------------------------------------------------------
     const inspectionRes = await fetch(
       `${SUPABASE_URL}/rest/v1/inspections?id=eq.${inspectionId}`,
-      { headers }
+      { headers },
     );
     const inspection = (await inspectionRes.json())[0];
 
     if (!inspection) {
-      return new Response(
-        JSON.stringify({ error: "Inspection not found" }),
-        { status: 404 }
-      );
+      return new Response(JSON.stringify({ error: "Inspection not found" }), {
+        status: 404,
+      });
     }
 
     // -------------------------------------------------------
@@ -54,7 +53,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const propertyRes = await fetch(
       `${SUPABASE_URL}/rest/v1/properties?id=eq.${inspection.property_id}`,
-      { headers }
+      { headers },
     );
     const property = (await propertyRes.json())[0] || null;
 
@@ -63,7 +62,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const inspectorRes = await fetch(
       `${SUPABASE_URL}/rest/v1/users?id=eq.${inspection.inspector_id}`,
-      { headers }
+      { headers },
     );
     const inspector = (await inspectorRes.json())[0] || null;
 
@@ -72,7 +71,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const openRes = await fetch(
       `${SUPABASE_URL}/rest/v1/reports?inspection_id=eq.${inspectionId}&status=eq.open`,
-      { headers }
+      { headers },
     );
     const openReports = await openRes.json();
 
@@ -81,7 +80,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const closedRes = await fetch(
       `${SUPABASE_URL}/rest/v1/reports?inspection_id=eq.${inspectionId}&status=eq.closed`,
-      { headers }
+      { headers },
     );
     const closedReports = await closedRes.json();
 
@@ -90,7 +89,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const mediaRes = await fetch(
       `${SUPABASE_URL}/rest/v1/issue_media?inspection_id=eq.${inspectionId}`,
-      { headers }
+      { headers },
     );
     const media = await mediaRes.json();
 
@@ -99,7 +98,7 @@ export default async (req) => {
     // -------------------------------------------------------
     const notesRes = await fetch(
       `${SUPABASE_URL}/rest/v1/inspection_notes?inspection_id=eq.${inspectionId}`,
-      { headers }
+      { headers },
     );
     const notes = await notesRes.json();
 
@@ -117,7 +116,7 @@ export default async (req) => {
         media,
         notes,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(
@@ -125,7 +124,7 @@ export default async (req) => {
         error: err.message,
         stack: err.stack,
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

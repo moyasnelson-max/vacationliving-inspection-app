@@ -23,7 +23,7 @@ export default async (req) => {
     if (!supabaseUrl || !serviceKey) {
       return new Response(
         JSON.stringify({ error: "Missing Supabase environment variables" }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -37,7 +37,7 @@ export default async (req) => {
     if (!houseId || !categoryId || !itemId) {
       return new Response(
         JSON.stringify({ error: "Missing required metadata" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,14 +46,14 @@ export default async (req) => {
     if (!files || files.length === 0) {
       return new Response(
         JSON.stringify({ error: "At least one file is required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (files.length > 3) {
       return new Response(
         JSON.stringify({ error: "Maximum 3 photos allowed" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -70,7 +70,7 @@ export default async (req) => {
       if (!allowedExt.includes(ext)) {
         return new Response(
           JSON.stringify({ error: "Invalid format (jpg/jpeg/png/webp only)" }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -88,13 +88,16 @@ export default async (req) => {
             Authorization: `Bearer ${serviceKey}`,
           },
           body: buffer,
-        }
+        },
       );
 
       if (!resp.ok) {
         return new Response(
-          JSON.stringify({ error: "Upload failed", details: await resp.text() }),
-          { status: 500 }
+          JSON.stringify({
+            error: "Upload failed",
+            details: await resp.text(),
+          }),
+          { status: 500 },
         );
       }
 
@@ -106,11 +109,13 @@ export default async (req) => {
       });
     }
 
-    return new Response(JSON.stringify({ success: true, files: uploadedFiles }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-
+    return new Response(
+      JSON.stringify({ success: true, files: uploadedFiles }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,

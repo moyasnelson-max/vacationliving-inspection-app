@@ -17,14 +17,18 @@ serve({
       } = await req.json();
 
       if (!house_id || !category_id || !issue_id || !file_base64) {
-        return new Response(JSON.stringify({
-          error: "Missing required fields (house_id, category_id, issue_id, file_base64)"
-        }), { status: 400 });
+        return new Response(
+          JSON.stringify({
+            error:
+              "Missing required fields (house_id, category_id, issue_id, file_base64)",
+          }),
+          { status: 400 },
+        );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // Contar fotos existentes
@@ -41,7 +45,7 @@ serve({
           JSON.stringify({
             error: "Max 3 photos allowed per issue",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -50,16 +54,20 @@ serve({
 
       // Convert base64 → Uint8Array
       const fileData = Uint8Array.from(atob(file_base64), (c) =>
-        c.charCodeAt(0)
+        c.charCodeAt(0),
       );
 
       // Upload
       const { error: uploadErr } = await supabase.storage
         .from("issue-media")
-        .upload(`${house_id}/${category_id}/${issue_id}/${fileName}`, fileData, {
-          contentType: `image/${extension}`,
-          upsert: false,
-        });
+        .upload(
+          `${house_id}/${category_id}/${issue_id}/${fileName}`,
+          fileData,
+          {
+            contentType: `image/${extension}`,
+            upsert: false,
+          },
+        );
 
       if (uploadErr) {
         return new Response(JSON.stringify({ error: uploadErr }), {
@@ -85,7 +93,7 @@ serve({
           message: "Photo uploaded",
           url: publicUrl.publicUrl,
         }),
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

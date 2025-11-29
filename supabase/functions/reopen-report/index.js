@@ -20,7 +20,7 @@ export default async (req) => {
     if (!issueId || !houseId) {
       return new Response(
         JSON.stringify({ error: "issueId and houseId are required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -29,7 +29,7 @@ export default async (req) => {
         JSON.stringify({
           error: "Reopen reason is required (min 3 chars)",
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -44,7 +44,7 @@ export default async (req) => {
         JSON.stringify({
           error: "Missing SUPABASE_URL or SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -68,7 +68,7 @@ export default async (req) => {
           reopened_at: new Date().toISOString(),
           reopen_reason: reason,
         }),
-      }
+      },
     );
 
     const reopenResp = await reopenReq.json();
@@ -79,7 +79,7 @@ export default async (req) => {
           error: "Error reopening report",
           details: reopenResp,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -111,12 +111,11 @@ export default async (req) => {
         message: "Issue successfully reopened",
         issueId,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 };

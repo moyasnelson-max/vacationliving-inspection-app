@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 import "./styles.css";
 
 export default function SubcategoriesPage({ params }) {
@@ -101,7 +101,6 @@ export default function SubcategoriesPage({ params }) {
 
   return (
     <div className="lux-wrapper">
-
       {/* Header */}
       <div className="lux-header">
         <h2 className="lux-title">
@@ -140,9 +139,7 @@ export default function SubcategoriesPage({ params }) {
             <textarea
               className="lux-textarea"
               placeholder={
-                lang === "es"
-                  ? "Describe el problema…"
-                  : "Describe the issue…"
+                lang === "es" ? "Describe el problema…" : "Describe the issue…"
               }
               value={note}
               onChange={(e) => setNote(e.target.value)}

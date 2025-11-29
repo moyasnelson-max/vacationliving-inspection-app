@@ -33,20 +33,20 @@ serve({
             error:
               "Missing fields (inspection_id, issue_id, house_id, category_id, subcategory_id, note, photos, inspector_email)",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       if (!Array.isArray(photos) || photos.length === 0) {
         return new Response(
           JSON.stringify({ error: "Photos must be a non-empty array" }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // Validar que el issue este listo (note_done + photos_done)
@@ -59,16 +59,15 @@ serve({
       if (issueErr || !issue)
         return new Response(
           JSON.stringify({ error: "Issue not found or DB error" }),
-          { status: 404 }
+          { status: 404 },
         );
 
       if (!issue.note_done || !issue.photos_done) {
         return new Response(
           JSON.stringify({
-            error:
-              "Issue is not ready yet (missing note_done or photos_done).",
+            error: "Issue is not ready yet (missing note_done or photos_done).",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -104,7 +103,7 @@ serve({
         {
           headers: { "Content-Type": "application/json" },
           status: 200,
-        }
+        },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

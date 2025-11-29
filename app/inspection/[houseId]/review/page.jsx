@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 import { useRouter } from "next/navigation";
 import "../../../../styles/inspection-review.css";
 
@@ -59,7 +59,11 @@ export default function ReviewPage({ params }) {
       ) : (
         <div className="lux-list">
           {issues.map((issue) => (
-            <div key={issue.id} className="lux-item" onClick={() => goToIssueClose(issue.id)}>
+            <div
+              key={issue.id}
+              className="lux-item"
+              onClick={() => goToIssueClose(issue.id)}
+            >
               <div className="lux-item-left">
                 <h3 className="lux-item-title">Issue #{issue.id}</h3>
                 <p className="lux-item-note">{issue.note}</p>

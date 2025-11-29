@@ -14,10 +14,9 @@ export default async (req) => {
     const { houseId } = await req.json();
 
     if (!houseId) {
-      return new Response(
-        JSON.stringify({ error: "houseId is required" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "houseId is required" }), {
+        status: 400,
+      });
     }
 
     // ----------------------------------------------------------
@@ -29,10 +28,9 @@ export default async (req) => {
     if (!supabaseUrl || !serviceKey) {
       return new Response(
         JSON.stringify({
-          error:
-            "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars",
+          error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -47,7 +45,7 @@ export default async (req) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     const data = await res.json();
@@ -58,7 +56,7 @@ export default async (req) => {
           error: "Failed fetching closed issues",
           details: data,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -98,7 +96,7 @@ export default async (req) => {
         closedIssues: grouped,
         totalClosed: data.length,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

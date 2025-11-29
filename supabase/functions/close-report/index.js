@@ -21,21 +21,21 @@ export default async (req) => {
     if (!issueId || !houseId) {
       return new Response(
         JSON.stringify({ error: "issueId and houseId are required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!fixNote || fixNote.trim().length < 3) {
       return new Response(
         JSON.stringify({ error: "A fixNote is required to close this issue" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!fixImages || !Array.isArray(fixImages) || fixImages.length === 0) {
       return new Response(
         JSON.stringify({ error: "At least 1 fixImage is required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -47,10 +47,10 @@ export default async (req) => {
 
     if (!supabaseUrl || !serviceKey) {
       return new Response(
-        JSON.stringify({ 
-          error: "Missing SUPABASE_URL or SERVICE_ROLE_KEY" 
+        JSON.stringify({
+          error: "Missing SUPABASE_URL or SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -72,7 +72,7 @@ export default async (req) => {
           fix_images: fixImages, // array de fotos final
           closed_at: new Date().toISOString(),
         }),
-      }
+      },
     );
 
     const closeResp = await closeReq.json();
@@ -83,7 +83,7 @@ export default async (req) => {
           error: "Error closing report",
           details: closeResp,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -115,13 +115,11 @@ export default async (req) => {
         message: "Issue successfully closed",
         issueId,
       }),
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 };

@@ -12,13 +12,13 @@ serve({
       if (!inspection_id) {
         return new Response(
           JSON.stringify({ error: "Missing inspection_id" }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // 1. Verificar si aún hay issues abiertos en esta inspección
@@ -41,7 +41,7 @@ serve({
             message: "Cannot close inspection: there are still open issues.",
             open_issues: issues.length,
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -65,13 +65,12 @@ serve({
           message: "Inspection successfully closed.",
           inspection: data?.[0] || null,
         }),
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } },
       );
     } catch (err) {
-      return new Response(
-        JSON.stringify({ error: err.message }),
-        { status: 500 }
-      );
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+      });
     }
   },
 });

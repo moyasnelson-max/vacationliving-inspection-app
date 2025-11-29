@@ -28,10 +28,9 @@ serve({
         .single();
 
       if (error || !issue) {
-        return new Response(
-          JSON.stringify({ error: "Issue not found" }),
-          { status: 404 },
-        );
+        return new Response(JSON.stringify({ error: "Issue not found" }), {
+          status: 404,
+        });
       }
 
       // 2. Fetch all media for this issue
@@ -44,10 +43,11 @@ serve({
       let media_urls = [];
 
       if (mediaFiles && mediaFiles.length > 0) {
-        media_urls = mediaFiles.map((file) =>
-          supabase.storage
-            .from("issue-media")
-            .getPublicUrl(`${mediaPath}/${file.name}`).data.publicUrl
+        media_urls = mediaFiles.map(
+          (file) =>
+            supabase.storage
+              .from("issue-media")
+              .getPublicUrl(`${mediaPath}/${file.name}`).data.publicUrl,
         );
       }
 
@@ -61,10 +61,9 @@ serve({
       );
     } catch (err) {
       console.error("Error in get-issue-details", err);
-      return new Response(
-        JSON.stringify({ error: "Internal server error" }),
-        { status: 500 },
-      );
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+      });
     }
   },
 });

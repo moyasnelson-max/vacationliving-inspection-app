@@ -39,11 +39,14 @@ serve({
       }
 
       if (existing && existing.length > 0) {
-        return new Response(JSON.stringify({
-          success: true,
-          inspection: existing[0],
-          already_open: true,
-        }), { status: 200 });
+        return new Response(
+          JSON.stringify({
+            success: true,
+            inspection: existing[0],
+            already_open: true,
+          }),
+          { status: 200 },
+        );
       }
 
       // 2. Crear nueva inspección
@@ -66,13 +69,16 @@ serve({
         });
       }
 
-      return new Response(JSON.stringify({
-        success: true,
-        inspection: newInspection,
-        already_open: false,
-      }), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          success: true,
+          inspection: newInspection,
+          already_open: false,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {
         status: 500,

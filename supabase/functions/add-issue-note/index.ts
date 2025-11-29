@@ -14,13 +14,13 @@ serve({
           JSON.stringify({
             error: "Missing required fields (issue_id, inspector_email, note)",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // Actualiza el issue con la nota
@@ -47,7 +47,7 @@ serve({
           message: "Note saved successfully",
           issue: data,
         }),
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

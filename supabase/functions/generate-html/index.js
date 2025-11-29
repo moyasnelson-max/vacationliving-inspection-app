@@ -108,15 +108,12 @@ export default async (req) => {
       ${
         item.media_urls && item.media_urls.length > 0
           ? item.media_urls
-              .map(
-                (url) =>
-                  `<p><strong>Photo:</strong> ${url}</p>`
-              )
+              .map((url) => `<p><strong>Photo:</strong> ${url}</p>`)
               .join("")
           : `<p><em>No media uploaded</em></p>`
       }
     </div>
-  `
+  `,
     )
     .join("")}
 

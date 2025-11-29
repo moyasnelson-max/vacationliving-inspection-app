@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 import Image from "next/image";
 
 export default function InspectionDashboard() {
@@ -27,7 +27,6 @@ export default function InspectionDashboard() {
 
   return (
     <div className="lux-wrapper">
-
       {/* LOGO — Four Seasons Style */}
       <div className="lux-logo">
         <Image
@@ -73,7 +72,6 @@ export default function InspectionDashboard() {
           Go to Reports
         </button>
       </div>
-
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import "../../../../styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 
 export default function HouseDashboard() {
   const params = useParams();
@@ -39,7 +39,9 @@ export default function HouseDashboard() {
 
         <button
           className="lux-btn"
-          onClick={() => (window.location.href = `/inspection/${houseId}/components`)}
+          onClick={() =>
+            (window.location.href = `/inspection/${houseId}/components`)
+          }
         >
           Start Inspection
         </button>

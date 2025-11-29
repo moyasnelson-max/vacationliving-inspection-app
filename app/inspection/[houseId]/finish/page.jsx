@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 import { useRouter, useParams } from "next/navigation";
 
 export default function FinishInspectionPage() {
@@ -74,7 +74,7 @@ export default function FinishInspectionPage() {
             Authorization: `Bearer ${session.session.access_token}`,
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!response.ok) {

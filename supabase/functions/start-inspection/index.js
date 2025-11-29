@@ -54,7 +54,10 @@ serve(async (req) => {
 
     if (inspErr) {
       return new Response(
-        JSON.stringify({ error: "Could not start inspection.", details: inspErr.message }),
+        JSON.stringify({
+          error: "Could not start inspection.",
+          details: inspErr.message,
+        }),
         { status: 400 },
       );
     }

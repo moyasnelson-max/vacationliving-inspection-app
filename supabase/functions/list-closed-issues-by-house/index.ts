@@ -10,10 +10,9 @@ serve({
       const { house_id } = await req.json();
 
       if (!house_id) {
-        return new Response(
-          JSON.stringify({ error: "house_id is required" }),
-          { status: 400 },
-        );
+        return new Response(JSON.stringify({ error: "house_id is required" }), {
+          status: 400,
+        });
       }
 
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -44,10 +43,11 @@ serve({
           .list(folder);
 
         issue.repair_photos = photos
-          ? photos.map((p) =>
-              supabase.storage
-                .from("issue-media")
-                .getPublicUrl(`${folder}/${p.name}`).data.publicUrl
+          ? photos.map(
+              (p) =>
+                supabase.storage
+                  .from("issue-media")
+                  .getPublicUrl(`${folder}/${p.name}`).data.publicUrl,
             )
           : [];
       }
@@ -61,10 +61,9 @@ serve({
       );
     } catch (err) {
       console.error("list-closed-issues-by-house error:", err);
-      return new Response(
-        JSON.stringify({ error: "Internal server error" }),
-        { status: 500 },
-      );
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+      });
     }
   },
 });

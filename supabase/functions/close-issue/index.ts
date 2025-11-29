@@ -7,12 +7,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 serve({
   "/": async (req) => {
     try {
-      const {
-        issue_id,
-        inspector_email,
-        closing_note,
-        closing_photos,
-      } = await req.json();
+      const { issue_id, inspector_email, closing_note, closing_photos } =
+        await req.json();
 
       if (!issue_id || !inspector_email || !closing_note || !closing_photos) {
         return new Response(
@@ -20,7 +16,7 @@ serve({
             error:
               "Missing fields (issue_id, inspector_email, closing_note, closing_photos)",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -29,13 +25,13 @@ serve({
           JSON.stringify({
             error: "closing_photos must be a non-empty array",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // Validar que el issue exista
@@ -46,16 +42,15 @@ serve({
         .single();
 
       if (issueErr || !issue) {
-        return new Response(
-          JSON.stringify({ error: "Issue not found" }),
-          { status: 404 }
-        );
+        return new Response(JSON.stringify({ error: "Issue not found" }), {
+          status: 404,
+        });
       }
 
       if (issue.is_closed === true) {
         return new Response(
           JSON.stringify({ error: "Issue is already closed" }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -85,7 +80,7 @@ serve({
           message: "Issue closed successfully",
           closed_issue: closed,
         }),
-        { status: 200 }
+        { status: 200 },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

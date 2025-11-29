@@ -30,7 +30,7 @@ export default async (req) => {
         JSON.stringify({
           error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -39,7 +39,7 @@ export default async (req) => {
     // status: closed
     // ---------------------------------------------------------
     const query = new URL(
-      `${supabaseUrl}/rest/v1/reports?select=id,house_id,category_id,category_name,title,status,description,images,created_at,updated_at,closed_at,fix_note,fix_images,inspector_id&house_id=eq.${houseId}&status=eq.closed`
+      `${supabaseUrl}/rest/v1/reports?select=id,house_id,category_id,category_name,title,status,description,images,created_at,updated_at,closed_at,fix_note,fix_images,inspector_id&house_id=eq.${houseId}&status=eq.closed`,
     );
 
     const fetchReq = await fetch(query.toString(), {
@@ -57,7 +57,7 @@ export default async (req) => {
           error: "Error fetching closed reports",
           details: data,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -65,7 +65,8 @@ export default async (req) => {
     // ORDER: newest closed first
     // ---------------------------------------------------------
     data.sort(
-      (a, b) => new Date(b.closed_at).getTime() - new Date(a.closed_at).getTime()
+      (a, b) =>
+        new Date(b.closed_at).getTime() - new Date(a.closed_at).getTime(),
     );
 
     // ---------------------------------------------------------
@@ -78,7 +79,7 @@ export default async (req) => {
         houseId,
         closedReports: data,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

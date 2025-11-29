@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
 export async function PATCH(request: Request, context: any) {
   const id = context.params.id;
@@ -7,13 +7,13 @@ export async function PATCH(request: Request, context: any) {
 
   const supabase = createClient(
     process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
 
   const { data, error } = await supabase
-    .from('issues')
+    .from("issues")
     .update(body)
-    .eq('id', id)
+    .eq("id", id)
     .select()
     .single();
 

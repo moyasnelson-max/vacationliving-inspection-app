@@ -11,7 +11,9 @@ serve({
 
       if (!house_id || !inspector_id) {
         return new Response(
-          JSON.stringify({ error: "Missing required fields: house_id, inspector_id" }),
+          JSON.stringify({
+            error: "Missing required fields: house_id, inspector_id",
+          }),
           { status: 400 },
         );
       }
@@ -36,10 +38,9 @@ serve({
         .single();
 
       if (error) {
-        return new Response(
-          JSON.stringify({ error: error.message }),
-          { status: 500 },
-        );
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+        });
       }
 
       return new Response(

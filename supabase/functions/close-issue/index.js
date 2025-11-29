@@ -24,9 +24,12 @@ export default async (req) => {
     }
 
     if (!inspectorId) {
-      return new Response(JSON.stringify({ error: "inspectorId is required" }), {
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "inspectorId is required" }),
+        {
+          status: 400,
+        },
+      );
     }
 
     if (!closingNote || closingNote.trim().length < 2) {
@@ -34,7 +37,7 @@ export default async (req) => {
         JSON.stringify({
           error: "closingNote is required to close an issue",
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -43,7 +46,7 @@ export default async (req) => {
         JSON.stringify({
           error: "At least 1 closing photo is required to close an issue",
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -59,7 +62,7 @@ export default async (req) => {
           error:
             "Missing environment variables SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -74,7 +77,7 @@ export default async (req) => {
           apikey: serviceKey,
           Authorization: `Bearer ${serviceKey}`,
         },
-      }
+      },
     );
 
     const issueData = await issueRes.json();
@@ -82,7 +85,7 @@ export default async (req) => {
     if (!issueRes.ok || issueData.length === 0) {
       return new Response(
         JSON.stringify({ error: "Issue not found", details: issueData }),
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -94,7 +97,7 @@ export default async (req) => {
         JSON.stringify({
           error: "Issue is already closed",
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -119,7 +122,7 @@ export default async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-      }
+      },
     );
 
     const closedIssue = await closeRes.json();
@@ -130,7 +133,7 @@ export default async (req) => {
           error: "Failed to close issue",
           details: closedIssue,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -143,7 +146,7 @@ export default async (req) => {
         message: "Issue closed successfully",
         issue: closedIssue[0],
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

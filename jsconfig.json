@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@lib/*": ["app/lib/*"],
       "@styles/*": ["styles/*"],

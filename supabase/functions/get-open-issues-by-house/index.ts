@@ -20,7 +20,7 @@ serve(async (req) => {
         JSON.stringify({
           error: "house_id is required",
         }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -38,7 +38,7 @@ serve(async (req) => {
           created_at,
           updated_at,
           images
-        `
+        `,
       )
       .eq("house_id", house_id)
       .eq("status", "open")
@@ -46,10 +46,9 @@ serve(async (req) => {
 
     if (error) {
       console.error("Supabase error:", error);
-      return new Response(
-        JSON.stringify({ error: error.message }),
-        { status: 500 }
-      );
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+      });
     }
 
     // 4. Return list
@@ -62,13 +61,12 @@ serve(async (req) => {
       {
         headers: { "Content-Type": "application/json" },
         status: 200,
-      }
+      },
     );
   } catch (err) {
     console.error("Unhandled error:", err);
-    return new Response(
-      JSON.stringify({ error: "Internal error" }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: "Internal error" }), {
+      status: 500,
+    });
   }
 });

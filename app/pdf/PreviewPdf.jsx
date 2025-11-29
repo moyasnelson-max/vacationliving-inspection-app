@@ -1,9 +1,9 @@
 // /app/pdf/PreviewPdf.jsx
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { pdf } from '@react-pdf/renderer';
-import PdfDocument from './PdfDocument';
+import { useEffect, useState } from "react";
+import { pdf } from "@react-pdf/renderer";
+import PdfDocument from "./PdfDocument";
 
 export default function PreviewPdf({ data }) {
   const [url, setUrl] = useState(null);
@@ -20,10 +20,10 @@ export default function PreviewPdf({ data }) {
     <iframe
       src={url}
       style={{
-        width: '100%',
-        height: '90vh',
-        border: '1px solid #ccc',
-        borderRadius: 8
+        width: "100%",
+        height: "90vh",
+        border: "1px solid #ccc",
+        borderRadius: 8,
       }}
     />
   );

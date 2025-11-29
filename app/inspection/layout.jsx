@@ -12,9 +12,7 @@ export default function InspectionLayout({ children }) {
       <LuxHeader title="Inspection Dashboard" backHref="/login" />
 
       {/* CONTENIDO */}
-      <main className="lux-inspection-content">
-        {children}
-      </main>
+      <main className="lux-inspection-content">{children}</main>
     </div>
   );
 }

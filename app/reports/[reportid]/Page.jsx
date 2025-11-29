@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 
 export default function ReportDetailsPage() {
   const params = useParams();
@@ -37,7 +37,8 @@ export default function ReportDetailsPage() {
   }, []);
 
   const goBack = () => (window.location.href = "/reports");
-  const addItem = () => (window.location.href = `/reports/${reportId}/items/add`);
+  const addItem = () =>
+    (window.location.href = `/reports/${reportId}/items/add`);
   const openItem = (id) =>
     (window.location.href = `/reports/${reportId}/items/${id}/edit`);
 
@@ -103,8 +104,8 @@ export default function ReportDetailsPage() {
                         item.status === "ok"
                           ? "#3a7f2b"
                           : item.status === "issue"
-                          ? "#b02c2c"
-                          : "#555",
+                            ? "#b02c2c"
+                            : "#555",
                     }}
                   >
                     {item.status.toUpperCase()}

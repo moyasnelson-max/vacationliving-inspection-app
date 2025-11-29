@@ -7,13 +7,20 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 serve({
   "/": async (req) => {
     try {
-      const { house_id, inspection_id, category_id, subcategory_id, note, created_by } =
-        await req.json();
+      const {
+        house_id,
+        inspection_id,
+        category_id,
+        subcategory_id,
+        note,
+        created_by,
+      } = await req.json();
 
       if (!house_id || !inspection_id || !category_id || !subcategory_id) {
         return new Response(
           JSON.stringify({
-            error: "Missing required fields: house_id, inspection_id, category_id, subcategory_id",
+            error:
+              "Missing required fields: house_id, inspection_id, category_id, subcategory_id",
           }),
           { status: 400 },
         );
@@ -43,12 +50,17 @@ serve({
 
       if (error) {
         console.error("Error creating issue:", error);
-        return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+        });
       }
 
-      return new Response(JSON.stringify({ success: true, issue_id: data.id }), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ success: true, issue_id: data.id }),
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     } catch (err) {
       console.error("Unhandled error:", err);
       return new Response(JSON.stringify({ error: "Internal server error" }), {

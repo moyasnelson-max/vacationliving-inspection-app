@@ -18,13 +18,13 @@ export default async (req) => {
       itemId,
       inspectorId,
       note,
-      photos,   // array de URLs retornado por upload-media
+      photos, // array de URLs retornado por upload-media
     } = body;
 
     if (!houseId || !categoryId || !itemId || !inspectorId || !note) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -34,7 +34,7 @@ export default async (req) => {
     if (!supabaseUrl || !serviceKey) {
       return new Response(
         JSON.stringify({ error: "Missing Supabase environment variables" }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -64,7 +64,7 @@ export default async (req) => {
     if (!resp.ok) {
       return new Response(
         JSON.stringify({ error: "Insert failed", details: data }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -73,13 +73,11 @@ export default async (req) => {
         success: true,
         issue: data[0],
       }),
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 };

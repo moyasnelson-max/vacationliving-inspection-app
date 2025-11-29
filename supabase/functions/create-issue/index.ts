@@ -9,13 +9,8 @@ serve({
     try {
       const body = await req.json();
 
-      const {
-        house_id,
-        category_id,
-        subcategory_id,
-        note,
-        inspector_id,
-      } = body;
+      const { house_id, category_id, subcategory_id, note, inspector_id } =
+        body;
 
       // Validación de campos obligatorios
       if (!house_id || !category_id || !note || !inspector_id) {
@@ -56,8 +51,7 @@ serve({
       const issue_id = data.id;
 
       // 2. Generar ruta de media para subir fotos iniciales
-      const upload_path =
-        `issue-media/${house_id}/${category_id}/${issue_id}/initial/`;
+      const upload_path = `issue-media/${house_id}/${category_id}/${issue_id}/initial/`;
 
       return new Response(
         JSON.stringify({
@@ -71,10 +65,9 @@ serve({
       );
     } catch (err) {
       console.error("create-issue error:", err);
-      return new Response(
-        JSON.stringify({ error: "Internal server error" }),
-        { status: 500 },
-      );
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+      });
     }
   },
 });

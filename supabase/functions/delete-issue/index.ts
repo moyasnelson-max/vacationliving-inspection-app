@@ -28,10 +28,9 @@ serve({
         .single();
 
       if (!issue || issueError) {
-        return new Response(
-          JSON.stringify({ error: "Issue not found" }),
-          { status: 404 },
-        );
+        return new Response(JSON.stringify({ error: "Issue not found" }), {
+          status: 404,
+        });
       }
 
       if (issue.status === "closed") {
@@ -44,15 +43,13 @@ serve({
       }
 
       // 2. Delete associated media from storage
-      const { data: mediaFiles } = await supabase
-        .storage
+      const { data: mediaFiles } = await supabase.storage
         .from("issue-media")
         .list(`${issue.house_id}/${issue.category_id}/${issue.id}`);
 
       if (mediaFiles?.length) {
         const paths = mediaFiles.map(
-          (f) =>
-            `${issue.house_id}/${issue.category_id}/${issue.id}/${f.name}`,
+          (f) => `${issue.house_id}/${issue.category_id}/${issue.id}/${f.name}`,
         );
 
         await supabase.storage.from("issue-media").remove(paths);
@@ -65,10 +62,9 @@ serve({
         .eq("id", issue_id);
 
       if (deleteError) {
-        return new Response(
-          JSON.stringify({ error: deleteError.message }),
-          { status: 500 },
-        );
+        return new Response(JSON.stringify({ error: deleteError.message }), {
+          status: 500,
+        });
       }
 
       return new Response(

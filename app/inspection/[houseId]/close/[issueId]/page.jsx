@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import supabase from "@/lib/supabase-client"
+import supabase from "@/lib/supabase-client";
 import { useRouter } from "next/navigation";
 import "../../../../styles/inspection-close.css";
 
@@ -144,13 +144,24 @@ export default function CloseIssuePage({ params }) {
       </div>
 
       <div className="lux-section">
-        <label className="lux-label">Fotos de reparación (mínimo 1 / máximo 3)</label>
+        <label className="lux-label">
+          Fotos de reparación (mínimo 1 / máximo 3)
+        </label>
 
-        <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} />
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handlePhotoUpload}
+        />
 
         <div className="lux-photo-preview">
           {photos.map((file, idx) => (
-            <img key={idx} src={URL.createObjectURL(file)} className="lux-photo" />
+            <img
+              key={idx}
+              src={URL.createObjectURL(file)}
+              className="lux-photo"
+            />
           ))}
         </div>
       </div>

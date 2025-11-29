@@ -13,7 +13,7 @@ export default function GlassCard({ report }) {
         <h3 className="glass-card-title">{report.title}</h3>
 
         {/* Marriott Menu Dots */}
-        <button 
+        <button
           className="glass-menu-button"
           onClick={() => setMenuOpen(!menuOpen)}
         >
@@ -21,10 +21,7 @@ export default function GlassCard({ report }) {
         </button>
 
         {menuOpen && (
-          <GlassActionMenu 
-            id={report.id}
-            onClose={() => setMenuOpen(false)}
-          />
+          <GlassActionMenu id={report.id} onClose={() => setMenuOpen(false)} />
         )}
       </div>
 

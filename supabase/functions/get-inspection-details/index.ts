@@ -11,14 +11,17 @@ serve({
       const { inspection_id } = await req.json();
 
       if (!inspection_id) {
-        return new Response(JSON.stringify({ error: "inspection_id missing" }), {
-          status: 400,
-        });
+        return new Response(
+          JSON.stringify({ error: "inspection_id missing" }),
+          {
+            status: 400,
+          },
+        );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // -----------------------------
@@ -98,7 +101,7 @@ serve({
           issues: fullIssues,
           pdfs,
         }),
-        { status: 200 }
+        { status: 200 },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

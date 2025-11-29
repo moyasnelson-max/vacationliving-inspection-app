@@ -14,7 +14,7 @@ serve({
           JSON.stringify({
             error: "Missing required fields (issue_id, step, inspector_email)",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -23,13 +23,13 @@ serve({
           JSON.stringify({
             error: "Invalid step. Allowed: note_done, photos_done",
           }),
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL"),
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
       );
 
       // Actualizar el issue dependiendo del step
@@ -60,7 +60,7 @@ serve({
         {
           headers: { "Content-Type": "application/json" },
           status: 200,
-        }
+        },
       );
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {

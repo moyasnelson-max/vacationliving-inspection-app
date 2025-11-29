@@ -28,10 +28,9 @@ serve(async (req) => {
       .single();
 
     if (inspErr || !inspection) {
-      return new Response(
-        JSON.stringify({ error: "Inspection not found." }),
-        { status: 404 },
-      );
+      return new Response(JSON.stringify({ error: "Inspection not found." }), {
+        status: 404,
+      });
     }
 
     if (inspection.status !== "in_progress") {
