@@ -1,8 +1,8 @@
-import "@/styles/luxury-inspection.css";
+import "../../../../styles/luxury-inspection.css";
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client";
+import supabase from "../../../../lib/supabase-client";
 import { useRouter, useParams } from "next/navigation";
 
 export default function FinishInspectionPage() {

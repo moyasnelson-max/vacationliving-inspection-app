@@ -1,8 +1,8 @@
-import "@/styles/luxury-inspection.css";
+import "../../../../styles/luxury-inspection.css";
 "use client";
 
 import { useState, useEffect } from "react";
-import supabase from "@/lib/supabase-client";
+import supabase from "../../../../lib/supabase-client";
 import { useRouter } from "next/navigation";
 import "../../../../styles/inspection-close.css";
 
