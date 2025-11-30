@@ -1,8 +1,9 @@
 node_modules/
-node_modules/
 .next/
-node_modules/
-.vercel/
-npm-debug.log
+dist/
+.env
+.env.local
 .vercel
-.env*.local
+.DS_Store
+.vscode/
+scripts/*.log

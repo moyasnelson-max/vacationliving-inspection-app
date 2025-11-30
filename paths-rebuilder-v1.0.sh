@@ -1,4 +1,3 @@
-cat << 'EOF' > paths-rebuilder-v1.0.sh
 #!/bin/bash
 
 echo "================================================"
@@ -53,6 +52,3 @@ echo "================================================"
 echo "PATHS REBUILDER V1.0 COMPLETADO"
 echo "Ya puedes correr AUTO-FIX MASTER v8.5 o v8.6"
 echo "================================================"
-EOF
-
-chmod +x paths-rebuilder-v1.0.sh

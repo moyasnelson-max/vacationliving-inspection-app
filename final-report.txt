@@ -1,4 +1,22 @@
 === Validación de CSS ===
-✔ CSS OK
+⚠ Falta CSS en:
+app/inspection/page.jsx
+app/inspection/[houseId]/close/page.jsx
+app/inspection/[houseId]/close/[issueId]/page.jsx
+app/inspection/[houseId]/issue/page.jsx
+app/inspection/[houseId]/finish/page.jsx
+app/inspection/[houseId]/finish/summary/page.jsx
+app/inspection/[houseId]/items/[itemId]/page.jsx
+app/inspection/[houseId]/issues/[id]/page.jsx
+app/inspection/[houseId]/categories/page.jsx
+app/inspection/[houseId]/categories/[id]/page.jsx
+app/inspection/[houseId]/media/page.jsx
+app/inspection/[houseId]/media/[mediaId]/page.jsx
+app/inspection/[houseId]/submit/page.jsx
+app/inspection/[houseId]/submit/review/page.jsx
+app/inspection/[houseId]/submit/review/review/page.jsx
+app/inspection/[houseId]/subcategories/page.jsx
+app/inspection/[houseId]/subcategories/[categoryId]/page.jsx
+app/inspection/[houseId]/review/page.jsx
 === Validación de EXPORT DEFAULT ===
 === Validación FINAL COMPLETA ===
