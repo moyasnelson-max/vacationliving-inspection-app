@@ -1,0 +1,39 @@
+name: VacationLiving AutoDeploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟦 Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🧪 Run linter (opcional)
+        run: |
+          echo "Skipping lint for faster deploy..."
+
+      - name: 🛠 Build Next.js project
+        run: npm run build
+
+      - name: 🚀 Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          npm install -g vercel
+          vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          vercel deploy --prod --token=$VERCEL_TOKEN
