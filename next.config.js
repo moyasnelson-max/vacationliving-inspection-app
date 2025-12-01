@@ -1,19 +1,12 @@
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      "@": path.resolve(__dirname, "app"),
-      "@lib": path.resolve(__dirname, "app/lib")
-    };
-    return config;
+  reactStrictMode: false,
+  experimental: {
+    serverActions: true
   },
+  images: {
+    unoptimized: true
+  }
 };
 
-export default nextConfig;
+module.exports = nextConfig;
