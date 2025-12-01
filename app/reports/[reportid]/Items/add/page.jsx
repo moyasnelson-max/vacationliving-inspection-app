@@ -1,86 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
-import supabase from "../../../../lib/supabase-client";
+import supabase from "@/lib/supabase-client";
+import { useRouter } from "next/navigation";
 
-export default function AddItemPage() {
-  const params = useParams();
-  const reportId = params.reportid;
+export default function AddItemPage({ params }) {
+  const { reportId } = params;
+  const router = useRouter();
+  const [name, setName] = useState("");
 
-  const [title, setTitle] = useState("");
-  const [status, setStatus] = useState("ok");
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const addItem = async () => {
+    if (!name.trim()) return;
 
-  const addItem = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+    await supabase.from("report_items").insert({
+      report_id: reportId,
+      name,
+    });
 
-    if (!title) {
-      setError("Title is required");
-      setLoading(false);
-      return;
-    }
-
-    const { error } = await supabase.from("report_items").insert([
-      {
-        report_id: reportId,
-        title,
-        status,
-        notes,
-      },
-    ]);
-
-    if (error) {
-      setError("Error adding item");
-      setLoading(false);
-      return;
-    }
-
-    window.location.href = `/reports/${reportId}`;
+    router.back();
   };
 
   return (
-    <div className="page-container">
-      <h1 className="vl-title">Add Item</h1>
-      <p className="vl-subtitle">Attach a new inspection item to this report</p>
+    <div style={{ padding: 20 }}>
+      <h2>Add Item</h2>
 
-      <form onSubmit={addItem} style={{ marginTop: "20px" }}>
-        {/* Title */}
-        <input
-          type="text"
-          placeholder="Item Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+      <input
+        placeholder="Item name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={{ padding: 10, width: "100%", marginTop: 10 }}
+      />
 
-        {/* Status */}
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          style={{ marginBottom: "16px" }}
-        >
-          <option value="ok">OK</option>
-          <option value="issue">Issue</option>
-        </select>
-
-        {/* Notes */}
-        <textarea
-          rows={4}
-          placeholder="Notes (optional)"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        ></textarea>
-
-        {error && <p className="error-text">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Add Item"}
-        </button>
-      </form>
+      <button
+        onClick={addItem}
+        style={{
+          marginTop: 20,
+          padding: 12,
+          borderRadius: 6,
+          background: "#C8A36D",
+          color: "#fff",
+        }}
+      >
+        Add
+      </button>
     </div>
   );
 }
