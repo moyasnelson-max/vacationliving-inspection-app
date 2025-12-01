@@ -1,0 +1,21 @@
+/* ---------- Subcategories Layout ---------- */
+.subcategories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+  gap: 20px;
+  padding: 25px;
+}
+
+.subcategory-card {
+  background: var(--glass);
+  padding: 18px;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: 0.25s;
+  cursor: pointer;
+}
+
+.subcategory-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
