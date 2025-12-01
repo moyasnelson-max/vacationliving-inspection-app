@@ -1,47 +1,44 @@
-import "../../../../styles/luxury-inspection.css";
 "use client";
 
 import { useEffect, useState } from "react";
+import supabase from "@/lib/supabase-client";
 import { useRouter } from "next/navigation";
-import supabase from "../../../../lib/supabase-client";
-import "../../../../styles/inspection-categories.css";
 
-export default function CategoriesPage({ params }) {
-  const router = useRouter();
+export default function InspectionCategories({ params }) {
   const { houseId } = params;
-
+  const router = useRouter();
   const [categories, setCategories] = useState([]);
-  const [lang, setLang] = useState("es");
 
   useEffect(() => {
-    async function loadCategories() {
-      const { data, error } = await supabase
-        .from("categories_v2")
-        .select("*")
-        .order("id");
-
-      if (!error) setCategories(data);
+    async function load() {
+      const { data } = await supabase.from("categories").select("*");
+      setCategories(data || []);
     }
-    loadCategories();
+    load();
   }, []);
 
-  const goToSubcategories = (categoryId) => {
-    router.push(`/inspection/${houseId}/categories/${categoryId}`);
-  };
-
   return (
-    <div className="lux-container">
-      <h1 className="lux-title">Selecciona una Categoría</h1>
+    <div style={{ padding: 20 }}>
+      <h3>Categories</h3>
 
-      <div className="lux-list">
+      <div style={{ display: "grid", gap: 12 }}>
         {categories.map((cat) => (
           <div
             key={cat.id}
-            className="lux-item"
-            onClick={() => goToSubcategories(cat.id)}
+            onClick={() =>
+              router.push(
+                `/inspection/${houseId}/categories/${cat.id}`
+              )
+            }
+            style={{
+              padding: 14,
+              borderRadius: 10,
+              border: "1px solid #ddd",
+              background: "#fff",
+              cursor: "pointer",
+            }}
           >
-            <span>{lang === "es" ? cat.name_es : cat.name_en}</span>
-            <i className="lux-arrow"></i>
+            {cat.name}
           </div>
         ))}
       </div>
