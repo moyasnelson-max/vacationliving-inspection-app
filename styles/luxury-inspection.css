@@ -1,0 +1,29 @@
+/* styles/luxury-inspection.css */
+
+.lux-box {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.lux-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.lux-subtitle {
+  font-size: 1rem;
+  color: #6b6b6e;
+}
+
+.lux-button {
+  width: 100%;
+  padding: 14px;
+  background: #c9b27f;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
