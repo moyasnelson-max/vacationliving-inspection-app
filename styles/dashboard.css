@@ -1,0 +1,24 @@
+/* ---------- Dashboard Layout ---------- */
+
+.dashboard-container {
+  padding: 30px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.dashboard-card {
+  background: var(--glass);
+  padding: 22px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.03);
+}
