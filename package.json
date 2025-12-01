@@ -3,36 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
     "start": "next start",
-    "dev": "next dev",
-    "fix": "npm run --fix",
-    "guardian": "node scripts/path-guardian-titanium.js",
-    "watchdog:prod": "node scripts/titanium-watchdog-pro.js",
-    "env:sync": "node scripts/env-sync.js",
-    "validate": "node scripts/validator-full.js",
-    "alias:heal": "bash alias-healer.sh",
-    "prepare": "husky install",
-    "lint:staged": "lint-staged",
-    "predev": "bash scripts/config-heal.sh",
-    "prebuild": "bash scripts/vercel-prebuild.sh"
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "node scripts/path-guardian-titanium.js",
-      "eslint --fix"
-    ]
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.0.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "@supabase/supabase-js": "2.38.4",
-    "dotenv": "16.3.1"
-  },
-  "devDependencies": {
-    "eslint": "^8.55.0",
-    "eslint-config-next": "14.0.3",
-    "lint-staged": "^15.2.0",
-    "husky": "^8.0.0"
+    "@supabase/supabase-js": "2.42.5",
+    "next": "14.2.5",
+    "pdf-lib": "1.17.1",
+    "qrcode": "1.5.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }
