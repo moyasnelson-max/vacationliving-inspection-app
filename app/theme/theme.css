@@ -1,0 +1,35 @@
+/* Light Theme */
+[data-theme="light"] {
+  --bg: #f7f3ec;
+  --text: #1f2328;
+  --card: white;
+  --gold: #c8a36d;
+  --gold-dark: #b38e57;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg: #151515;
+  --text: #f1f1f1;
+  --card: #1e1e1e;
+  --gold: #d4b37c;
+  --gold-dark: #c19f68;
+}
+
+body,
+[data-theme] {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.card {
+  background: var(--card);
+}
+
+button {
+  background: var(--gold);
+}
+
+button:hover {
+  background: var(--gold-dark);
+}
