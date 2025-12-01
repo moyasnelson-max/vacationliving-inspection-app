@@ -1,4 +1,8 @@
-import "../../../../styles/luxury-inspection.css";
-export default function Page() {
-  return null;
+export default function MediaPage({ params }) {
+  return (
+    <div style={{ padding: 20 }}>
+      <h3>Media {params.mediaId}</h3>
+      <p>Media preview coming soon.</p>
+    </div>
+  );
 }
