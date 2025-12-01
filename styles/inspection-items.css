@@ -1,0 +1,19 @@
+/* ---------- Items Page ---------- */
+.item-container {
+  padding: 20px;
+}
+
+.item-card {
+  background: var(--glass);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.item-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
