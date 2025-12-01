@@ -1,109 +1,58 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import supabase from "../../../../lib/supabase-client";
+import supabase from "@/lib/supabase-client";
+import { useRouter } from "next/navigation";
 
-export default function EditItemPage() {
-  const params = useParams();
-  const reportId = params.reportid;
-  const itemId = params.itemId;
-
-  const [title, setTitle] = useState("");
-  const [status, setStatus] = useState("ok");
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  // Fetch existing item
-  const fetchItem = async () => {
-    const { data, error } = await supabase
-      .from("report_items")
-      .select("*")
-      .eq("id", itemId)
-      .single();
-
-    if (!error && data) {
-      setTitle(data.title);
-      setStatus(data.status);
-      setNotes(data.notes || "");
-    }
-
-    setLoading(false);
-  };
+export default function EditReportItem({ params }) {
+  const { reportId, itemId } = params;
+  const router = useRouter();
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    fetchItem();
-  }, []);
+    async function load() {
+      const { data } = await supabase
+        .from("report_items")
+        .select("*")
+        .eq("id", itemId)
+        .single();
 
-  const saveItem = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    setError("");
-
-    if (!title) {
-      setError("Title is required");
-      setSaving(false);
-      return;
+      if (data) setName(data.name);
     }
+    load();
+  }, [itemId]);
 
-    const { error } = await supabase
+  const save = async () => {
+    await supabase
       .from("report_items")
-      .update({
-        title,
-        status,
-        notes,
-      })
+      .update({ name })
       .eq("id", itemId);
 
-    if (error) {
-      setError("Error saving item");
-      setSaving(false);
-      return;
-    }
-
-    window.location.href = `/reports/${reportId}`;
+    router.back();
   };
 
   return (
-    <div className="page-container">
-      <h1 className="vl-title">Edit Item</h1>
-      <p className="vl-subtitle">Modify details for this inspection item</p>
+    <div style={{ padding: 20 }}>
+      <h2>Edit Item</h2>
 
-      {loading ? (
-        <p>Loading item...</p>
-      ) : (
-        <form onSubmit={saveItem} style={{ marginTop: "20px" }}>
-          {/* Title */}
-          <input
-            type="text"
-            placeholder="Item Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={{ padding: 10, width: "100%", marginTop: 10 }}
+      />
 
-          {/* Status */}
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="ok">OK</option>
-            <option value="issue">Issue</option>
-          </select>
-
-          {/* Notes */}
-          <textarea
-            rows={4}
-            placeholder="Notes (optional)"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          ></textarea>
-
-          {error && <p className="error-text">{error}</p>}
-
-          <button type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-        </form>
-      )}
+      <button
+        onClick={save}
+        style={{
+          marginTop: 20,
+          padding: 12,
+          background: "#C8A36D",
+          color: "#fff",
+          borderRadius: 6,
+        }}
+      >
+        Save
+      </button>
     </div>
   );
 }
