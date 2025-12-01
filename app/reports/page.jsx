@@ -1,76 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "../../../../lib/supabase-client";
+import supabase from "@/lib/supabase-client";
+import { useRouter } from "next/navigation";
 
 export default function ReportsPage() {
   const [reports, setReports] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchReports = async () => {
-    const { data, error } = await supabase
-      .from("reports")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (!error) {
-      setReports(data || []);
-    }
-
-    setLoading(false);
-  };
+  const router = useRouter();
 
   useEffect(() => {
-    fetchReports();
+    async function load() {
+      const { data } = await supabase.from("reports").select("*");
+      setReports(data || []);
+    }
+    load();
   }, []);
 
-  const goToNewReport = () => {
-    window.location.href = "/reports/new";
-  };
-
-  const openReport = (id) => {
-    window.location.href = `/reports/${id}`;
-  };
-
   return (
-    <div className="page-container">
-      <h1 className="vl-title">Inspection Reports</h1>
-      <p className="vl-subtitle">Review, update, or create new inspections</p>
+    <div style={{ padding: 20 }}>
+      <h2>Reports</h2>
 
-      {/* NEW REPORT BUTTON */}
-      <button onClick={goToNewReport} style={{ marginBottom: "22px" }}>
-        + New Report
-      </button>
-
-      {loading ? (
-        <p>Loading reports...</p>
-      ) : reports.length === 0 ? (
-        <p>No reports found.</p>
-      ) : (
-        <div>
-          {reports.map((rep) => (
-            <div
-              key={rep.id}
-              className="card"
-              onClick={() => openReport(rep.id)}
-              style={{
-                cursor: "pointer",
-                transition: "0.25s",
-              }}
-            >
-              <h3 style={{ marginBottom: "6px" }}>{rep.property_name}</h3>
-              <p style={{ marginBottom: "6px", color: "#555" }}>
-                {rep.created_at
-                  ? new Date(rep.created_at).toLocaleString()
-                  : "No date"}
-              </p>
-              <p style={{ fontSize: "14px", color: "#777" }}>
-                Tap to view report →
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+      <div style={{ display: "grid", gap: 12 }}>
+        {reports.map((r) => (
+          <div
+            key={r.id}
+            onClick={() => router.push(`/reports/${r.id}`)}
+            style={{
+              padding: 14,
+              border: "1px solid #ddd",
+              borderRadius: 6,
+              cursor: "pointer",
+              background: "#fff",
+            }}
+          >
+            Report #{r.id}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
