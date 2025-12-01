@@ -1,58 +1,27 @@
 "use client";
 
-import "../../../../styles/luxury-inspection.css";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import supabase from "../../../../lib/supabase-client";
+import { useRouter } from "next/navigation";
 
-export default function HouseDashboard() {
-  const params = useParams();
-  const houseId = params.houseId;
-
-  const [house, setHouse] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const loadHouse = async () => {
-    const { data } = await supabase
-      .from("houses")
-      .select("*")
-      .eq("id", houseId)
-      .single();
-
-    setHouse(data);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadHouse();
-  }, []);
+export default function HouseInspectionHome({ params }) {
+  const router = useRouter();
+  const { houseId } = params;
 
   return (
-    <div className="lux-container">
-      <div className="lux-header">
-        <h1 className="lux-title">{loading ? "Loading..." : house?.name}</h1>
-        <p className="lux-subtitle">Inspection Dashboard</p>
-      </div>
+    <div>
+      <h2>Inspection — House {houseId}</h2>
 
-      <div className="lux-card">
-        <h2 className="lux-section-title">Actions</h2>
-
-        <button
-          className="lux-btn"
-          onClick={() =>
-            (window.location.href = `/inspection/${houseId}/components`)
-          }
-        >
-          Start Inspection
-        </button>
-
-        <button
-          className="lux-btn-outline"
-          onClick={() => (window.location.href = `/reports?house=${houseId}`)}
-        >
-          View Reports
-        </button>
-      </div>
+      <button
+        onClick={() => router.push(`/inspection/${houseId}/categories`)}
+        style={{
+          padding: 12,
+          marginTop: 20,
+          borderRadius: 6,
+          background: "#C8A36D",
+          color: "#fff",
+        }}
+      >
+        Start Inspection
+      </button>
     </div>
   );
 }
