@@ -1,0 +1,16 @@
+/* ---------- Reports Page ---------- */
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 30px;
+}
+
+.report-card {
+  background: var(--glass);
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
