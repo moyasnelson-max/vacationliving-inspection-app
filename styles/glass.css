@@ -1,0 +1,14 @@
+/* ---------- Global Glassmorphism Styling ---------- */
+
+:root {
+  --glass: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(255, 255, 255, 0.25);
+}
+
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px solid var(--glass-border);
+}
