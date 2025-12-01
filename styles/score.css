@@ -1,0 +1,17 @@
+/* ---------- Health Score ---------- */
+
+.score-container {
+  text-align: center;
+  padding: 30px;
+}
+
+.score-value {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.score-label {
+  margin-top: 10px;
+  font-size: 20px;
+}
