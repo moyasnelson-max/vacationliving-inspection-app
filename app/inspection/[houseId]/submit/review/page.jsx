@@ -1,4 +1,5 @@
 "use client";
+
 import "../../../../styles/luxury-inspection.css";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
@@ -10,15 +11,16 @@ const supabase = createClient(
 
 export default function ReviewPage({ params }) {
   const houseId = params.houseId;
+
   const [issues, setIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [repairNote, setRepairNote] = useState("");
   const [repairPhotos, setRepairPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // ============================================================
-  // Load all open issues of that house
-  // ============================================================
+  // ======================================================
+  // Load open issues of that house
+  // ======================================================
   useEffect(() => {
     const loadIssues = async () => {
       const { data, error } = await supabase
@@ -30,34 +32,34 @@ export default function ReviewPage({ params }) {
 
       if (!error) setIssues(data);
     };
+
     loadIssues();
   }, [houseId]);
 
-  // ============================================================
-  // Upload repair photos
-  // ============================================================
+  // ======================================================
+  // Upload repair photos to Supabase Storage
+  // ======================================================
   const uploadRepairPhotos = async (issueId) => {
     const uploaded = [];
 
     for (let i = 0; i < repairPhotos.length; i++) {
       const file = repairPhotos[i];
       const ext = file.name.split(".").pop();
-      const fileName = `${issueId}/repair_${Date.now()}_${i}.${ext}`;
+      const fileName = `repair_${issueId}_${Date.now()}_${i}.${ext}`;
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("issue-media")
         .upload(fileName, file);
 
-      if (!error) {
-        uploaded.push(fileName);
-      }
+      if (!error) uploaded.push(fileName);
     }
+
     return uploaded;
   };
 
-  // ============================================================
+  // ======================================================
   // Close issue
-  // ============================================================
+  // ======================================================
   const closeIssue = async () => {
     if (!selectedIssue) return;
 
@@ -75,17 +77,84 @@ export default function ReviewPage({ params }) {
 
     setLoading(true);
 
-    // 1. Upload repair photos
+    // 1. Upload photos
     const uploadedFiles = await uploadRepairPhotos(selectedIssue.id);
 
     // 2. Update issue
-    await supabase
-  .from("issues")
-  .update({
-    status: "closed",
-    repair_note: repairNote,
-  })
-  .eq("id", selectedIssue.id);
+    const { error } = await supabase
+      .from("issues")
+      .update({
+        status: "closed",
+        repair_note: repairNote,
+        repair_photos: uploadedFiles,
+      })
+      .eq("id", selectedIssue.id);
 
-setLoading(false);
-alert("Issue closed successfully!");
+    setLoading(false);
+
+    if (!error) {
+      alert("Issue closed successfully.");
+      window.location.reload();
+    } else {
+      alert("Error closing the issue.");
+    }
+  };
+
+  // ======================================================
+  // UI
+  // ======================================================
+  return (
+    <div className="review-wrapper">
+      <h1 className="review-title">Review & Close Issue</h1>
+
+      {/* Issue selector */}
+      <div className="review-section">
+        <h2>Select an Issue</h2>
+        <select
+          value={selectedIssue?.id || ""}
+          onChange={(e) => {
+            const issue = issues.find((i) => i.id === Number(e.target.value));
+            setSelectedIssue(issue);
+          }}
+        >
+          <option value="">Select...</option>
+          {issues.map((issue) => (
+            <option key={issue.id} value={issue.id}>
+              {issue.title}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Repair note */}
+      <div className="review-section">
+        <h2>Repair Note</h2>
+        <textarea
+          className="repair-note-box"
+          value={repairNote}
+          onChange={(e) => setRepairNote(e.target.value)}
+          placeholder="Describe the repair done..."
+        />
+      </div>
+
+      {/* Repair photos */}
+      <div className="review-section">
+        <h2>Repair Photos</h2>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={(e) => setRepairPhotos(Array.from(e.target.files))}
+        />
+      </div>
+
+      <button
+        onClick={closeIssue}
+        disabled={loading}
+        className="submit-button"
+      >
+        {loading ? "Closing..." : "Close Issue"}
+      </button>
+    </div>
+  );
+}
