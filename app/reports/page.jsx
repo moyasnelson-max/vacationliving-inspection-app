@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client.js";
+import supabase from "@/lib/supabase-browser.js";
 import { useRouter } from "next/navigation";
 
 export default function ReportsPage() {

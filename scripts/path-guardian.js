@@ -30,7 +30,7 @@ function fixFile(file) {
   content = content.replace(/\.\.\/app/g, "@/app");
 
   // 3. Forzar el import correcto del supabase-client
-  content = content.replace(/from ["'].*supabase-client["']/g, `from "@/lib/supabase-client.js"`);
+  content = content.replace(/from ["'].*supabase-client["']/g, `from "@/lib/supabase-browser.js"`);
 
   // 4. Insertar CSS faltante de luxury-inspection
   if (
