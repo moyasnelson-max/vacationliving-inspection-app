@@ -1,6 +1,6 @@
 "use client";
 
-import { generateQR } from "@/lib/qrGenerator";
+import { generateQR } from "@/lib/qrGenerator.js";
 import { useState } from "react";
 
 export default function QRDownloader({ houseId }) {

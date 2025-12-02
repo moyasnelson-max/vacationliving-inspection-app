@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabase-client";
+import { supabase } from "@/lib/supabase-client.js.js";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

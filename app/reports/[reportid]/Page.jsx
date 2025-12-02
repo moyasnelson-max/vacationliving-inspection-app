@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client";
+import supabase from "@/lib/supabase-client.js.js";
 
 export default function ReportViewPage({ params }) {
   const { reportId } = params;
