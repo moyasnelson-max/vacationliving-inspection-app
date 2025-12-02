@@ -3,22 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev -p 3008",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3008",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/supabase-js": "2.42.5",
     "next": "14.2.5",
-    "pdf-lib": "1.17.1",
-    "qrcode": "1.5.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/react": "19.2.7",
-    "eslint-plugin-import": "^2.32.0",
-    "typescript": "5.9.3"
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.5"
   }
 }

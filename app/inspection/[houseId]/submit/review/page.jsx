@@ -1,5 +1,5 @@
-import "../../../../styles/luxury-inspection.css";
 "use client";
+import "../../../../styles/luxury-inspection.css";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -85,4 +85,7 @@ export default function ReviewPage({ params }) {
     status: "closed",
     repair_note: repairNote,
   })
-  .eq("id", selectedIssue.id);}
+  .eq("id", selectedIssue.id);
+
+setLoading(false);
+alert("Issue closed successfully!");
