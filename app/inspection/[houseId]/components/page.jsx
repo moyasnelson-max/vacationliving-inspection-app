@@ -1,10 +1,9 @@
 "use client";
-"use client";
 
 import "@/styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-browser";
+import supabase from "@/lib/supabase-browser.js";
 
 export default function CategoriesPage() {
   const params = useParams();

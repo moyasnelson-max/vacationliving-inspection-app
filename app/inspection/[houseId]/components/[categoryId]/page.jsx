@@ -1,9 +1,8 @@
 "use client";
-"use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-browser";     // ← ya correcto
+import supabase from "@/lib/supabase-browser.js";     // ← ya correcto
 
 export default function CategoryItems() {
   const params = useParams();

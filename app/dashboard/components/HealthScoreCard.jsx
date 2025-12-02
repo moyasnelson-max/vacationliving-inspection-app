@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import { useEffect, useState } from "react";
 import { calculateHealthScore } from "@/lib/health-score.js";

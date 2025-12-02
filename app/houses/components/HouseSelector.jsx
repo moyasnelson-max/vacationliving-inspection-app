@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import { useEffect, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase-browser.js";

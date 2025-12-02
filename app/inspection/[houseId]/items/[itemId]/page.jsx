@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import supabase from "@/lib/supabase-browser.js";
 import { useState } from "react";

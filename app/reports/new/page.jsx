@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import supabase from "@/lib/supabase-browser";
+import supabase from "@/lib/supabase-browser.js";
 
 export default function NewReportPage() {
   const [propertyName, setPropertyName] = useState("");
