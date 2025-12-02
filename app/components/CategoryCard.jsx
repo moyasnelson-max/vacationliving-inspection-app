@@ -1,10 +1,11 @@
+import Link from "next/link";
 
-"use client";
-export default function CategoryCard(props) {
+export default function CategoryCard({ category, href }) {
   return (
-    <div className="vl-component">
-      <p>CategoryCard loaded.</p>
-    </div>
+    <Link href={href}>
+      <div className="category-card">
+        <h3>{category.name}</h3>
+      </div>
+    </Link>
   );
 }
-
