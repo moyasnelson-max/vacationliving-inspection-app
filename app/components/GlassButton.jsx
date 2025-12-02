@@ -1,10 +1,7 @@
-
-"use client";
-export default function GlassButton(props) {
+export default function GlassButton({ children, onClick, type = "button" }) {
   return (
-    <div className="vl-component">
-      <p>GlassButton loaded.</p>
-    </div>
+    <button type={type} className="glass-btn" onClick={onClick}>
+      {children}
+    </button>
   );
 }
-

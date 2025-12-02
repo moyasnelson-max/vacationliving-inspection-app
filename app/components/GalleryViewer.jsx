@@ -1,10 +1,9 @@
-
-"use client";
-export default function GalleryViewer(props) {
+export default function GalleryViewer({ images = [] }) {
   return (
-    <div className="vl-component">
-      <p>GalleryViewer loaded.</p>
+    <div className="gallery-viewer">
+      {images.map((src, i) => (
+        <img key={i} src={src} alt="" className="gallery-thumb" />
+      ))}
     </div>
   );
 }
-

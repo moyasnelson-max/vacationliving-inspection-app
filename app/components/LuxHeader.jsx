@@ -1,10 +1,17 @@
-
 "use client";
-export default function LuxHeader(props) {
+import Link from "next/link";
+import "./lux-header.css";
+
+export default function LuxHeader({ title = "Vacation Living", back }) {
   return (
-    <div className="vl-component">
-      <p>LuxHeader loaded.</p>
-    </div>
+    <header className="lux-header">
+      {back && (
+        <Link href={back} className="lux-header-back">
+          ← Back
+        </Link>
+      )}
+
+      <h1 className="lux-header-title">{title}</h1>
+    </header>
   );
 }
-

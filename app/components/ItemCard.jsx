@@ -1,10 +1,11 @@
+import Link from "next/link";
 
-"use client";
-export default function ItemCard(props) {
+export default function ItemCard({ item, href }) {
   return (
-    <div className="vl-component">
-      <p>ItemCard loaded.</p>
-    </div>
+    <Link href={href}>
+      <div className="item-card">
+        <p>{item.name}</p>
+      </div>
+    </Link>
   );
 }
-

@@ -1,10 +1,18 @@
-
 "use client";
-export default function Uploader(props) {
+import { useState } from "react";
+
+export default function Uploader({ onUpload }) {
+  const [files, setFiles] = useState([]);
+
+  function handleChange(e) {
+    const list = Array.from(e.target.files);
+    setFiles(list);
+    onUpload(list);
+  }
+
   return (
-    <div className="vl-component">
-      <p>Uploader loaded.</p>
+    <div className="uploader">
+      <input type="file" multiple onChange={handleChange} />
     </div>
   );
 }
-

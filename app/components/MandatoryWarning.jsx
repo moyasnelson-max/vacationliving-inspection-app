@@ -1,10 +1,7 @@
-
-"use client";
-export default function MandatoryWarning(props) {
+export default function MandatoryWarning() {
   return (
-    <div className="vl-component">
-      <p>MandatoryWarning loaded.</p>
-    </div>
+    <p className="mandatory-warning">
+      ⚠️ This field is required to continue
+    </p>
   );
 }
-

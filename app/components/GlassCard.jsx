@@ -1,10 +1,3 @@
-
-"use client";
-export default function GlassCard(props) {
-  return (
-    <div className="vl-component">
-      <p>GlassCard loaded.</p>
-    </div>
-  );
+export default function GlassCard({ children }) {
+  return <div className="glass-card">{children}</div>;
 }
-

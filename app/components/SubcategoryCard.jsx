@@ -1,10 +1,11 @@
+import Link from "next/link";
 
-"use client";
-export default function SubcategoryCard(props) {
+export default function SubcategoryCard({ subcategory, href }) {
   return (
-    <div className="vl-component">
-      <p>SubcategoryCard loaded.</p>
-    </div>
+    <Link href={href}>
+      <div className="subcategory-card">
+        <h4>{subcategory.name}</h4>
+      </div>
+    </Link>
   );
 }
-

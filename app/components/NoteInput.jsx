@@ -1,10 +1,20 @@
-
 "use client";
-export default function NoteInput(props) {
+import { useState } from "react";
+
+export default function NoteInput({ onChange }) {
+  const [value, setValue] = useState("");
+
+  function handle(e) {
+    setValue(e.target.value);
+    onChange(e.target.value);
+  }
+
   return (
-    <div className="vl-component">
-      <p>NoteInput loaded.</p>
-    </div>
+    <textarea
+      className="note-input"
+      placeholder="Add notes..."
+      value={value}
+      onChange={handle}
+    />
   );
 }
-
