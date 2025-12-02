@@ -2,7 +2,7 @@ import "@/styles/luxury-inspection.css";
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client";
+import supabase from "@/lib/supabase-browser";
 import Image from "next/image";
 
 export default function InspectionDashboard() {

@@ -1,55 +1,65 @@
 "use client";
 
+import { supabaseBrowser } from "@/lib/supabase-browser";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { supabaseBrowser } from "@/lib/supabase-client";
 
 export default function LoginPage() {
+  const router = useRouter();
   const supabase = supabaseBrowser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
+    setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
       setErrorMsg(error.message);
+      setLoading(false);
       return;
     }
 
-    window.location.href = "/dashboard";
+    router.push("/dashboard");
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Inspector Login</h2>
+    <form onSubmit={handleLogin} style={{ padding: "40px" }}>
+      <h1>Login Inspectors</h1>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <input
+        type="email"
+        placeholder="Email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ width: "100%", marginBottom: "20px" }}
+      />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ width: "100%", marginBottom: "20px" }}
+      />
 
-        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+      {errorMsg && (
+        <p style={{ color: "red", marginBottom: "20px" }}>{errorMsg}</p>
+      )}
 
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      <button type="submit" disabled={loading} style={{ width: "100%" }}>
+        {loading ? "Loading..." : "Login"}
+      </button>
+    </form>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import supabase from "@/lib/supabase-client";
+import supabase from "@/lib/supabase-browser";
 
 export default function Home() {
   return (

@@ -1,27 +1,30 @@
 "use client";
 
+import { supabaseBrowser } from "@/lib/supabase-browser";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { supabaseBrowser } from "@/lib/supabase-client";
 
 export default function LogoutPage() {
-  useEffect(() => {
-    const supabase = supabaseBrowser();
+  const router = useRouter();
 
-    const runLogout = async () => {
-      try {
-        await supabase.auth.signOut();
-        window.location.href = "/auth/login";
-      } catch (err) {
-        console.error("Logout error:", err);
-      }
+  useEffect(() => {
+    const executeLogout = async () => {
+      const supabase = supabaseBrowser();
+      await supabase.auth.signOut();
+      router.push("/auth/login");
     };
 
-    runLogout();
-  }, []);
+    executeLogout();
+  }, [router]);
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Logging out...</h2>
+    <div style={{
+      padding: "40px",
+      textAlign: "center",
+      fontSize: "18px",
+      color: "#555",
+    }}>
+      Cerrando sesión…
     </div>
   );
 }

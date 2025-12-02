@@ -6,12 +6,12 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 
 export default function Providers({ children }) {
-  const [supabaseClient] = useState(() =>
+  const [supabaseBrowser] = useState(() =>
     createBrowserSupabaseClient()
   );
 
   return (
-    <SessionContextProvider supabaseClient={supabaseClient}>
+    <SessionContextProvider supabaseBrowser={supabaseBrowser}>
       <ThemeProvider>{children}</ThemeProvider>
     </SessionContextProvider>
   );
