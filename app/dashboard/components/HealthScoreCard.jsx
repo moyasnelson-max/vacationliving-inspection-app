@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { calculateHealthScore } from "@/lib/health-score.js.js";
+import { calculateHealthScore } from "@/lib/health-score.js";
 
 export default function HealthScoreCard() {
   const [score, setScore] = useState(null);

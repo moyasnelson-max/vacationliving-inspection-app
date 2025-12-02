@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-client.js.js";
+import supabase from "@/lib/supabase-client.js";
 
 export default function HistoryPage({ params }) {
   const { houseId } = params;

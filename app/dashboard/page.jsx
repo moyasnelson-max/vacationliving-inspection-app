@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase-client.js.js";
+import { supabase } from "@/lib/supabase-client.js";
 import HouseCard from "./components/HouseCard";
 import ReportCard from "./components/ReportCard";
 import IssueCard from "./components/IssueCard";
