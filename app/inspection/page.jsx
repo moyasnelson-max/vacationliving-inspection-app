@@ -1,7 +1,6 @@
 "use client";
-import "@/styles/luxury-inspection.css";
-"use client";
 
+import "@/styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabase-browser";
 import Image from "next/image";

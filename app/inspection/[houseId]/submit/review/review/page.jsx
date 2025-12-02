@@ -1,6 +1,6 @@
 "use client";
+
 import "@/styles/luxury-inspection.css";
-"use client";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
