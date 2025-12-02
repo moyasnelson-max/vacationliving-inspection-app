@@ -1,9 +1,8 @@
 "use client";
 
-import "../../../../styles/luxury-inspection.css";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import supabase from "@/lib/supabase-client";
+import supabase from "@/lib/supabase-client";     // ← ya correcto
 
 export default function CategoryItems() {
   const params = useParams();
@@ -14,27 +13,39 @@ export default function CategoryItems() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ============================================
+  // Load category + items
+  // ============================================
   const loadData = async () => {
-    const { data: cat } = await supabase
+    setLoading(true);
+
+    // Load category info
+    const { data: cat, error: catErr } = await supabase
       .from("categories")
       .select("*")
       .eq("id", categoryId)
       .single();
 
-    const { data: it } = await supabase
+    if (!catErr) setCategory(cat);
+
+    // Load items belonging to category
+    const { data: itemsData, error: itemsErr } = await supabase
       .from("items")
       .select("*")
       .eq("category_id", categoryId);
 
-    setCategory(cat);
-    setItems(it);
+    if (!itemsErr) setItems(itemsData);
+
     setLoading(false);
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [categoryId]);
 
+  // ============================================
+  // RENDER
+  // ============================================
   return (
     <div className="lux-container">
       <div className="lux-header">
@@ -47,9 +58,12 @@ export default function CategoryItems() {
       {!loading && (
         <div className="lux-list">
           {items.map((item) => (
-            <div className="lux-list-item" key={item.id}>
+            <div
+              key={item.id}
+              className="lux-list-item"
+            >
               <span className="lux-item-name">{item.name}</span>
-              <span className="lux-arrow">✓</span>
+              <span className="lux-arrow">›</span>
             </div>
           ))}
         </div>

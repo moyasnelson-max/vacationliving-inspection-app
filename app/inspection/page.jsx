@@ -1,4 +1,4 @@
-import "../../../../styles/luxury-inspection.css";
+import "@/styles/luxury-inspection.css";
 "use client";
 
 import { useEffect, useState } from "react";

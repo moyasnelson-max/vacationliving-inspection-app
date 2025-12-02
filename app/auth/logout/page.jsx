@@ -1,19 +1,27 @@
 "use client";
 
-import { supabase } from "@/lib/supabase-client.js";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { supabaseBrowser } from "@/lib/supabase-client";
 
 export default function LogoutPage() {
-  const router = useRouter();
-
   useEffect(() => {
-    async function doLogout() {
-      await supabase.auth.signOut();
-      router.push("/auth/login");
-    }
-    doLogout();
+    const supabase = supabaseBrowser();
+
+    const runLogout = async () => {
+      try {
+        await supabase.auth.signOut();
+        window.location.href = "/auth/login";
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    };
+
+    runLogout();
   }, []);
 
-  return <p style={{ padding: 20 }}>Logging out...</p>;
+  return (
+    <div style={{ padding: 40 }}>
+      <h2>Logging out...</h2>
+    </div>
+  );
 }
