@@ -25,13 +25,16 @@
         "./app/*"
       ],
       "@components/*": [
-        "./components/*"
+        "./app/components/*"
       ],
       "@lib/*": [
         "./lib/*"
       ],
       "@styles/*": [
         "./styles/*"
+      ],
+      "@public/*": [
+        "./public/*"
       ]
     },
     "incremental": true,
@@ -41,12 +44,19 @@
       }
     ]
   },
+  "incremental": true,
+  "plugins": [
+    {
+      "name": "next"
+    }
+  ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
+    "**/*.json",
     ".next/types/**/*.ts"
   ],
   "exclude": [

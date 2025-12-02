@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseBrowser } from "@/lib/supabase-client";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import Image from "next/image";
 import "@/styles/login.css";
 
-import GoldenParticles from "@/components/GoldenParticles";
-import HotelLoader from "@/components/HotelLoader";
+import GoldenParticles from "@components/GoldenParticles.jsx";
+import HotelLoader from "@components/HotelLoader.jsx";
 
 export default function LoginPage() {
   const router = useRouter();
