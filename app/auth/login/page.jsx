@@ -1,65 +1,132 @@
 "use client";
 
-import { supabaseBrowser } from "@/lib/supabase-browser";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { supabaseBrowser } from "@/lib/supabase-client";
+import Image from "next/image";
+import "@/styles/login.css";
+
+import GoldenParticles from "@/components/GoldenParticles";
+import HotelLoader from "@/components/HotelLoader";
 
 export default function LoginPage() {
   const router = useRouter();
   const supabase = supabaseBrowser();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [screenLoading, setScreenLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin = async (e) => {
+  // Loader premium inicial
+  useEffect(() => {
+    const t = setTimeout(() => setScreenLoading(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  async function handleLogin(e) {
     e.preventDefault();
+    setErrorMsg("");
     setLoading(true);
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password: pass,
     });
 
     if (error) {
-      setErrorMsg(error.message);
+      setErrorMsg("Credenciales incorrectas");
       setLoading(false);
       return;
     }
 
     router.push("/dashboard");
-  };
+  }
 
   return (
-    <form onSubmit={handleLogin} style={{ padding: "40px" }}>
-      <h1>Login Inspectors</h1>
+    <div className="login-page">
+      {screenLoading && <HotelLoader />}
 
-      <input
-        type="email"
-        placeholder="Email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ width: "100%", marginBottom: "20px" }}
-      />
+      <GoldenParticles />
 
-      <input
-        type="password"
-        placeholder="Password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", marginBottom: "20px" }}
-      />
+      <div className="vapor-layer"></div>
 
-      {errorMsg && (
-        <p style={{ color: "red", marginBottom: "20px" }}>{errorMsg}</p>
-      )}
+      <div className="login-background" />
 
-      <button type="submit" disabled={loading} style={{ width: "100%" }}>
-        {loading ? "Loading..." : "Login"}
-      </button>
-    </form>
+      <div className="login-container fade-in">
+
+        {/* LOGO PRINCIPAL */}
+        <div className="logo-wrapper">
+          <Image
+            src="/logo.png"
+            alt="Vacation Living Logo"
+            width={340}
+            height={140}
+            className="login-logo"
+            priority
+          />
+        </div>
+
+        {/* CARD */}
+        <form className="login-card" onSubmit={handleLogin}>
+          <h2 className="login-title">Iniciar sesión</h2>
+
+          {/* INPUT EMAIL */}
+          <input
+            className="login-input"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          {/* INPUT PASSWORD */}
+          <div className="password-wrapper">
+            <input
+              className="login-input"
+              type={showPass ? "text" : "password"}
+              placeholder="Contraseña"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              required
+            />
+
+            <span
+              className="show-pass"
+              onClick={() => setShowPass(!showPass)}
+            >
+              {showPass ? "Ocultar" : "Mostrar"}
+            </span>
+          </div>
+
+          {errorMsg && (
+            <p className="login-error">{errorMsg}</p>
+          )}
+
+          {/* BOTÓN LOGIN */}
+          <button className="login-btn" type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+
+          {/* RESET PASSWORD */}
+          <div className="login-links">
+            <a href="/auth/reset">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          {/* SOCIAL LOGINS */}
+          <button type="button" className="social-btn apple-btn">
+              Sign in with Apple
+          </button>
+
+          <button type="button" className="social-btn google-btn">
+            <Image src="/icon.png" alt="icon" width={20} height={20} />
+            Sign in with Google
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }

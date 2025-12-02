@@ -1,4 +1,5 @@
 "use client";
+"use client";
 
 import "@/styles/luxury-inspection.css";
 import { useEffect, useState } from "react";

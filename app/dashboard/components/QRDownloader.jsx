@@ -1,4 +1,5 @@
 "use client";
+"use client";
 
 import { generateQR } from "@/lib/qrGenerator.js";
 import { useState } from "react";

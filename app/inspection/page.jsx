@@ -1,3 +1,4 @@
+"use client";
 import "@/styles/luxury-inspection.css";
 "use client";
 
