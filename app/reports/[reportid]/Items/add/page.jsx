@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import supabase from "@/lib/supabase-browser.js";
+import supabase from "@lib/supabase-browser.js";
 import { useRouter } from "next/navigation";
 
 export default function AddItemPage({ params }) {

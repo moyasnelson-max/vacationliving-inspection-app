@@ -1,0 +1,59 @@
+"use client";
+
+import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import "@/styles/issue-created.css";
+
+export default function IssueCreatedPage() {
+  const router = useRouter();
+  const params = useParams();
+  const houseId = params.houseId;
+
+  function handleAddAnother() {
+    router.push(`/inspection/${houseId}/categories`);
+  }
+
+  function handleViewList() {
+    router.push(`/inspection/${houseId}/submit/review`);
+  }
+
+  return (
+    <div className="issue-created-page fade-in">
+
+      {/* Fondo premium oscuro difuminado */}
+      <div className="issue-bg" />
+
+      {/* Card principal */}
+      <div className="issue-card">
+
+        {/* Icono check dorado animado */}
+        <div className="gold-check-wrapper">
+          <Image
+            src="/icons/gold-check.png"
+            alt="Success"
+            width={120}
+            height={120}
+            className="gold-check"
+          />
+        </div>
+
+        <h1 className="issue-title">Issue creado exitosamente</h1>
+
+        <p className="issue-subtitle">
+          Tu reporte ha sido guardado con éxito.  
+          Puedes continuar inspeccionando o finalizar cuando desees.
+        </p>
+
+        {/* Botones */}
+        <button className="issue-btn primary-btn" onClick={handleAddAnother}>
+          Añadir otro issue
+        </button>
+
+        <button className="issue-btn secondary-btn" onClick={handleViewList}>
+          Ver lista de issues creados
+        </button>
+
+      </div>
+    </div>
+  );
+}

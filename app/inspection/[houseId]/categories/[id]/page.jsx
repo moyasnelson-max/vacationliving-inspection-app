@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase-browser.js";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 
 export default function CategoryPage({ params }) {

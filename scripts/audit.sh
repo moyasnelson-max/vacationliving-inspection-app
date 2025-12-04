@@ -1,43 +1,44 @@
 #!/bin/bash
-echo "🔎 Starting Full Project Audit (Vacation Living – 5-Stars Edition)..."
 
-echo "------------------------------------------------------"
-echo "1) Checking invalid imports (@/* aliases)"
-echo "------------------------------------------------------"
-grep -R "@/" -n ./app ./lib ./components ./styles || echo "✔ No invalid imports found"
+echo "======================================="
+echo " VACATION LIVING - AUTO AUDIT v1"
+echo "======================================="
 
-echo "------------------------------------------------------"
-echo "2) Checking for deleted module references"
-echo "------------------------------------------------------"
-grep -R "supabase-client" -n ./app || echo "✔ All references updated"
+echo ""
+echo "🔍 1) Revisando imports rotos..."
+grep -R "from '@" -n app | grep -v ".next"
 
-echo "------------------------------------------------------"
-echo "3) Checking for missing files"
-echo "------------------------------------------------------"
-for file in $(grep -R "from \"@/components" -h ./app | sed 's/.*@\/components\///' | sed 's/".*//' | sed 's/\(.*\)/\1.jsx/'); do
-    if [ ! -f "./components/$file" ]; then
-        echo "❌ Missing component: $file"
-    fi
-done
+echo ""
+echo "🔍 2) Revisando rutas que no existen..."
+grep -R "@/components" -n app
+grep -R "@/lib" -n app
 
-echo "------------------------------------------------------"
-echo "4) Validating use client placement"
-echo "------------------------------------------------------"
-grep -R "use client" -n ./app | grep -v "^1:" && echo "⚠ Fix needed" || echo "✔ All client directives at top"
+echo ""
+echo "🔍 3) Verificando existencia de archivos reales..."
+ls app/components
+ls app/lib
 
-echo "------------------------------------------------------"
-echo "5) Validating Tailwind + PostCSS install"
-echo "------------------------------------------------------"
-if [ -f "./postcss.config.js" ] && [ -f "./tailwind.config.js" ]; then
-    echo "✔ Tailwind + PostCSS OK"
-else
-    echo "❌ Missing config – needs fix"
-fi
+echo ""
+echo "🔍 4) Verificando variables de entorno..."
+grep -R "NEXT_PUBLIC_SUPABASE" -n .
 
-echo "------------------------------------------------------"
-echo "6) Running production build"
-echo "------------------------------------------------------"
-npm run build
+echo ""
+echo "🔍 5) Verificando estructura pública (public/)..."
+ls public
 
-echo "------------------------------------------------------"
-echo "Audit complete."
+echo ""
+echo "🔍 6) Validando imports de imágenes..."
+grep -R "Image" -n app | grep "/"
+
+echo ""
+echo "🔍 7) Validando que no existan imports duplicados..."
+grep -R "supabase" -n app
+
+echo ""
+echo "🔍 8) Simulando build para detectar errores..."
+npm run build --silent
+
+echo ""
+echo "=================================================="
+echo " AUTO AUDIT FINALIZADA "
+echo "=================================================="

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseBrowser } from "@/lib/supabase-browser.js";
 import Image from "next/image";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import "@/styles/login.css";
 
-import GoldenParticles from "@components/GoldenParticles.jsx";
-import HotelLoader from "@components/HotelLoader.jsx";
+import GoldenParticles from "@/components/GoldenParticles.jsx";
+import HotelLoader from "@/components/HotelLoader.jsx";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,29 +20,79 @@ export default function LoginPage() {
   const [screenLoading, setScreenLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Loader premium inicial
+  // Intentos y bloqueo anti-bruteforce
+  const [attempts, setAttempts] = useState(0);
+  const [lockUntil, setLockUntil] = useState(null);
+
+  // Loader luxury inicial
   useEffect(() => {
     const t = setTimeout(() => setScreenLoading(false), 1200);
     return () => clearTimeout(t);
   }, []);
+
+  // Limpieza automática de errores
+  useEffect(() => {
+    if (errorMsg) {
+      const t = setTimeout(() => setErrorMsg(""), 3500);
+      return () => clearTimeout(t);
+    }
+  }, [errorMsg]);
 
   async function handleLogin(e) {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: pass,
-    });
-
-    if (error) {
-      setErrorMsg("Credenciales incorrectas");
+    // Bloqueo por demasiados intentos
+    if (lockUntil && lockUntil > Date.now()) {
+      const seconds = Math.ceil((lockUntil - Date.now()) / 1000);
+      setErrorMsg(`Demasiados intentos. Intenta nuevamente en ${seconds}s.`);
       setLoading(false);
       return;
     }
 
-    router.push("/dashboard");
+    // Validaciones premium (Marriott-level)
+    if (!email || !pass) {
+      setErrorMsg("Por favor completa todos los campos.");
+      setLoading(false);
+      return;
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+      setErrorMsg("Ingresa un email válido.");
+      setLoading(false);
+      return;
+    }
+
+    // Limpieza silenciosa
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPass = pass.trim();
+
+    // Login real
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password: cleanPass,
+    });
+
+    // Error de credenciales
+    if (error) {
+      setAttempts((prev) => prev + 1);
+
+      // Activa bloqueo de 15s después de 5 intentos
+      if (attempts >= 4) {
+        setLockUntil(Date.now() + 15000);
+        setAttempts(0);
+        setErrorMsg("Demasiados intentos. Intenta nuevamente en 15s.");
+      } else {
+        setErrorMsg("Credenciales incorrectas.");
+      }
+
+      setLoading(false);
+      return;
+    }
+
+    // Éxito → redirección al dashboard de casas
+    router.push("/houses");
   }
 
   return (
@@ -52,12 +102,10 @@ export default function LoginPage() {
       <GoldenParticles />
 
       <div className="vapor-layer"></div>
-
       <div className="login-background" />
 
       <div className="login-container fade-in">
-
-        {/* LOGO PRINCIPAL */}
+        {/* LOGO */}
         <div className="logo-wrapper">
           <Image
             src="/logo.png"
@@ -73,7 +121,7 @@ export default function LoginPage() {
         <form className="login-card" onSubmit={handleLogin}>
           <h2 className="login-title">Iniciar sesión</h2>
 
-          {/* INPUT EMAIL */}
+          {/* EMAIL */}
           <input
             className="login-input"
             type="email"
@@ -83,7 +131,7 @@ export default function LoginPage() {
             required
           />
 
-          {/* INPUT PASSWORD */}
+          {/* PASSWORD */}
           <div className="password-wrapper">
             <input
               className="login-input"
@@ -102,9 +150,8 @@ export default function LoginPage() {
             </span>
           </div>
 
-          {errorMsg && (
-            <p className="login-error">{errorMsg}</p>
-          )}
+          {/* ERROR */}
+          {errorMsg && <p className="login-error">{errorMsg}</p>}
 
           {/* BOTÓN LOGIN */}
           <button className="login-btn" type="submit" disabled={loading}>
@@ -116,9 +163,9 @@ export default function LoginPage() {
             <a href="/auth/reset">¿Olvidaste tu contraseña?</a>
           </div>
 
-          {/* SOCIAL LOGINS */}
+          {/* SOCIAL LOGINS (placeholder premium) */}
           <button type="button" className="social-btn apple-btn">
-              Sign in with Apple
+             Sign in with Apple
           </button>
 
           <button type="button" className="social-btn google-btn">
