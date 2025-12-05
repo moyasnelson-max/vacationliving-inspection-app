@@ -1,4 +1,54 @@
-/* Lux Header Styles — placeholder to satisfy Vercel build */
-.lux-header { }
-.lux-header-title { }
-.lux-header-back { }
+/* ============================================================
+   LUXURY HEADER — HOTEL COLLECTION (Marriott / Four Seasons)
+   Designed for premium inspection experience
+   ============================================================ */
+
+.lux-header {
+  position: relative;
+  padding: 22px 10px;
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+
+  box-shadow: 0 4px 25px rgba(0,0,0,0.45);
+}
+
+.lux-header-title {
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.lux-header-back {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+
+  color: #d4af37;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.45);
+
+  background: rgba(255,255,255,0.05);
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.lux-header-back:hover {
+  background: #d4af37;
+  color: #000;
+  box-shadow: 0 4px 18px rgba(212,175,55,0.45);
+  transform: translateY(-50%) translateX(3px);
+}
