@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 
-import "@/styles/luxury-inspection.css";
+import "@styles/luxury-inspection.css";
 
-import { supabaseBrowser } from "@/lib/supabase-browser";
+import { supabaseBrowser } from "@lib/supabase-browser";
 const supabase = supabaseBrowser();
 
 export default function EditIssuePage() {

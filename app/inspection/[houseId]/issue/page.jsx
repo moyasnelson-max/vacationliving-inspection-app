@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
-import "@/styles/luxury-inspection.css";
-import { createIssue } from "@/lib/issues-create";
+import "@styles/luxury-inspection.css";
+import { createIssue } from "@lib/issues-create";
 
 export default function IssuePage() {
   const router = useRouter();

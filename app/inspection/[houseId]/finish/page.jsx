@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Image from "next/image";
-import { supabaseBrowser } from "@/lib/supabase-browser";
-import "@/styles/luxury-inspection.css";
+import { supabaseBrowser } from "@lib/supabase-browser";
+import "@styles/luxury-inspection.css";
 
 export default function FinishInspectionPage() {
   const router = useRouter();

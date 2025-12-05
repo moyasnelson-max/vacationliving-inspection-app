@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
-import "@/styles/issue-created.css";
+import "@styles/issue-created.css";
 
 export default function IssueCreatedPage() {
   const router = useRouter();

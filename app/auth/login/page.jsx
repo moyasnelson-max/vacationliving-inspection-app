@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabaseBrowser } from "@/lib/supabase-browser";
-import "@/styles/login.css";
+import { supabaseBrowser } from "@lib/supabase-browser";
+import "@styles/login.css";
 
-import GoldenParticles from "@/components/GoldenParticles.jsx";
-import HotelLoader from "@/components/HotelLoader.jsx";
+import GoldenParticles from "@components/GoldenParticles.jsx";
+import HotelLoader from "@components/HotelLoader.jsx";
 
 export default function LoginPage() {
   const router = useRouter();

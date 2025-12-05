@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabaseBrowser } from "@/lib/supabase-browser";
-import "@/styles/finish.css";   // asegúrate de que este archivo existe
+import { supabaseBrowser } from "@lib/supabase-browser";
+import "@styles/finish.css";   // asegúrate de que este archivo existe
 import Image from "next/image";
 
 export default function SubmitReportPage() {

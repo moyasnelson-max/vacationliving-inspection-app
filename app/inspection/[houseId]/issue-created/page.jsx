@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import "@/styles/luxury-inspection.css";
+import "@styles/luxury-inspection.css";
 
 export default function IssueCreated() {
   const router = useRouter();

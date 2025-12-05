@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabaseBrowser } from "@/lib/supabase-browser";
-import "@/styles/luxury-inspection.css";
+import { supabaseBrowser } from "@lib/supabase-browser";
+import "@styles/luxury-inspection.css";
 
-import Spinner from "@/components/Spinner.jsx";
+import Spinner from "@components/Spinner.jsx";
 
 export default function ItemsPage() {
   const router = useRouter();

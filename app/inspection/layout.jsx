@@ -1,4 +1,4 @@
-import LuxHeader from "@/components/LuxHeader";
+import LuxHeader from "@components/LuxHeader";
 
 export const metadata = {
   title: "Inspection · Vacation Living",
