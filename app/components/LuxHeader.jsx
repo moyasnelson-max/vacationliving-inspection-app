@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import "@/styles/lux-header.css";
+import "../../styles/lux-header.css";
 
 export default function LuxHeader({ title = "Vacation Living", back }) {
   return (
