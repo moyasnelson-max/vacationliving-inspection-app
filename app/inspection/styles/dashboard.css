@@ -1,124 +1,173 @@
-"use client";
+/* ================================
+   VACATION LIVING – DASHBOARD UI
+   Nivel Marriott (Premium)
+   ================================ */
 
-import { useEffect, useState } from "react";
-import supabase from @lib/supabase-browser.js";
+/* --------- GLOBAL RESET --------- */
 
-export default function InspectionDashboard() {
-  const [session, setSession] = useState(null);
-  const [houses, setHouses] = useState([]);
-  const [loading, setLoading] = useState(true);
+.lux-dashboard {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+  animation: fadeIn 0.4s ease-out;
+}
 
-  // -----------------------------
-  // LOAD SESSION
-  // -----------------------------
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session || null);
-    };
-    load();
-  }, []);
+/* --------- HEADER --------- */
 
-  // -----------------------------
-  // LOAD HOUSES FROM SUPABASE
-  // -----------------------------
-  useEffect(() => {
-    const fetchHouses = async () => {
-      const { data, error } = await supabase
-        .from("houses")
-        .select("*")
-        .order("name", { ascending: true });
+.lux-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
 
-      if (!error) setHouses(data || []);
-      setLoading(false);
-    };
-    fetchHouses();
-  }, []);
+.lux-header-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 6px;
+}
 
-  // -----------------------------
-  // GO TO SPECIFIC HOUSE
-  // -----------------------------
-  const goToHouse = (houseId) => {
-    window.location.href = `/inspection/${houseId}`;
-  };
+.lux-header-sub {
+  font-size: 16px;
+  font-weight: 400;
+  color: #666;
+}
 
-  // -----------------------------
-  // LOGOUT
-  // -----------------------------
-  const logout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  };
+/* --------- BREADCRUMBS --------- */
 
-  return (
-    <div className="lux-dashboard">
+.lux-breadcrumbs {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 24px;
+}
 
-      {/* ------------------------------
-          HEADER
-      --------------------------------*/}
-      <div className="lux-header">
-        <div>
-          <h1 className="lux-header-title">Inspection Center</h1>
-          <p className="lux-header-sub">Manage inspections and house reports</p>
-        </div>
+.lux-breadcrumbs span {
+  margin: 0 4px;
+}
 
-        <img src="/logo.png" alt="VL Logo" className="lux-header-logo" />
-      </div>
+/* --------- CARD BASE --------- */
 
-      {/* ------------------------------
-          BREADCRUMBS
-      --------------------------------*/}
-      <div className="lux-breadcrumbs">
-        <a>Dashboard</a> <span>/</span> <span>Properties</span>
-      </div>
+.lux-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(203, 163, 109, 0.15);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.5s ease-out;
+}
 
-      {/* ------------------------------
-          SESSION CARD
-      --------------------------------*/}
-      <div className="lux-card">
-        <h2 className="lux-card-title">Your Session</h2>
-        {session ? (
-          <p className="lux-card-text">
-            <strong>Email:</strong> {session.user.email}
-            <br />
-            <strong>Status:</strong> Logged in ✔
-          </p>
-        ) : (
-          <p className="lux-card-text">Not logged in.</p>
-        )}
+.lux-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
 
-        <button className="lux-btn-outline" onClick={logout}>
-          Logout
-        </button>
-      </div>
+.lux-card-text {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 12px;
+}
 
-      {/* ------------------------------
-          HOUSE LIST
-      --------------------------------*/}
-      <div className="lux-card">
-        <h2 className="lux-card-title">Your Properties</h2>
-        <p className="lux-card-text">
-          Choose a property to start a new inspection or review reports.
-        </p>
+/* --------- SESSION CARD --------- */
 
-        {loading ? (
-          <p className="lux-dash-loading">Loading properties...</p>
-        ) : (
-          <div className="lux-grid">
-            {houses.map((house) => (
-              <div
-                key={house.id}
-                className="lux-house-box"
-                onClick={() => goToHouse(house.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <p className="lux-house-title">{house.name}</p>
-                <p className="lux-house-id">ID: {house.id}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+.lux-card strong {
+  color: #222;
+  font-weight: 600;
+}
+
+/* --------- LOGOUT BUTTON --------- */
+
+.lux-btn-outline {
+  padding: 10px 18px;
+  border: 1px solid #cba36d;
+  background: transparent;
+  color: #cba36d;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.lux-btn-outline:hover {
+  background: #cba36d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(203, 163, 109, 0.25);
+}
+
+/* --------- LOADING --------- */
+
+.lux-dash-loading {
+  font-size: 16px;
+  color: #777;
+  padding-left: 6px;
+}
+
+/* --------- HOUSES GRID --------- */
+
+.lux-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 8px;
+}
+
+/* --------- HOUSE BOX --------- */
+
+.lux-house-box {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(203, 163, 109, 0.18);
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+.lux-house-box:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(203, 163, 109, 0.28);
+  border-color: #cba36d;
+}
+
+/* HOUSE TITLE */
+.lux-house-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* HOUSE ID */
+.lux-house-id {
+  font-size: 14px;
+  color: #777;
+}
+
+/* --------- ANIMATIONS --------- */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

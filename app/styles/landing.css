@@ -1,0 +1,86 @@
+/* ================================
+   LANDING PAGE — Marriott Level
+   ================================ */
+
+.vl-landing-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+.vl-landing-card {
+  background: var(--card-bg, rgba(255, 255, 255, 0.75));
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  padding: 45px 55px;
+  max-width: 680px;
+  width: 100%;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.05),
+    0 1px 3px rgba(0,0,0,0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vl-landing-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.08),
+    0 2px 6px rgba(0,0,0,0.04);
+}
+
+.vl-tag {
+  display: inline-block;
+  background: #f1ece4;
+  color: #6d5635;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.vl-title {
+  margin: 18px 0 12px;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.vl-subtitle {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+
+/* Button */
+.vl-btn-primary {
+  display: inline-block;
+  background: #c8a36d;
+  color: white;
+  padding: 12px 22px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.vl-btn-primary:hover {
+  background: #b68f5a;
+  transform: translateY(-1px);
+}
+
+/* Footer */
+.vl-footer {
+  margin-top: 28px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

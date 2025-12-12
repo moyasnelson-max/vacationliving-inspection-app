@@ -1,0 +1,64 @@
+/* ======================================================
+   Report Card – Marriott Level UI
+   ====================================================== */
+
+.vl-report-card {
+  padding: 18px 20px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #ffffff, #fafafa);
+  border: 1px solid #e5e5e5;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.vl-report-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* TITLE */
+.vl-report-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* DATE */
+.vl-report-date {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #777777;
+}
+
+/* STATUS */
+.vl-report-status {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #444444;
+}
+
+.vl-report-status span {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* Fade-in Animation */
+.fade-in {
+  animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

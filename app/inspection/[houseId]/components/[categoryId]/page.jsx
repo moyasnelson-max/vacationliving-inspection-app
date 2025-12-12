@@ -1,73 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import supabase from "@lib/supabase-browser.js";     // ← ya correcto
-
-export default function CategoryItems() {
-  const params = useParams();
-  const houseId = params.houseId;
-  const categoryId = params.categoryId;
-
-  const [category, setCategory] = useState(null);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // ============================================
-  // Load category + items
-  // ============================================
-  const loadData = async () => {
-    setLoading(true);
-
-    // Load category info
-    const { data: cat, error: catErr } = await supabase
-      .from("categories")
-      .select("*")
-      .eq("id", categoryId)
-      .single();
-
-    if (!catErr) setCategory(cat);
-
-    // Load items belonging to category
-    const { data: itemsData, error: itemsErr } = await supabase
-      .from("items")
-      .select("*")
-      .eq("category_id", categoryId);
-
-    if (!itemsErr) setItems(itemsData);
-
-    setLoading(false);
-  };
-
+import supabase from "@lib/supabaseClient";
+import { useRouter } from "next/navigation";
+export default function InspectionCategories({ params }) {
+  const { houseId } = params;
+  const [categories, setCategories] = useState([]);
+  const router = useRouter();
   useEffect(() => {
-    loadData();
-  }, [categoryId]);
-
-  // ============================================
-  // RENDER
-  // ============================================
+    async function load() {
+      const { data } = await supabase.from("categories").select("*");
+      setCategories(data || []);
+    }
+    load();
+  }, []);
   return (
-    <div className="lux-container">
-      <div className="lux-header">
-        <h1 className="lux-title">{category?.name}</h1>
-        <p className="lux-subtitle">Checklist</p>
+    <div style={{ padding: 20 }}>
+      <h3>Categories</h3>
+      <div style={{ display: "grid", gap: 12 }}>
+        {categories.map((cat) => (
+          <div
+            key={cat.id}
+            onClick={() =>
+              router.push(`/inspection/${houseId}/categories/${cat.id}`)
+            }
+            style={{
+              padding: 14,
+              borderRadius: 8,
+              border: "1px solid #ddd",
+              cursor: "pointer",
+              background: "#fff",
+            }}
+          >
+            <strong>{cat.name}</strong>
+          </div>
+        ))}
       </div>
-
-      {loading && <p className="lux-loading">Loading...</p>}
-
-      {!loading && (
-        <div className="lux-list">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="lux-list-item"
-            >
-              <span className="lux-item-name">{item.name}</span>
-              <span className="lux-arrow">›</span>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

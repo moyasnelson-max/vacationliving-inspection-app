@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 export default async (req, res) => {
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL"),
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
   const { houseId, inspectorId } = await req.json();
@@ -13,7 +13,7 @@ export default async (req, res) => {
     .insert({
       house_id: houseId,
       inspector_id: inspectorId,
-      status: "in_progress"
+      status: "in_progress",
     })
     .select()
     .single();

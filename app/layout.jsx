@@ -1,13 +1,18 @@
+import "./globals.css";
+import Providers from "./providers";
+
 export const metadata = {
-  title: "Vacation Living – Inspection System",
-  description: "Professional inspection system for Vacation Living Rentals",
+  title: "Vacation Living · Inspections",
+  description: "Inspection system",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, padding: 0, background: "#F7F3EC" }}>
-        {children}
+      <body>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

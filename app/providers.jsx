@@ -1,18 +1,15 @@
 "use client";
 
-import { ThemeProvider } from "./theme/ThemeProvider";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
 
 export default function Providers({ children }) {
-  const [supabaseBrowser] = useState(() =>
-    createBrowserSupabaseClient()
+  const [supabase] = useState(() =>
+    createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
   );
 
-  return (
-    <SessionContextProvider supabaseBrowser={supabaseBrowser}>
-      <ThemeProvider>{children}</ThemeProvider>
-    </SessionContextProvider>
-  );
+  return children;
 }

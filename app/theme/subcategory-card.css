@@ -1,0 +1,50 @@
+/* =========================================
+   Subcategory Card – Marriott Level
+   ========================================= */
+
+.vl-subcategory-card {
+  display: block;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+.vl-subcategory-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.vl-subcategory-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vl-subcategory-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-light);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

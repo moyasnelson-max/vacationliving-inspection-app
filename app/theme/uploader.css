@@ -1,0 +1,83 @@
+/* ======================================================
+   Marriott Uploader – Premium File Input
+   ====================================================== */
+
+.vl-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Caja principal "glass" */
+.vl-upload-box {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+
+  padding: 26px 18px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.vl-upload-box:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.02);
+}
+
+/* Icono */
+.vl-upload-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+/* Texto */
+.vl-upload-text {
+  font-size: 15px;
+  color: var(--text-light);
+  letter-spacing: 0.3px;
+}
+
+/* Input escondido */
+.vl-upload-input {
+  display: none;
+}
+
+/* Lista de archivos (preview simple) */
+.vl-upload-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vl-preview-item {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: var(--text-light);
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* Fade */
+.fade-in {
+  animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

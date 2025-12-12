@@ -22,16 +22,11 @@ export const supabase = createClient(
 body {
   background: #f5f5f5;
 }
-  `
+  `,
 };
 
 // Carpetas que deben existir
-const REQUIRED_FOLDERS = [
-  "app/inspection",
-  "app/api",
-  "app/lib",
-  "styles"
-];
+const REQUIRED_FOLDERS = ["app/inspection", "app/api", "app/lib", "styles"];
 
 // =============================
 // FUNCIONES BASE
@@ -78,7 +73,10 @@ function detectBrokenImports() {
     const content = fs.readFileSync(file, "utf8");
 
     // Detectar imports rotos de supabase-client
-    if (content.includes("supabase-client") && !content.includes("../lib/supabase-client.js")) {
+    if (
+      content.includes("supabase-client") &&
+      !content.includes("../lib/supabase-client.js")
+    ) {
       broken.push(file);
     }
   }
@@ -89,13 +87,16 @@ function detectBrokenImports() {
   }
 
   console.log(`⚠️ Imports rotos detectados en ${broken.length} archivo(s):`);
-  broken.forEach(f => console.log("   - " + f));
+  broken.forEach((f) => console.log("   - " + f));
 
   console.log("\n   ➜ Reparando...");
 
   for (const file of broken) {
     let content = fs.readFileSync(file, "utf8");
-    content = content.replace(/supabase-client[^'"]+/g, "../lib/supabase-client.js");
+    content = content.replace(
+      /supabase-client[^'"]+/g,
+      "../lib/supabase-client.js",
+    );
     fs.writeFileSync(file, content);
   }
 
@@ -107,7 +108,7 @@ function getAllFiles(dir) {
   let results = [];
   const list = fs.readdirSync(dir);
 
-  list.forEach(file => {
+  list.forEach((file) => {
     file = path.join(dir, file);
     const stat = fs.statSync(file);
     if (stat && stat.isDirectory()) {

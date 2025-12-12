@@ -1,26 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import "@theme/report-card.css";
 
 export default function ReportCard({ data }) {
   const router = useRouter();
 
   return (
     <div
+      className="vl-report-card fade-in"
       onClick={() => router.push(`/reports/${data.id}`)}
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 10,
-        padding: 16,
-        cursor: "pointer",
-        background: "#fff",
-      }}
     >
-      <h3>Report #{data.id}</h3>
-      <p style={{ color: "#777" }}>
+      <h3 className="vl-report-title">Report #{data.id}</h3>
+
+      <p className="vl-report-date">
         {new Date(data.created_at).toLocaleString()}
       </p>
-      <p>Status: {data.status}</p>
+
+      <p className="vl-report-status">
+        Status: <span>{data.status}</span>
+      </p>
     </div>
   );
 }

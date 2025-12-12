@@ -1,8 +1,9 @@
 "use client";
-"use client";
-import { useEffect, useState } from "react";
 
-export default function Toast({ message }) {
+import { useEffect, useState } from "react";
+import "@theme/toast.css";
+
+export default function Toast({ message = "" }) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -12,5 +13,5 @@ export default function Toast({ message }) {
 
   if (!show) return null;
 
-  return <div className="toast">{message}</div>;
+  return <div className="vl-toast fade-in-up">{message}</div>;
 }

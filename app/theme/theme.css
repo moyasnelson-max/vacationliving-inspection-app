@@ -1,35 +1,144 @@
-/* Light Theme */
-[data-theme="light"] {
-  --bg: #f7f3ec;
-  --text: #1f2328;
-  --card: white;
+/* ============================================================
+   Vacation Living Rentals — Marriott Theme v3.0
+   Sistema de temas premium (Light / Dark)
+   ------------------------------------------------------------
+   ✔ Golden Luxury Palette
+   ✔ Smooth transitions
+   ✔ Variables globales
+   ✔ Soporte total para ThemeProvider.jsx v3
+   ============================================================ */
+
+/* ---------- PALETA DE COLORES PRINCIPAL (GLOBAL) ---------- */
+:root {
   --gold: #c8a36d;
-  --gold-dark: #b38e57;
+  --gold-soft: #d8b98a;
+  --gold-dark: #a17f4f;
+
+  --beige: #f7f3ec;
+  --sand: #e4d9c7;
+
+  --dark-navy: #1a1a1f;
+  --dark-card: #222228;
+
+  --white: #ffffff;
+  --black: #000000;
+
+  --transition-fast: 0.25s ease;
 }
 
-/* Dark Theme */
-[data-theme="dark"] {
-  --bg: #151515;
-  --text: #f1f1f1;
-  --card: #1e1e1e;
-  --gold: #d4b37c;
-  --gold-dark: #c19f68;
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+html.light,
+[data-theme="Light"] {
+  --bg: var(--beige);
+  --text: #1f1f1f;
+
+  --card: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.06);
+
+  --gold-ui: var(--gold);
+  --gold-ui-hover: var(--gold-dark);
+
+  --input-bg: #ffffff;
+  --input-border: #d4d4d4;
 }
 
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+html.dark,
+[data-theme="Dark"] {
+  --bg: var(--dark-navy);
+  --text: #f2f2f2;
+
+  --card: var(--dark-card);
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  --gold-ui: var(--gold-soft);
+  --gold-ui-hover: var(--gold);
+
+  --input-bg: #2c2c33;
+  --input-border: #44444d;
+}
+
+/* ============================================================
+   TRANSICIONES GLOBAL MARRIOTT
+   ============================================================ */
+html,
 body,
 [data-theme] {
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+/* ============================================================
+   APLICACIÓN DE VARIABLES (UI BASE)
+   ============================================================ */
+
+body {
   background: var(--bg);
   color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
+/* ---------- TARJETAS / SECCIONES ---------- */
 .card {
   background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
+/* ---------- BOTONES PREMIUM ---------- */
 button {
-  background: var(--gold);
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--gold-ui);
+  color: var(--black);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
 }
 
 button:hover {
-  background: var(--gold-dark);
+  background: var(--gold-ui-hover);
+}
+
+/* ---------- INPUTS / SELECTS ---------- */
+input,
+textarea,
+select {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+  font-size: 15px;
+  color: var(--text);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+/* ---------- LINK ---------- */
+a {
+  color: var(--gold-ui);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--gold-ui-hover);
+  text-decoration: underline;
 }

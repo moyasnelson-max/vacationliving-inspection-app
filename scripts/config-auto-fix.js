@@ -16,7 +16,9 @@ function fixFile(path, content) {
 console.log("Reparando archivos de configuración...");
 
 // === next.config.js ===
-fixFile("next.config.js", `
+fixFile(
+  "next.config.js",
+  `
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -24,10 +26,13 @@ const nextConfig = {
 };
 
 export default nextConfig;
-`);
+`,
+);
 
 // === jsconfig.json ===
-fixFile("jsconfig.json", `
+fixFile(
+  "jsconfig.json",
+  `
 {
   "compilerOptions": {
     "baseUrl": ".",
@@ -36,20 +41,26 @@ fixFile("jsconfig.json", `
     }
   }
 }
-`);
+`,
+);
 
 // === .eslintrc.json ===
-fixFile(".eslintrc.json", `
+fixFile(
+  ".eslintrc.json",
+  `
 {
   "extends": "next",
   "rules": {
     "react/no-unescaped-entities": 0
   }
 }
-`);
+`,
+);
 
 // === .gitignore ===
-fixFile(".gitignore", `
+fixFile(
+  ".gitignore",
+  `
 node_modules
 .next
 .env
@@ -58,6 +69,7 @@ node_modules
 .vscode
 .vercel
 .DS_Store
-`);
+`,
+);
 
 console.log("✨ AUTO-FIX COMPLETADO ✔");

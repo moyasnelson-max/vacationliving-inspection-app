@@ -1,14 +1,12 @@
-"use client";
+'use client';
 
 import "@styles/luxury-inspection.css";
 import { useState, useEffect } from "react";
-import supabase from "@lib/supabase-browser.js";
+import { supabase } from "@lib/supabaseClient";
 import Image from "next/image";
-
 export default function InspectionDashboard() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const load = async () => {
       const { data } = await supabase.auth.getSession();
@@ -17,15 +15,11 @@ export default function InspectionDashboard() {
     };
     load();
   }, []);
-
   const goToHouseList = () => {
     window.location.href = "/inspection/houselist";
   };
-
   const goToReports = () => {
     window.location.href = "/reports";
-  };
-
   return (
     <div className="lux-wrapper">
       {/* LOGO — Four Seasons Style */}
@@ -38,13 +32,11 @@ export default function InspectionDashboard() {
           priority
         />
       </div>
-
       {/* TITLE */}
       <h1 className="lux-title">Inspection Dashboard</h1>
       <p className="lux-subtitle">
         Manage inspections, access houses, and generate new reports.
       </p>
-
       {/* CARD */}
       <div className="lux-card">
         {loading ? (
@@ -54,25 +46,18 @@ export default function InspectionDashboard() {
             <p className="lux-info">
               <strong>Email:</strong> {session.user.email}
             </p>
-            <p className="lux-info">
               <strong>Status:</strong> Logged in ✓
-            </p>
           </>
         ) : (
           <p className="lux-error">Session not found. Please login again.</p>
         )}
-      </div>
-
       {/* BUTTONS */}
       <div className="lux-button-group">
         <button className="lux-btn" onClick={goToHouseList}>
           Start Inspection
         </button>
-
         <button className="lux-btn" onClick={goToReports}>
           Go to Reports
-        </button>
-      </div>
     </div>
   );
 }

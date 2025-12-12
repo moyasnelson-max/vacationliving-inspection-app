@@ -1,49 +1,77 @@
-// /app/pdf/uploadToSupabase.js
+// app/pdf/uploadToSupabase.js
 import { createClient } from "@supabase/supabase-js";
 
 /**
- * Uploads a PDF Blob to Supabase Storage in the "reports" bucket.
- * The folder structure becomes:
- *    reports/{propertyId}/{timestamp}.pdf
+ * Uploads a PDF Blob to Supabase Storage (bucket: "reports").
+ * Output:
+ *  {
+ *    ok: boolean,
+ *    url?: string,     // Public download URL
+ *    path?: string,    // Storage path
+ *    error?: string
+ *  }
  */
-
 export async function uploadToSupabase({ pdfBlob, propertyId }) {
   try {
-    if (!pdfBlob) throw new Error("PDF blob is missing");
-    if (!propertyId) throw new Error("propertyId is missing");
+    // -------------------------------------------------------------
+    // VALIDACIÓN PROFESIONAL
+    // -------------------------------------------------------------
+    if (!pdfBlob) throw new Error("Missing PDF Blob.");
+    if (!propertyId) throw new Error("Missing propertyId.");
 
+    // -------------------------------------------------------------
+    // CLIENTE SUPABASE
+    // -------------------------------------------------------------
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     );
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    // -------------------------------------------------------------
+    // GENERAR PATH PREMIUM (CONSISTENTE)
+    // reports/{propertyId}/inspection-{yyyy-mm-dd_hh-mm-ss}.pdf
+    // -------------------------------------------------------------
+    const timestamp = new Date().toISOString().replace(/[:]/g, "-");
     const filePath = `${propertyId}/inspection-${timestamp}.pdf`;
 
-    const { data, error } = await supabase.storage
+    // -------------------------------------------------------------
+    // SUBIR PDF
+    // -------------------------------------------------------------
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from("reports")
       .upload(filePath, pdfBlob, {
-        cacheControl: "3600",
         upsert: false,
         contentType: "application/pdf",
+        cacheControl: "3600",
       });
 
-    if (error) throw error;
+    if (uploadError) throw uploadError;
 
-    // Generate public URL
-    const { data: publicData } = supabase.storage
+    // -------------------------------------------------------------
+    // GENERAR URL PÚBLICA PROFESIONAL
+    // -------------------------------------------------------------
+    const { data: publicData, error: urlError } = supabase.storage
       .from("reports")
       .getPublicUrl(filePath);
 
+    if (urlError) throw urlError;
+
+    const publicUrl = publicData.publicUrl;
+
+    // -------------------------------------------------------------
+    // RESPUESTA ESTÁNDAR MARRIOTT
+    // -------------------------------------------------------------
     return {
       ok: true,
+      url: publicUrl,
       path: filePath,
-      url: publicData.publicUrl,
     };
   } catch (err) {
+    console.error("UPLOAD ERROR:", err);
+
     return {
       ok: false,
-      error: err.message,
+      error: err.message || "Unknown upload error",
     };
   }
 }

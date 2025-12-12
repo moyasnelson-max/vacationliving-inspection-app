@@ -1,0 +1,27 @@
+/* Marriott-Level Mandatory Warning */
+
+.mandatory-warning {
+  color: var(--error);
+  font-size: 14px;
+  margin-top: 6px;
+  padding-left: 2px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  opacity: 0.9;
+}
+
+/* Animación sutil de aparición */
+.fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

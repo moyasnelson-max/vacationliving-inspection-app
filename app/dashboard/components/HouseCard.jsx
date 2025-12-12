@@ -1,24 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import "@theme/house-card.css";
 
 export default function HouseCard({ data }) {
   const router = useRouter();
 
   return (
     <div
+      className="vl-house-card fade-in"
       onClick={() => router.push(`/inspection/${data.id}`)}
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 10,
-        padding: 16,
-        cursor: "pointer",
-        background: "#fff",
-        transition: "0.2s",
-      }}
     >
-      <h3 style={{ margin: 0 }}>{data.name}</h3>
-      <p style={{ marginTop: 8, color: "#555" }}>{data.address}</p>
+      <h3 className="vl-house-title">{data.name}</h3>
+      <p className="vl-house-address">{data.address}</p>
     </div>
   );
 }

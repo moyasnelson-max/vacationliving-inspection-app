@@ -4,16 +4,11 @@ import path from "path";
 // ARCHIVOS QUE TIENE QUE PROTEGER ESTE WATCHDOG
 const REQUIRED_FILES = [
   "app/lib/supabase-client.js",
-  "styles/luxury-inspection.css"
+  "styles/luxury-inspection.css",
 ];
 
 // RUTAS PERMITIDAS
-const REQUIRED_FOLDERS = [
-  "app/inspection",
-  "app/api",
-  "app/lib",
-  "styles"
-];
+const REQUIRED_FOLDERS = ["app/inspection", "app/api", "app/lib", "styles"];
 
 function fileExists(file) {
   return fs.existsSync(path.join(process.cwd(), file));

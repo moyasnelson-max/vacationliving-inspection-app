@@ -32,7 +32,7 @@ const requiredEnv = [
   "UPLOAD_API_URL",
   "SEND_EMAIL_API_URL",
   "NEXT_PUBLIC_APP_URL",
-  "NEXT_PUBLIC_SITE_URL"
+  "NEXT_PUBLIC_SITE_URL",
 ];
 
 let envErrors = false;
@@ -46,7 +46,9 @@ requiredEnv.forEach((key) => {
 });
 
 if (envErrors) {
-  console.log("\n⚠ ERROR: Faltan variables de entorno. Abre .env.local y corrige.\n");
+  console.log(
+    "\n⚠ ERROR: Faltan variables de entorno. Abre .env.local y corrige.\n",
+  );
 } else {
   console.log("\n✔ Variables de entorno correctas.\n");
 }
@@ -73,13 +75,13 @@ function validateJSON(file) {
             compilerOptions: {
               baseUrl: ".",
               paths: {
-                "@/*": ["./*"]
-              }
-            }
+                "@/*": ["./*"],
+              },
+            },
           },
           null,
-          2
-        )
+          2,
+        ),
       );
       ok(`jsconfig.json regenerado`);
     }
@@ -89,11 +91,11 @@ function validateJSON(file) {
         file,
         JSON.stringify(
           {
-            extends: "next/core-web-vitals"
+            extends: "next/core-web-vitals",
           },
           null,
-          2
-        )
+          2,
+        ),
       );
       ok(`.eslintrc.json regenerado`);
     }
@@ -142,7 +144,7 @@ const requiredPaths = [
   "styles/luxury-inspection.css",
   "app/api",
   "app/inspection",
-  "scripts"
+  "scripts",
 ];
 
 requiredPaths.forEach((p) => {
@@ -169,7 +171,7 @@ const scriptList = [
   "titanium-watchdog-pro.js",
   "config-heal.sh",
   "vercel-prebuild.sh",
-  "env-sync.js"
+  "env-sync.js",
 ];
 
 scriptList.forEach((s) => {
@@ -202,7 +204,7 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
-`
+`,
   );
   ok("supabase-client.js regenerado");
 }

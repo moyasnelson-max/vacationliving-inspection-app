@@ -1,20 +1,25 @@
 "use client";
 
+import "@theme/issue-card.css";
+
 export default function IssueCard({ data }) {
+  const formattedDate = new Date(data.created_at).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 10,
-        padding: 16,
-        background: "#fff",
-      }}
-    >
-      <h3 style={{ margin: 0 }}>{data.title}</h3>
-      <p style={{ marginTop: 8, color: "#555" }}>
-        {new Date(data.created_at).toLocaleString()}
+    <div className={`vl-issue-card fade-in status-${data.status}`}>
+      <h3 className="vl-issue-title">{data.title}</h3>
+
+      <p className="vl-issue-date">{formattedDate}</p>
+
+      <p className="vl-issue-status">
+        <span className="label">Status:</span>
+        <span className="value">{data.status}</span>
       </p>
-      <p style={{ marginTop: 4 }}>Status: {data.status}</p>
     </div>
   );
 }

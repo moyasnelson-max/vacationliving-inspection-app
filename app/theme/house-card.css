@@ -1,0 +1,60 @@
+/* ======================================================
+   House Card – Marriott Dashboard Style
+   ====================================================== */
+
+.vl-house-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+
+  border-radius: 18px;
+  padding: 20px 22px;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: var(--text-light);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.vl-house-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Title */
+.vl-house-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+/* Address */
+.vl-house-address {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 0.2px;
+}
+
+/* Fade animation */
+.fade-in {
+  animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

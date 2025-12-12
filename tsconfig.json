@@ -2,12 +2,78 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./app/*"],
-      "@app/*": ["./app/*"],
-      "@components/*": ["./app/components/*"],
-      "@lib/*": ["./lib/*"],
-      "@styles/*": ["./styles/*"]
-    }
+      "@/*": [
+        "./*"
+      ],
+      "@app/*": [
+        "app/*"
+      ],
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@styles/*": [
+        "app/styles/*"
+      ],
+      "@theme/*": [
+        "app/theme/*"
+      ],
+      "@dashboard/*": [
+        "app/dashboard/*"
+      ],
+      "@inspection/*": [
+        "app/inspection/*"
+      ],
+      "@reports/*": [
+        "app/reports/*"
+      ],
+      "@pdf/*": [
+        "app/pdf/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@utils/*": [
+        "lib/utils/*"
+      ],
+      "@hooks/*": [
+        "lib/hooks/*"
+      ],
+      "@fetch/*": [
+        "lib/fetch/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ]
+    },
+    "strict": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["."]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

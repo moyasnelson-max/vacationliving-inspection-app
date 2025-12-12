@@ -58,7 +58,9 @@ if (!supabaseKey) {
 
 // Si faltan, terminar aquí
 if (!supabaseUrl || !supabaseKey) {
-  console.log("\n❌ No se pueden correr pruebas de Supabase sin estas variables.\n");
+  console.log(
+    "\n❌ No se pueden correr pruebas de Supabase sin estas variables.\n",
+  );
   process.exit(1);
 }
 
@@ -82,7 +84,9 @@ try {
 // ==============================
 console.log("\n🔍 Verificando carpetas principales del proyecto...\n");
 
-["app", "app/lib", "app/inspection", "app/api", "styles", "scripts"].forEach(exists);
+["app", "app/lib", "app/inspection", "app/api", "styles", "scripts"].forEach(
+  exists,
+);
 
 console.log("\n============================================");
 console.log(" UNIVERSAL TEST SCRIPT COMPLETADO");

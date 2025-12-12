@@ -16,7 +16,7 @@ export async function middleware(req) {
   const protectedRoutes = ["/inspection"];
 
   const isProtected = protectedRoutes.some((route) =>
-    req.nextUrl.pathname.startsWith(route)
+    req.nextUrl.pathname.startsWith(route),
   );
 
   // Si no hay sesión → mandar al login

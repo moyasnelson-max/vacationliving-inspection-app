@@ -30,7 +30,10 @@ function fixFile(file) {
   content = content.replace(/\.\.\/app/g, "@/app");
 
   // 3. Forzar el import correcto del supabase-client
-  content = content.replace(/from ["'].*supabase-client["']/g, `from "@/lib/supabase-browser.js"`);
+  content = content.replace(
+    /from ["'].*supabase-client["']/g,
+    `from "@/lib/supabase-browser.js"`,
+  );
 
   // 4. Insertar CSS faltante de luxury-inspection
   if (
@@ -38,9 +41,7 @@ function fixFile(file) {
     file.endsWith("page.jsx") &&
     !content.includes("luxury-inspection.css")
   ) {
-    content =
-      `import "@/styles/luxury-inspection.css";\n` +
-      content;
+    content = `import "@/styles/luxury-inspection.css";\n` + content;
   }
 
   fs.writeFileSync(file, content, "utf8");
@@ -53,7 +54,7 @@ function fixFile(file) {
 function getAllFiles(dir, arr = []) {
   const files = fs.readdirSync(dir);
 
-  files.forEach(f => {
+  files.forEach((f) => {
     const fullPath = path.join(dir, f);
     const stat = fs.statSync(fullPath);
 
@@ -87,7 +88,7 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
-`
+`,
   );
 } else {
   console.log("✔ supabase-client.js verificado");
@@ -101,7 +102,7 @@ console.log("Escaneando archivos...");
 
 const projectFiles = getAllFiles("app");
 
-projectFiles.forEach(file => {
+projectFiles.forEach((file) => {
   fixFile(file);
 });
 

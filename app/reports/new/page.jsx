@@ -1,76 +1,52 @@
-"use client";
+const createReport = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-import { useState } from "react";
-import supabase from "@lib/supabase-browser.js";
+  const cleanProperty = propertyName.trim();
+  const cleanInspector = inspector.trim();
+  const cleanNotes = notes.trim();
 
-export default function NewReportPage() {
-  const [propertyName, setPropertyName] = useState("");
-  const [inspector, setInspector] = useState("");
-  const [notes, setNotes] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // Validaciones PRO
+  if (!cleanProperty) {
+    setError("Property name is required");
+    setLoading(false);
+    return;
+  }
 
-  const createReport = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  if (!cleanInspector) {
+    setError("Inspector name is required");
+    setLoading(false);
+    return;
+  }
 
-    if (!propertyName) {
-      setError("Property name is required");
-      setLoading(false);
-      return;
-    }
+  if (cleanNotes.length > 800) {
+    setError("Notes cannot exceed 800 characters");
+    setLoading(false);
+    return;
+  }
 
-    const { error } = await supabase.from("reports").insert([
+  // Inserción Marriott-level
+  const { data, error } = await supabase
+    .from("reports")
+    .insert([
       {
-        property_name: propertyName,
-        inspector: inspector || "Unknown",
-        notes,
+        property_name: cleanProperty,
+        inspector: cleanInspector,
+        notes: cleanNotes,
+        created_at: new Date().toISOString(),
       },
-    ]);
+    ])
+    .select()
+    .single();
 
-    if (error) {
-      setError("Error creating report");
-      setLoading(false);
-      return;
-    }
+  if (error) {
+    console.error("❌ Error creating report:", error);
+    setError("Error creating report");
+    setLoading(false);
+    return;
+  }
 
-    window.location.href = "/reports";
-  };
-
-  return (
-    <div className="page-container">
-      <h1 className="vl-title">New Inspection Report</h1>
-      <p className="vl-subtitle">Create a new report for a property</p>
-
-      <form onSubmit={createReport} style={{ marginTop: "20px" }}>
-        <input
-          type="text"
-          placeholder="Property Name"
-          value={propertyName}
-          onChange={(e) => setPropertyName(e.target.value)}
-        />
-
-        <input
-          type="text"
-          placeholder="Inspector Name"
-          value={inspector}
-          onChange={(e) => setInspector(e.target.value)}
-        />
-
-        <textarea
-          placeholder="Notes (optional)"
-          rows={4}
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        ></textarea>
-
-        {error && <p className="error-text">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Create Report"}
-        </button>
-      </form>
-    </div>
-  );
-}
+  // Redirigir al reporte recién creado
+  window.location.href = `/reports/${data.id}`;
+};

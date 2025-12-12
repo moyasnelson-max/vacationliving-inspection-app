@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 export default async (req, res) => {
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL"),
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
   const body = await req.json();
@@ -23,14 +23,14 @@ export default async (req, res) => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${Deno.env.get("SENDGRID_KEY")}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       personalizations: [{ to: [{ email: email_to }] }],
       from: { email: Deno.env.get("EMAIL_FROM") },
       subject: `Inspection Report ${reportId}`,
-      content: [{ type: "text/html", value: "Report sent successfully." }]
-    })
+      content: [{ type: "text/html", value: "Report sent successfully." }],
+    }),
   });
 
   return res.json({ success: true });

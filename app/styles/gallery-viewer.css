@@ -1,0 +1,90 @@
+/* -----------------------------------------------------------
+   VLR · Marriott-Level Gallery Viewer Styles
+----------------------------------------------------------- */
+
+.gallery-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  padding: 16px;
+  animation: fadeIn 0.4s ease;
+}
+
+.gallery-main-image {
+  width: 100%;
+  height: 280px;
+  border-radius: 18px;
+  object-fit: cover;
+  background-color: #000;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-thumbs {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+
+.gallery-thumb {
+  width: 90px;
+  height: 70px;
+  border-radius: 14px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  background: #111;
+}
+
+.gallery-thumb:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.gallery-thumb.active {
+  opacity: 1;
+  outline: 3px solid #d7b676;
+  transform: scale(1.12);
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.gallery-btn {
+  pointer-events: all;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.gallery-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

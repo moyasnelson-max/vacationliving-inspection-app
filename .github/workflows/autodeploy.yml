@@ -31,7 +31,7 @@ jobs:
 
       - name: 🚀 Deploy to Vercel
         env:
-          VERCEL_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          VERCEL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           npm install -g vercel

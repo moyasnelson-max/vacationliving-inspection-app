@@ -1,0 +1,65 @@
+/* ======================================================
+   QR Downloader – Marriott Level UI
+   ====================================================== */
+
+.vl-qr-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* GENERATE BUTTON */
+.vl-btn-generate {
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: var(--gold);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+
+  font-size: 15px;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+
+  transition: 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.vl-btn-generate:hover {
+  transform: translateY(-2px);
+  background: #b8944f;
+}
+
+/* DOWNLOAD LINK */
+.vl-qr-download-link {
+  display: block;
+  margin-top: 16px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #0070f3;
+
+  text-decoration: underline;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.vl-qr-download-link:hover {
+  color: #0051b3;
+  letter-spacing: 0.3px;
+}
+
+/* Fade-in Animation */
+.fade-in {
+  animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

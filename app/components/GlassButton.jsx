@@ -1,8 +1,21 @@
 "use client";
-export default function GlassButton({ children, onClick, type = "button" }) {
+
+import "@theme/glass-button.css";
+
+export default function GlassButton({
+  children,
+  onClick,
+  type = "button",
+  disabled = false,
+}) {
   return (
-    <button type={type} className="glass-btn" onClick={onClick}>
-      {children}
+    <button
+      type={type}
+      className={`vl-glass-btn ${disabled ? "disabled" : ""}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <span className="vl-glass-label">{children}</span>
     </button>
   );
 }

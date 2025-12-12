@@ -10,7 +10,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: -apple-system, Inter, sans-serif;
   background: #000;
@@ -37,9 +38,18 @@ html, body {
 }
 
 @keyframes vaporFlow {
-  0% { backdrop-filter: blur(4px); opacity: 0.3; }
-  50% { backdrop-filter: blur(7px); opacity: 0.55; }
-  100% { backdrop-filter: blur(10px); opacity: 0.35; }
+  0% {
+    backdrop-filter: blur(4px);
+    opacity: 0.3;
+  }
+  50% {
+    backdrop-filter: blur(7px);
+    opacity: 0.55;
+  }
+  100% {
+    backdrop-filter: blur(10px);
+    opacity: 0.35;
+  }
 }
 
 /* ---- FADE-IN ---- */
@@ -49,7 +59,9 @@ html, body {
 }
 
 @keyframes fadeIn {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---- MAIN CONTAINER ---- */
@@ -78,9 +90,15 @@ html, body {
 }
 
 @keyframes logoFloat {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 /* ---- CARD ---- */
@@ -104,8 +122,14 @@ html, body {
 }
 
 @keyframes cardRise {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ---- TITLE ---- */
@@ -114,7 +138,7 @@ html, body {
   font-size: 1.65rem;
   color: #fff;
   margin-bottom: 25px;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   font-weight: 600;
 }
 
@@ -125,11 +149,11 @@ html, body {
   margin-bottom: 14px;
   font-size: 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
   color: #fff;
   outline: none;
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 
 .login-input::placeholder {
@@ -137,9 +161,9 @@ html, body {
 }
 
 .login-input:focus {
-  background: rgba(255,255,255,0.38);
+  background: rgba(255, 255, 255, 0.38);
   border-color: #f1d27a;
-  box-shadow: 0 0 12px rgba(255,215,0,0.3);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
 }
 
 /* ---- PASSWORD SHOW/HIDE ---- */
@@ -155,7 +179,7 @@ html, body {
   font-size: 0.9rem;
   opacity: 0.8;
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .show-pass:hover {
@@ -183,13 +207,13 @@ html, body {
   border-radius: 10px;
   cursor: pointer;
   font-size: 1rem;
-  transition: all .3s;
-  box-shadow: 0 2px 12px rgba(212,175,55,0.45);
+  transition: all 0.3s;
+  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.45);
 }
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(212,175,55,0.65);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.65);
 }
 
 .login-btn:disabled {
@@ -207,7 +231,7 @@ html, body {
   color: #fff;
   opacity: 0.85;
   font-size: 0.92rem;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .login-links a:hover {
@@ -228,7 +252,7 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .apple-btn {

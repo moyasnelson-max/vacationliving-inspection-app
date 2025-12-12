@@ -1,0 +1,11 @@
+.logout-container {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 40px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  text-align: center;
+}

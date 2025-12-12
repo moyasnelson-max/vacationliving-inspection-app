@@ -1,28 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@lib/supabase-browser.js";
-
+import { supabase } from "@lib/supabaseClient";
 export default function HistoryPage({ params }) {
   const { houseId } = params;
   const [history, setHistory] = useState([]);
-
   useEffect(() => {
     async function load() {
       const { data } = await supabase
         .from("reports")
         .select("*")
         .eq("house_id", houseId);
-
       setHistory(data || []);
     }
     load();
   }, [houseId]);
-
   return (
     <div style={{ padding: 20 }}>
       <h2>Inspection History</h2>
-
       <div style={{ display: "grid", gap: 12 }}>
         {history.map((r) => (
           <div

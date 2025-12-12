@@ -3,6 +3,6 @@ export default async (_, res) => {
     ok: true,
     message: "Vacation Living · Self-test OK",
     timestamp: new Date().toISOString(),
-    version: "1.0.0"
+    version: "1.0.0",
   });
 };

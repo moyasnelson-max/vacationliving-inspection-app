@@ -1,0 +1,37 @@
+/* Marriott-Level Issue List */
+
+.vl-issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+/* Cada item envuelve una tarjeta */
+.vl-issue-list-item {
+  width: 100%;
+}
+
+/* Texto cuando no hay issues */
+.vl-no-issues {
+  color: var(--text-light);
+  text-align: center;
+  font-size: 14px;
+  padding: 20px 0;
+}
+
+/* Fade-in elegante */
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

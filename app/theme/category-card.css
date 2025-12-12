@@ -1,0 +1,82 @@
+/* -----------------------------------------------------------
+   Vacation Living · Category Card (Marriott-Level Component)
+----------------------------------------------------------- */
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 18px;
+  gap: 12px;
+  width: 100%;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.category-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #d5b277, #bea06a);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+}
+
+.category-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+.category-description {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.category-badge {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e3d2a3;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(6px);
+}
+
+.category-card-footer {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.category-arrow {
+  font-size: 20px;
+  color: #d7b676;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.category-card:hover .category-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}

@@ -1,0 +1,43 @@
+/* Marriott-Level Note Input */
+
+.vl-note-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.vl-note-input::placeholder {
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+.vl-note-input:focus {
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 12px rgba(200, 163, 109, 0.25);
+}
+
+/* Animación sutil Marriott */
+.fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

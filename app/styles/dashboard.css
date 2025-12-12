@@ -1,0 +1,156 @@
+/* -------------------------------------------------------
+   DASHBOARD — LUXURY MARRIOTT EDITION
+   Nivel hotel 5 estrellas · Ultra limpio · Aire premium
+---------------------------------------------------------*/
+
+/* Color system */
+:root {
+  --lux-bg: #f6f4f0;
+  --lux-card-bg: rgba(255, 255, 255, 0.7);
+  --lux-border: rgba(0, 0, 0, 0.1);
+  --lux-shadow: rgba(0, 0, 0, 0.08);
+  --lux-gold: #c8a36d;
+  --lux-gold-soft: rgba(200, 163, 109, 0.25);
+  --lux-text-main: #2c2c2c;
+  --lux-text-sub: #6a6a6a;
+}
+
+/* MAIN CONTAINER */
+.lux-dashboard {
+  padding: 40px;
+  max-width: 1100px;
+  margin: auto;
+  color: var(--lux-text-main);
+  animation: fadeIn 0.55s ease-out;
+}
+
+/* HEADER */
+.lux-header {
+  margin-bottom: 40px;
+}
+
+.lux-header-title {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: var(--lux-text-main);
+}
+
+.lux-header-sub {
+  font-size: 18px;
+  color: var(--lux-text-sub);
+}
+
+/* BREADCRUMBS */
+.lux-breadcrumbs {
+  font-size: 14px;
+  color: var(--lux-text-sub);
+  margin-bottom: 25px;
+}
+
+.lux-breadcrumbs span {
+  opacity: 0.6;
+}
+
+/* CARDS */
+.lux-card {
+  background: var(--lux-card-bg);
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid var(--lux-border);
+  box-shadow: 0 4px 14px var(--lux-shadow);
+  backdrop-filter: blur(10px);
+  margin-bottom: 28px;
+  transition:
+    transform 0.23s ease,
+    box-shadow 0.25s ease;
+}
+
+.lux-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+}
+
+.lux-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.lux-card-text {
+  font-size: 15px;
+  color: var(--lux-text-sub);
+  margin-bottom: 10px;
+}
+
+/* BUTTONS */
+.lux-btn-outline {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--lux-gold);
+  background: transparent;
+  color: var(--lux-gold);
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.lux-btn-outline:hover {
+  background: var(--lux-gold-soft);
+}
+
+/* GRID OF PROPERTIES */
+.lux-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.lux-house-box {
+  background: white;
+  border-radius: 20px;
+  padding: 22px;
+  border: 1px solid var(--lux-border);
+  box-shadow: 0 4px 12px var(--lux-shadow);
+  cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.lux-house-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.lux-house-title {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--lux-text-main);
+}
+
+.lux-house-id {
+  font-size: 14px;
+  color: var(--lux-text-sub);
+  margin-top: 4px;
+}
+
+/* LOADING */
+.lux-dash-loading {
+  font-size: 16px;
+  color: var(--lux-text-sub);
+  padding: 16px 0;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

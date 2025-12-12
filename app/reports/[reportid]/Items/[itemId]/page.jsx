@@ -1,46 +1,78 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import supabase from "@lib/supabase-browser.js";
+import supabase from "@lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function ReportItemPage({ params }) {
   const { reportId, itemId } = params;
   const router = useRouter();
+
   const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from("report_items")
-        .select("*")
-        .eq("id", itemId)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from("report_items")
+          .select("*")
+          .eq("id", itemId)
+          .single();
 
-      setItem(data || null);
+        if (error) throw error;
+        setItem(data);
+      } catch (err) {
+        console.error("❌ Error loading item:", err);
+        setError("Unable to load this item.");
+      } finally {
+        setLoading(false);
+      }
     }
+
     load();
   }, [itemId]);
 
-  if (!item) return <p>Loading...</p>;
+  if (loading) return <p style={{ padding: 20 }}>Loading…</p>;
+  if (error)
+    return (
+      <p style={{ padding: 20, color: "#d33", fontWeight: 500 }}>{error}</p>
+    );
+  if (!item)
+    return (
+      <p style={{ padding: 20, color: "#d33", fontWeight: 500 }}>
+        Item not found.
+      </p>
+    );
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>{item.name}</h2>
+    <div style={{ padding: 24 }}>
+      <h2 style={{ marginBottom: 8 }}>{item.name}</h2>
 
-      <button
-        onClick={() =>
-          router.push(`/reports/${reportId}/Items/${itemId}/edit`)
-        }
+      <p
         style={{
-          marginTop: 20,
-          padding: 12,
-          background: "#C8A36D",
-          color: "#fff",
-          borderRadius: 6,
+          marginBottom: 20,
+          color: "#777",
+          fontSize: 14,
         }}
       >
-        Edit
+        Item ID: {itemId}
+      </p>
+
+      <button
+        onClick={() => router.push(`/reports/${reportId}/items/${itemId}/edit`)}
+        style={{
+          padding: "12px 20px",
+          borderRadius: 8,
+          border: "none",
+          background: "#C8A36D", // Marriott Gold
+          color: "white",
+          fontSize: 16,
+          cursor: "pointer",
+        }}
+      >
+        Edit Item
       </button>
     </div>
   );

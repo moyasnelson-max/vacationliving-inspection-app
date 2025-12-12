@@ -1,0 +1,89 @@
+/* ------------------------------------------------------- */
+/*  Issue Created – Marriott-Level Success Screen          */
+/* ------------------------------------------------------- */
+
+.issue-created-container {
+  max-width: 520px;
+  margin: 90px auto;
+  padding: 48px 40px;
+  border-radius: 26px;
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+/* Success Icon */
+.issue-created-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  margin: 0 auto 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #3bb56d, #1f8a4c);
+  color: white;
+  font-size: 42px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* Title */
+.issue-created-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+/* Subtitle */
+.issue-created-subtext {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+/* Button */
+.issue-created-button {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #ffffff, #eaeaea);
+  color: #111;
+  font-size: 16px;
+  font-weight: 600;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+  transition: all 0.25s ease;
+}
+
+.issue-created-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,103 @@
+/* Marriott Header v3.0 */
+
+.lux-header {
+  width: 100%;
+  padding: 18px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.65);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  border-radius: 0 0 14px 14px;
+
+  animation: fadeInHeader 0.6s ease both;
+}
+
+html.dark .lux-header {
+  background: rgba(15, 15, 15, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@keyframes fadeInHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* LEFT SIDE (logo + title) */
+.lux-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.lux-header-logo {
+  opacity: 0.95;
+  transition: opacity 0.3s ease;
+}
+.lux-header-logo:hover {
+  opacity: 1;
+}
+
+.lux-header-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1c1c1c;
+}
+
+html.dark .lux-header-title {
+  color: #f5f5f5;
+}
+
+/* RIGHT SIDE (actions) */
+.lux-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Buttons */
+.lux-header-btn {
+  background: transparent;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+html.dark .lux-header-btn {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f5f5f5;
+}
+
+.lux-header-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+html.dark .lux-header-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Back Link */
+.lux-header-back {
+  margin-right: 12px;
+  font-size: 0.85rem;
+  color: #b48a50;
+  text-decoration: none;
+  transition: opacity 0.25s ease;
+}
+
+.lux-header-back:hover {
+  opacity: 0.7;
+}
