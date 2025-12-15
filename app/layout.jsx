@@ -1,19 +1,13 @@
-import "./globals.css";
-import Providers from "./providers";
+import { supabaseServer } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "Vacation Living · Inspections",
-  description: "Inspection system",
-};
+export default async function DashboardLayout({ children }) {
+  const supabase = supabaseServer();
+  const { data: { session } } = await supabase.auth.getSession();
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
-  );
+  if (!session) {
+    redirect("/auth/login");
+  }
+
+  return <>{children}</>;
 }

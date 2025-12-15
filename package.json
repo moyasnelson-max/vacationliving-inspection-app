@@ -9,14 +9,12 @@
     "vercel-build": "next build"
   },
   "dependencies": {
-    "@supabase/auth-helpers-nextjs": "0.10.0",
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.87.0",
-    "@tailwindcss/postcss": "^4.1.17",
-    "next": "14.2.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
+  "@supabase/ssr": "^0.8.0",
+  "@supabase/supabase-js": "^2.87.0",
+  "next": "14.2.5",
+  "react": "18.2.0",
+  "react-dom": "18.2.0"
+},
   "devDependencies": {
     "@types/react": "19.2.7",
     "autoprefixer": "^10.4.22",

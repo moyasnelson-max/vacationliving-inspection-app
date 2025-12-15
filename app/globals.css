@@ -40,9 +40,9 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color: var(--vl-text);
   background:
-    radial-gradient(1000px 600px at 10% -10%, rgba(200,163,109,0.18), transparent 60%),
-    radial-gradient(900px 500px at 90% 0%, rgba(45,111,115,0.12), transparent 60%),
-    var(--vl-bg);
+  radial-gradient(900px 600px at 10% -10%, rgba(127,182,184,0.18), transparent 60%),
+  radial-gradient(900px 600px at 90% 0%, rgba(200,163,109,0.12), transparent 55%),
+  var(--vl-bg);
 }
 
 a { color: inherit; text-decoration: none; }
@@ -84,19 +84,18 @@ code {
 .vl-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.vl-brand__mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  background: linear-gradient(135deg, #E8DBC6, #FFFFFF);
-  border: 1px solid var(--vl-border);
-  color: var(--vl-primary);
+.vl-brand_logo {
+  display: block;
+  height: auto;
+}
+
+.vl-brand_text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .vl-brand__title { font-weight: 800; }
@@ -283,23 +282,57 @@ code {
   .vl-card__grid { grid-template-columns: 1fr; }
 }
 
-/* ---------- Actions ---------- */
+/* -------- Actions -------- */
+
+.vl-actions {
+  display: grid;
+  gap: 12px;
+}
+
+/* Card clickable */
 .vl-action {
-  border-radius: 16px;
-  padding: 16px;
-  background: var(--vl-bg);
-  border: 1px solid var(--vl-border);
-  transition: all .15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--vl-card-bg);
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: var(--vl-shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .vl-action:hover {
   transform: translateY(-2px);
-  box-shadow: var(--vl-shadow);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
-.vl-action__title { font-weight: 900; }
-.vl-action__desc { margin-top: 6px; color: var(--vl-muted); font-size: 13px; }
-.vl-action__go { margin-top: 10px; font-weight: 800; color: var(--vl-primary); }
+/* Title */
+.vl-action_title {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* Description */
+.vl-action_desc {
+  margin-top: 4px;
+  color: var(--vl-muted);
+  font-size: 13px;
+}
+
+/* “Start →”, “Report →”, etc. */
+.vl-action_go {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--vl-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
 
 /* ---------- Section ---------- */
 .vl-section {
@@ -373,4 +406,1535 @@ code {
 .vl-footer__sub {
   font-size: 12px;
   color: var(--vl-muted-2);
+}
+:root {
+  --vl-bg-main: linear-gradient(135deg, #f6f4ef 0%, #eef1ec 100%);
+  --vl-card-bg: #ffffff;
+  --vl-text-primary: #1f2d2b;
+  --vl-text-secondary: #425f5a;
+  --vl-border-soft: rgba(0,0,0,0.08);
+}
+
+/* Fondo general */
+body {
+  background: var(--vl-bg-main);
+  color: var(--vl-text-primary);
+}
+
+/* Cards */
+.vl-card,
+.vl-panel,
+.vl-box {
+  background: var(--vl-card-bg);
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+/* Texto secundario */
+.vl-subtitle,
+.vl-muted,
+.vl-help {
+  color: var(--vl-text-secondary);
+}
+/* =============================
+   LAYOUT + HERO (override)
+============================= */
+
+.vl-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fondo general suave tipo suite */
+body {
+  background: var(--vl-bg-main);
+  color: var(--vl-text-primary);
+}
+
+/* Contenedor base */
+.vl-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero arriba */
+.vl-hero {
+  padding: 32px 0 40px;
+}
+
+.vl-hero_inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* Pantallas pequeñas: todo en columna */
+@media (max-width: 980px) {
+  .vl-hero_inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Columna izquierda hero */
+.vl-hero_copy {
+  max-width: 560px;
+}
+
+.vl-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vl-muted);
+  margin-bottom: 10px;
+}
+
+.vl-h1 {
+  font-size: 34px;
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.vl-subtitle {
+  font-size: 14px;
+  color: var(--vl-text-secondary);
+  max-width: 520px;
+}
+
+/* CTAs hero */
+.vl-ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  margin-bottom: 16px;
+}
+
+/* Badges debajo de los botones */
+.vl-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* =============================
+   QUICK ACTIONS PANEL (derecha)
+============================= */
+
+.vl-actionsPanel {
+  background: var(--vl-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: var(--vl-shadow);
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vl-actions_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.vl-actions_title {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.vl-actions_version {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f1f1;
+  color: var(--vl-muted);
+}
+
+/* Lista de tarjetas dentro del panel */
+.vl-actions {
+  display: grid;
+  gap: 10px;
+}
+
+/* Tarjeta individual */
+.vl-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--vl-card-bg);
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.vl-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.09);
+}
+
+.vl-action_title {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.vl-action_desc {
+  color: var(--vl-muted);
+  font-size: 13px;
+}
+
+.vl-action_go {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--vl-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* Nota pequeña debajo del panel */
+.vl-note--inline {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: #faf7f0;
+  font-size: 11px;
+}
+
+/* =============================
+   SECCIONES INFERIORES
+============================= */
+
+.vl-section {
+  padding: 24px 0 32px;
+}
+
+.vl-twoCols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 980px) {
+  .vl-twoCols {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card grande "Cómo funciona" */
+.vl-card {
+  background: var(--vl-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: var(--vl-shadow);
+  padding: 18px 20px;
+}
+
+/* Título de sección "Diseñado para operación real" */
+.vl-sectionHead {
+  margin-bottom: 16px;
+}
+
+/* Grid de 4 tarjetas de beneficios */
+.vl-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .vl-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-feature {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--vl-card-bg);
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+}
+
+.vl-feature_icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 4px;
+  background: var(--vl-accent, #e0b96f);
+}
+
+.vl-feature_title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.vl-feature_desc {
+  font-size: 13px;
+  color: var(--vl-text-secondary);
+}
+
+/* =============================
+   FOOTER
+============================= */
+
+.vl-footer {
+  margin-top: 8px;
+  padding: 18px 0 20px;
+  background: #efe4d2;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.vl-footer_inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .vl-footer_inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.vl-footer_brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vl-footer_mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--vl-border-soft);
+}
+/* =========================================
+   MARRIOTT POLISH v1 — VISUAL OVERRIDES
+   (no cambia contenido, solo estilo)
+========================================= */
+
+/* Fondo general suave */
+body {
+  background: var(--vl-bg-main);
+  color: var(--vl-text-primary);
+}
+
+/* Contenedor base */
+.vl-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* -------- Header / Topbar -------- */
+
+.vl-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 10px 0;
+}
+
+.vl-topbar_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Marca + logo */
+.vl-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vl-brand_logo {
+  display: block;
+  height: auto;
+}
+
+.vl-brand_text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vl-brand_title {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.vl-brand_sub {
+  font-size: 11px;
+  color: var(--vl-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Navegación */
+.vl-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vl-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vl-text-secondary);
+  text-decoration: none;
+}
+
+.vl-link:hover {
+  color: var(--vl-text-primary);
+}
+
+/* Botones header */
+.vl-btn {
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.vl-btn--small {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+/* Ghost (EN/ES) */
+.vl-btn--ghost {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--vl-text-primary);
+}
+
+/* Primary */
+.vl-btn--primary {
+  background: var(--vl-primary);
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover / focus */
+.vl-btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.vl-btn--ghost:hover {
+  background: #f7f7f7;
+}
+
+/* Accesibilidad básica */
+:focus-visible {
+  outline: 2px solid var(--vl-primary);
+  outline-offset: 2px;
+}
+
+/* -------- Hero & layout superior -------- */
+
+.vl-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.vl-hero {
+  padding: 32px 0 40px;
+}
+
+.vl-hero_inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: flex-start;
+}
+
+@media (max-width: 980px) {
+  .vl-hero_inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-hero_copy {
+  max-width: 560px;
+}
+
+.vl-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vl-muted);
+  margin-bottom: 10px;
+}
+
+.vl-h1 {
+  font-size: 34px;
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.vl-subtitle {
+  font-size: 14px;
+  color: var(--vl-text-secondary);
+  max-width: 520px;
+}
+
+/* CTAs hero */
+.vl-ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  margin-bottom: 16px;
+}
+
+/* Botón secundario un poco más suave */
+.vl-btn--ghost.vl-hero_secondary {
+  border-color: rgba(0, 0, 0, 0.04);
+  color: var(--vl-text-secondary);
+}
+
+/* Badges */
+.vl-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* -------- Quick actions panel -------- */
+
+.vl-actionsPanel {
+  background: var(--vl-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vl-actions_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.vl-actions_title {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.vl-actions_version {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f5f5f5;
+  color: var(--vl-muted);
+}
+
+/* Lista de tarjetas internas */
+.vl-actions {
+  display: grid;
+  gap: 10px;
+}
+
+/* Tarjeta individual */
+.vl-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.vl-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.vl-action_title {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.vl-action_desc {
+  color: var(--vl-muted);
+  font-size: 13px;
+}
+
+.vl-action_go {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--vl-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* Nota pequeña bajo el panel */
+.vl-note--inline {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: #faf7f0;
+  font-size: 11px;
+}
+
+/* -------- Sección “Basic workflow” -------- */
+
+.vl-section {
+  padding: 24px 0 32px;
+}
+
+.vl-twoCols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 980px) {
+  .vl-twoCols {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-card {
+  background: var(--vl-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--vl-border-soft);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  padding: 18px 20px;
+}
+
+/* Lista dentro del “Basic workflow” */
+.vl-list {
+  padding-left: 18px;
+  margin-top: 8px;
+}
+
+/* -------- Sección “Built for real-world operations” -------- */
+
+.vl-sectionHead {
+  margin-bottom: 16px;
+}
+
+/* Cuadrícula 2x2 de beneficios */
+.vl-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .vl-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-feature {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+}
+
+.vl-feature_icon {
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  margin-top: 4px;
+  background: var(--vl-accent, #e4b872);
+  box-shadow: 0 0 0 4px rgba(228, 184, 114, 0.27);
+}
+
+.vl-feature_title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.vl-feature_desc {
+  font-size: 13px;
+  color: var(--vl-text-secondary);
+}
+
+/* -------- Footer -------- */
+
+.vl-footer {
+  margin-top: 8px;
+  padding: 18px 0 20px;
+  background: #efe4d2;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.vl-footer_inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .vl-footer_inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.vl-footer_brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vl-footer_mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--vl-border-soft);
+}
+
+.vl-footer_title {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.vl-footer_sub {
+  font-size: 12px;
+  color: var(--vl-text-secondary);
+}
+
+/* Links del footer */
+.vl-footer .vl-link {
+  font-size: 12px;
+  font-weight: 700;
+}
+/* =========================================
+   INTER + MARRIOTT POLISH TIPOGRAFÍA & HERO
+========================================= */
+
+/* Fuente global (Inter) + suavizado */
+body {
+  background: var(--vl-bg-main);
+  color: var(--vl-text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
+    "SF Pro Text", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Jerarquía de títulos y textos */
+.vl-h1 {
+  font-size: 36px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.vl-h2 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.vl-h3 {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.vl-subtitle,
+.vl-muted,
+.vl-action_desc,
+.vl-feature_desc {
+  font-size: 13px;
+}
+
+/* Kicker más suite */
+.vl-kicker {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* Badges más finas */
+.vl-badge {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Links “Start / Report / View history” un poco más marcados */
+.vl-action_go span {
+  text-decoration: none;
+}
+.vl-action_go span:hover {
+  text-decoration: underline;
+}
+
+/* HERO – fondo tipo lobby Marriott */
+.vl-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.vl-hero_bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.92) 0,
+      rgba(255, 255, 255, 0.7) 34%,
+      transparent 66%
+    ),
+    linear-gradient(135deg, #f7f1e9 0%, #f2e7d7 55%, #efe4d2 100%);
+  z-index: -1;
+}
+
+/* Botón secundario del hero (reports) más suave */
+.vl-hero_secondary {
+  border-color: rgba(0, 0, 0, 0.04);
+  color: var(--vl-text-secondary);
+}
+.vl-hero_secondary:hover {
+  background: #f7f7f7;
+  color: var(--vl-text-primary);
+}
+/* Tab activo del menú (pill suave) */
+.vl-link--active {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--vl-text-primary);
+}
+/* Misma sensación de hover en TODAS las cards principales */
+.vl-card,
+.vl-action,
+.vl-feature {
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.vl-card:hover,
+.vl-feature:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+/* Un pelín más de espacio entre Hero y Basic workflow */
+.vl-section:first-of-type {
+  padding-top: 32px;
+}
+
+/* Que el título "Built for real-world operations" respire igual que el hero */
+.vl-sectionHead {
+  margin-top: 4px;
+  margin-bottom: 18px;
+}
+/* Línea superior del footer más definida pero suave */
+.vl-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Título del footer un poco más “brand” */
+.vl-footer_title {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* ========== LOGIN BRANDING ========== */
+
+.vl-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.vl-login-logo-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+.vl-login-logo {
+  display: block;
+  width: 30px;
+  height: auto;
+}
+
+.vl-login-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vl-login-brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vl-login-brand-suite {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vl-text-secondary);
+}
+
+/* Tagline inspirador debajo del subtítulo */
+.vl-login-tagline {
+  font-size: 12px;
+  color: var(--vl-text-secondary);
+  margin: 6px 0 18px;
+  line-height: 1.5;
+}
+/* =========================================
+   AUTH / LOGIN — MARRIOTT STYLE
+========================================= */
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.9) 0,
+      rgba(255, 255, 255, 0.6) 32%,
+      transparent 65%
+    ),
+    linear-gradient(135deg, #f7f1e9 0%, #f2e7d7 55%, #efe4d2 100%);
+  padding: 40px 16px;
+}
+
+.auth-panel {
+  max-width: 460px;
+  width: 100%;
+  margin: auto;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 26px 24px 22px;
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Header dentro del card */
+.auth-header {
+  margin-bottom: 18px;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.auth-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff8ef;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.auth-brand_text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.auth-brand_title {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.auth-brand_sub {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--vl-muted);
+}
+
+/* Título Login y subtítulo */
+.auth-title {
+  font-size: 22px;
+  margin: 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  color: var(--vl-text-secondary);
+}
+
+/* Formulario */
+.auth-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.auth-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--vl-text-secondary);
+  display: grid;
+  gap: 4px;
+}
+
+.auth-input {
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 13px;
+  outline: none;
+  background: #fafafa;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--vl-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(0, 91, 76, 0.16);
+}
+
+/* Error */
+.auth-error {
+  font-size: 12px;
+  color: #b3261e;
+  background: #fdeceb;
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+/* Botón */
+.auth-button {
+  margin-top: 4px;
+  border-radius: 999px;
+  border: none;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--vl-primary);
+  color: #ffffff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+
+.auth-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
+}
+
+.auth-button:disabled {
+  opacity: 0.7;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Nota final */
+.auth-footnote {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--vl-muted);
+  text-align: center;
+}
+/* =========================================
+   DASHBOARD — INSPECTION CENTER STYLE
+   (solo afecta a /dashboard porque usa .dash-main)
+========================================= */
+
+.dash-main {
+  min-height: 100vh;
+  padding: 32px 20px 40px;
+  background: var(--vl-bg-main);
+}
+
+/* Contenedor centrado como el home */
+.dash-main > * {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* Título "Inspection Center" */
+.dash-main h1 {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+/* Subtítulo "Manage inspections and house reports." */
+.dash-main p:first-of-type {
+  font-size: 13px;
+  color: var(--vl-text-secondary);
+  margin-bottom: 16px;
+}
+
+/* Cards grandes (Your Session / Your Properties) */
+.dash-main section {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Encabezados de cada card */
+.dash-main section h2,
+.dash-main section h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+/* Línea bajo "Your Properties" */
+.dash-main section p {
+  font-size: 13px;
+  color: var(--vl-text-secondary);
+}
+
+/* Filas de propiedades (Casa Carmela / Casa Paloma) */
+.dash-main .property-row,
+.dash-main .property-row + .property-row {
+  margin-top: 10px;
+}
+
+/* Por si tus filas son solo <div> simples, las estilizamos igual */
+.dash-main section > div {
+  margin-top: 10px;
+}
+
+/* Nombre de la casa */
+.dash-main strong {
+  font-size: 14px;
+}
+
+/* Slug (casa_carmela, casa_paloma) */
+.dash-main code,
+.dash-main span {
+  font-size: 12px;
+}
+
+/* Botones tipo "Inspect" & "Logout" dentro del dashboard */
+.dash-main button,
+.dash-main a.button {
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background: var(--vl-primary);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+/* Botón Logout un poco más suave (por si usas un className="logout") */
+.dash-main button.logout {
+  background: #ffffff;
+  color: var(--vl-text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none;
+}
+
+.dash-main button:hover:not(:disabled),
+.dash-main a.button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+/* =========================================
+   PROPERTIES LIST (dashboard)
+========================================= */
+
+.vl-house-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Cada propiedad como fila con pill */
+.vl-house-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Nombre de la casa */
+.vl-house-card h3 {
+  font-size: 14px;
+  margin: 0 8px 0 0;
+}
+
+/* Slug (casa_carmela, casa_paloma) empuja el botón a la derecha */
+.vl-house-slug {
+  font-size: 12px;
+  color: var(--vl-text-secondary);
+  margin: 0;
+  margin-right: auto; /* esto empuja el botón hacia la derecha */
+}
+
+/* Botón Inspect dentro de la fila */
+.vl-house-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+}
+
+/* Hover un poco más marcado */
+.vl-house-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+/* Ajuste fino: nombre y slug mejor separados */
+.vl-house-card h3 {
+  margin: 0;
+  margin-bottom: 2px; /* un poquito de aire con el slug */
+}
+
+.vl-house-slug {
+  display: block;
+  margin-top: 0;
+}
+/* Pill de propiedad más suave y elegante */
+.vl-house-card {
+  background: #fbfbfb;
+  border-radius: 999px;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+/* Contenedor de textos de la propiedad */
+.vl-house-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Meta info de la propiedad: última inspección + issues */
+.vl-house-meta {
+  font-size: 11px;
+  color: var(--vl-text-secondary);
+  opacity: 0.9;
+}
+
+/* Ajuste fino para que el botón no se pegue a los textos */
+.vl-house-card {
+  justify-content: space-between;
+  gap: 10px;
+}
+/* ========== DASHBOARD LAYOUT ========== */
+
+.vl-dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+  gap: 32px;
+  align-items: flex-start;
+}
+
+@media (max-width: 980px) {
+  .vl-dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-dashboard-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vl-dashboard-header {
+  margin-bottom: 12px;
+}
+
+.vl-page-title {
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin: 4px 0 8px;
+}
+
+.vl-dashboard-subtitle {
+  font-size: 14px;
+  color: var(--vl-text-secondary);
+  max-width: 420px;
+}
+
+/* ========== SESSION CARD ========== */
+
+.vl-session-card {
+  padding: 22px 22px 18px;
+}
+
+.vl-session-meta {
+  margin: 16px 0 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 10px 24px;
+}
+
+@media (max-width: 640px) {
+  .vl-session-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vl-session-row dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vl-text-secondary);
+  margin-bottom: 2px;
+}
+
+.vl-session-row dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--vl-text-primary);
+}
+
+.vl-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(25, 135, 84, 0.08);
+  color: #157347;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vl-session-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+/* ========== PROPERTIES LIST ========== */
+
+.vl-properties-card {
+  padding: 22px 22px 18px;
+}
+
+.vl-house-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.vl-house-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease, border-color 0.12s ease;
+}
+
+.vl-house-card:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+}
+
+@media (max-width: 640px) {
+  .vl-house-card {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 18px;
+  }
+
+  .vl-house-btn {
+    align-self: stretch;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.vl-house-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vl-house-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #f3e7d5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #6b4b2a;
+  box-shadow: 0 8px 20px rgba(107, 75, 42, 0.18);
+}
+
+.vl-house-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.vl-house-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.vl-house-slug {
+  font-size: 11px;
+  color: var(--vl-text-secondary);
+}
+
+.vl-house-meta {
+  font-size: 11px;
+  color: var(--vl-text-secondary);
+  opacity: 0.9;
+}
+
+/* Botón de inspección alineado al card */
+.vl-house-btn {
+  padding-inline: 18px;
+  white-space: nowrap;
+}
+
+/* ========== EMPTY STATES ========== */
+
+.vl-empty {
+  padding: 10px 2px 2px;
+}
+
+.vl-empty p {
+  font-size: 13px;
+}
+/* ========== DASHBOARD BRAND BAR ========== */
+
+.vl-dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.vl-dashboard-logo {
+  display: block;
+  height: auto;
+}
+
+.vl-dashboard-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--vl-text-secondary);
+  white-space: nowrap;
+}
+.vl-greeting {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0 2px;
+  color: var(--vl-text-primary);
+}
+.vl-input:focus {
+  outline: none;
+  border-color: rgba(12, 95, 80, 0.6);
+  box-shadow: 0 0 0 1px rgba(12, 95, 80, 0.25);
+}
+.vl-btn-primary {
+  transition: background 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.vl-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.16);
+}
+.auth-tagline {
+  font-size: 12px;
+  color: var(--vl-text-secondary);
+  margin-top: 4px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.auth-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
 }

@@ -15,7 +15,7 @@ export default function LogoutPage() {
 
       // Pequeño delay elegante para animación
       setTimeout(() => {
-        router.push("/login");
+        router.push("/auth/login");
       }, 900);
     }
 
