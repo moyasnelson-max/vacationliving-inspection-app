@@ -1,0 +1,7 @@
+[data-theme="light"] {
+  --bg: #f8f7f5;
+  --surface: #ffffff;
+  --text-primary: #1c1c1c;
+  --text-secondary: #6b6b6b;
+  --border: rgba(0,0,0,0.08);
+}

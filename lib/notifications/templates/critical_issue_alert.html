@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; background:#f7f7f7; padding:24px;">
+    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:12px;padding:32px;">
+      <h2 style="margin-top:0;color:#111;">⚠️ Critical Issue Alert</h2>
+      <p>The following critical issues have been open longer than expected:</p>
+      <ul>
+        {{#each issues}}
+          <li>
+            <strong>{{title}}</strong><br/>
+            House: {{house_id}}<br/>
+            Opened: {{created_at}}
+          </li>
+        {{/each}}
+      </ul>
+      <p style="margin-top:24px;color:#555;">
+        Please review and take action as soon as possible.
+      </p>
+    </div>
+  </body>
+</html>

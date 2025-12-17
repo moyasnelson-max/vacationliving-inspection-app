@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; background:#f7f7f7; padding:24px;">
+    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:12px;padding:32px;">
+      <h2 style="margin-top:0;color:#111;">📊 Open Issues Threshold Reached</h2>
+      <p>The following properties have an elevated number of open issues:</p>
+      <ul>
+        {{#each alerts}}
+          <li>
+            House: <strong>{{house_id}}</strong><br/>
+            Open issues: {{count}}
+          </li>
+        {{/each}}
+      </ul>
+      <p style="margin-top:24px;color:#555;">
+        This message is sent to help prioritize operational efforts.
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,24 +1,22 @@
 "use client";
+import { useEffect, useState } from "react";
 
-import { createContext, useContext, useMemo, useState } from "react";
-import { getDictionary } from "@/lib/i18n";
+export default function Providers({ children }) {
+  const [theme, setTheme] = useState("light");
 
-const I18nContext = createContext(null);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
-export function I18nProvider({ children }) {
-  // Default language: English
-  const [lang, setLang] = useState("en");
-
-  const value = useMemo(() => {
-    const t = getDictionary(lang);
-    return { lang, setLang, t };
-  }, [lang]);
-
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
-}
-
-export function useI18n() {
-  const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error("useI18n must be used within <I18nProvider />");
-  return ctx;
+  return (
+    <>
+      <button
+        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        style={{ position: "fixed", bottom: 20, right: 20 }}
+      >
+        ��
+      </button>
+      {children}
+    </>
+  );
 }

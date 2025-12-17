@@ -1,0 +1,18 @@
+
+{
+  "crons": [
+    {
+      "path": "/api/cron/system-health",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/daily-open-issues",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-summary",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}
+

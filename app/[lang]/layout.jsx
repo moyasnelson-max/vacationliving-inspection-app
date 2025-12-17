@@ -1,0 +1,7 @@
+import Providers from "@/app/providers";
+
+export default function LangLayout({ children }) {
+  return (
+    <Providers>{children}</Providers>
+  );
+}

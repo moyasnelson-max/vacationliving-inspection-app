@@ -1,67 +1,41 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-/**
- * ThemeProvider Marriott v3.0
- * -------------------------------------------------------------
- * - Evita el flash inicial (Flicker-Free Startup)
- * - Persiste tema en localStorage con clave "vl-theme"
- * - Aplica clase <html class="light|dark"> automáticamente
- * - Limpio, robusto y escalable
- * - Compatible con ThemeSwitcher Marriott v2.0
- */
-
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(null);
+  const [theme, setTheme] = useState("light");
 
-  // 1) Cargar tema guardado sin flicker
   useEffect(() => {
-    const saved = localStorage.getItem("vl-theme");
-    const initial = saved || "Light";
-
-    setTheme(initial);
-    document.documentElement.classList.add(initial.toLowerCase());
+    const saved = localStorage.getItem("theme");
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute("data-theme", saved);
+    } else {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const systemTheme = prefersDark ? "dark" : "light";
+      setTheme(systemTheme);
+      document.documentElement.setAttribute("data-theme", systemTheme);
+    }
   }, []);
 
-  // 2) Función para alternar tema
-  const toggleTheme = () => {
-    if (!theme) return;
-
-    const next = theme === "Light" ? "Dark" : "Light";
-
-    // Quitar clase anterior
-    document.documentElement.classList.remove(theme.toLowerCase());
-
-    // Agregar clase nueva
-    document.documentElement.classList.add(next.toLowerCase());
-
-    // Guardar en React y en localStorage
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    localStorage.setItem("vl-theme", next);
-  };
-
-  // 3) Evitar parpadeo mientras el estado inicial no ha cargado
-  if (!theme) {
-    return (
-      <div
-        style={{
-          opacity: 0,
-          transition: "opacity 0.2s ease",
-        }}
-      >
-        {children}
-      </div>
-    );
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
   }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div data-theme={theme}>{children}</div>
+      {children}
     </ThemeContext.Provider>
   );
 }
 
-export const useTheme = () => useContext(ThemeContext);
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme must be used inside ThemeProvider");
+  return ctx;
+}

@@ -1,13 +1,12 @@
-import { supabaseServer } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import "../styles/globals.css";
+import Providers from "@/app/providers";
 
-export default async function DashboardLayout({ children }) {
-  const supabase = supabaseServer();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect("/auth/login");
-  }
-
-  return <>{children}</>;
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }
